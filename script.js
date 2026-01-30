@@ -25,32 +25,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function mostrarProductos(lista) {
         contenedor.innerHTML = "";
-
         lista.forEach(p => {
             const div = document.createElement("div");
             div.className = "producto";
-
             div.innerHTML = `
                 <img src="${p.imagen}">
                 <div class="producto-info">
                     <h3>${p.nombre}</h3>
-                    <div class="precio">${p.precio}</div>
+                    <div>${p.precio}</div>
                     <button>Agregar al carrito</button>
                 </div>
             `;
-
             div.querySelector("button").onclick = () => {
                 carrito.push(p);
                 mostrarCarrito();
             };
-
             contenedor.appendChild(div);
         });
     }
 
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
-        let mensaje = "Hola, quiero comprar:%0A";
+        let mensaje = "Hola, quiero hacer un pedido:%0A";
 
         carrito.forEach(p => {
             listaCarrito.innerHTML += `<div>${p.nombre} - ${p.precio}</div>`;
@@ -63,11 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
     mostrarProductos(productos);
 
     filtroCategoria.addEventListener("change", () => {
-        if (filtroCategoria.value === "todas") {
-            mostrarProductos(productos);
-        } else {
-            mostrarProductos(productos.filter(p => p.categoria === filtroCategoria.value));
-        }
+        filtroCategoria.value === "todas"
+            ? mostrarProductos(productos)
+            : mostrarProductos(productos.filter(p => p.categoria === filtroCategoria.value));
     });
 
     buscador.addEventListener("keyup", () => {
@@ -78,3 +72,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
