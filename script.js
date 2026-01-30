@@ -9,8 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnAbrirCarrito = document.getElementById("btnAbrirCarrito");
     const carritoPanel = document.getElementById("carrito");
 
-    let carrito = [];
-
    btnAbrirCarrito.addEventListener("click", () => {
     if (carritoPanel.classList.contains("abierto")) {
         carritoPanel.classList.remove("abierto");
@@ -80,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
 
 
 
