@@ -83,14 +83,16 @@ btnAbrirCarrito.addEventListener("click", (e) => {
             p.nombre.toLowerCase().includes(texto)
         ));
     });
-
-});
+    
 document.addEventListener("click", (e) => {
     if (carritoAbierto && !carritoPanel.contains(e.target) && e.target !== btnAbrirCarrito) {
         carritoPanel.classList.remove("abierto");
         carritoAbierto = false;
     }
 });
+});
+
+
 
 
 
