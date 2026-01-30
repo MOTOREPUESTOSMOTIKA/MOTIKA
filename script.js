@@ -11,9 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let carrito = [];
 
-    btnAbrirCarrito.addEventListener("click", () => {
-        carritoPanel.classList.toggle("abierto");
-    });
+   btnAbrirCarrito.addEventListener("click", () => {
+    if (carritoPanel.classList.contains("abierto")) {
+        carritoPanel.classList.remove("abierto");
+    } else {
+        carritoPanel.classList.add("abierto");
+    }
+});
 
     const categorias = [...new Set(productos.map(p => p.categoria))];
     categorias.forEach(cat => {
@@ -72,4 +76,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
 
