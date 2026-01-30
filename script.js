@@ -58,6 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         btnComprar.href = `https://wa.me/573118612727?text=${mensaje}`;
+        btnComprar.onclick = () => {
+    carritoPanel.classList.remove("abierto");
+};
+
     }
 
     mostrarProductos(productos);
@@ -76,5 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
 
 
