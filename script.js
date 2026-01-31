@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const productos = JSON.parse(localStorage.getItem("productos")) || [];
+    const productos = JSON.parse(localStorage.getItem("productosMOTIKA")) || [];
     const contenedor = document.getElementById("productos");
     const btnComprar = document.getElementById("btnComprar");
     const buscador = document.getElementById("buscador");
@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             p.nombre.toLowerCase().includes(texto)
         ));
     });
+
 
 
 
