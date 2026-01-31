@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
 
     const productos = JSON.parse(localStorage.getItem("productosMOTIKA")) || [];
     const contenedor = document.getElementById("productos");
@@ -10,15 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const carritoPanel = document.getElementById("carrito");
     const listaCarrito = document.getElementById("listaCarrito");
 
-
     let carrito = [];
 
-    // ===== ABRIR / CERRAR CARRITO =====
+    // ===== CARRITO =====
     btnAbrirCarrito.onclick = () => {
         carritoPanel.classList.toggle("abierto");
     };
 
-    // ===== CERRAR AL HACER CLICK FUERA =====
     document.addEventListener("click", (e) => {
         if (
             carritoPanel.classList.contains("abierto") &&
@@ -29,13 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ===== CERRAR AL HACER PEDIDO =====
     btnComprar.onclick = () => {
         carritoPanel.classList.remove("abierto");
     };
 
-});
-
+    // ===== CATEGORÍAS =====
     const categorias = [...new Set(productos.map(p => p.categoria))];
     categorias.forEach(cat => {
         const option = document.createElement("option");
@@ -44,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         filtroCategoria.appendChild(option);
     });
 
+    // ===== MOSTRAR PRODUCTOS =====
     function mostrarProductos(lista) {
         contenedor.innerHTML = "";
         lista.forEach(p => {
@@ -65,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ===== MOSTRAR CARRITO =====
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
         let mensaje = "Hola, quiero comprar:%0A";
@@ -77,8 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnComprar.href = `https://wa.me/573118612727?text=${mensaje}`;
     }
 
-    mostrarProductos(productos);
-
+    // ===== FILTROS =====
     filtroCategoria.addEventListener("change", () => {
         if (filtroCategoria.value === "todas") {
             mostrarProductos(productos);
@@ -89,11 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buscador.addEventListener("keyup", () => {
         const texto = buscador.value.toLowerCase();
-        mostrarProductos(productos.filter(p =>
-            p.nombre.toLowerCase().includes(texto)
-        ));
+        mostrarProductos(
+            productos.filter(p => p.nombre.toLowerCase().includes(texto))
+        );
     });
 
+    // ===== INICIO =====
+    mostrarProductos(productos);
 
-
-
+});
