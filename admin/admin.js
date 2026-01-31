@@ -14,7 +14,7 @@ const btnAgregarCategoria = document.getElementById("agregarCategoria");
 const listaCategorias = document.getElementById("listaCategorias");
 
 function guardar() {
-    localStorage.setItem("productos", JSON.stringify(productos));
+    localStorage.setItem("productosMOTIKA", JSON.stringify(productos));
 }
 
 function guardarCategorias() {
@@ -102,3 +102,4 @@ btnAgregar.addEventListener("click", () => {
 renderCategorias();
 cargarCategoriasSelect();
 render();
+
