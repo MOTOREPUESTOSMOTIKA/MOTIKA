@@ -28,13 +28,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 : `<button class="btn-consultar">Consultar disponibilidad</button>`;
 
             div.innerHTML = `
-                <img src="${p.imagen}">
-                <div class="producto-info">
-                    <h3>${p.nombre}</h3>
-                    <div class="precio">${p.precio}</div>
-                    ${botonHTML}
-                </div>
-            `;
+    <img src="${p.imagen}">
+    <div class="producto-info">
+        <h3>${p.nombre}</h3>
+        <div class="precio">${p.precio}</div>
+        <div class="estado ${p.disponible ? 'disponible' : 'no-disponible'}">
+            ${p.disponible ? 'Disponible en tienda' : 'Consultar disponibilidad'}
+        </div>
+        ${botonHTML}
+    </div>
+`;
 
             const boton = div.querySelector("button");
 
