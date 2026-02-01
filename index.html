@@ -8,56 +8,53 @@
 </head>
 <body>
 
-<header>
-    <div class="logo-container">
-        <img src="img/logo.jpg" alt="Logo MOTIKA">
-    </div>
-    <div class="header-texto">
-        <h1>MOTIKA</h1>
-        <p>Tenemos lo que tú necesitas</p>
-        <p>Villa Páez</p>
-    </div>
-    <button id="btnAbrirCarrito" class="btn-carrito">🛒</button>
+<header class="header">
+    <img src="img/logo.jpg" alt="MOTIKA" class="logo">
+    <h1>MOTIKA</h1>
+    <p>Tenemos lo que tú necesitas</p>
+    <p>Villa Páez</p>
 </header>
 
 <div class="franja-info">
     <select id="filtroCategoria">
         <option value="todas">Todas las Categorías</option>
     </select>
-    <div class="item-info">📍 Villa Páez-Herrán</div>
-    <div class="item-info">🚚 Pedidos a todo Destino</div>
-    <div class="item-info">📲 Consultas por WhatsApp</div>
+    <div>📍 Villa Páez–Herrán</div>
+    <div>🚚 Pedidos a todo destino</div>
+    <div>📲 Consultas por WhatsApp</div>
 </div>
 
-<div id="buscadorContainer">
+<div class="buscador-container">
     <input type="text" id="buscador" placeholder="Buscar producto...">
 </div>
+
+<button id="btnAbrirCarrito" class="btn-carrito-fijo">🛒</button>
 
 <main>
     <div id="productos" class="grid-productos"></div>
 </main>
 
-<section id="carrito">
+<div id="carrito" class="carrito">
     <h2>Carrito</h2>
     <div id="listaCarrito"></div>
-    <a id="btnComprar" target="_blank">Hacer Pedido</a>
-</section>
+    <a id="btnComprar" target="_blank">Hacer pedido</a>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyCzd4E8mJ7zyzoddBQXmfB43-Mhu1BCPJQ",
-        authDomain: "motika-751ee.firebaseapp.com",
-        projectId: "motika-751ee",
-        storageBucket: "motika-751ee.appspot.com",
-        messagingSenderId: "260880167433",
-        appId: "1:260880167433:web:d0cd51752c25637fd83ed8"
-    };
+const firebaseConfig = {
+    apiKey: "AIzaSyCzd4E8mJ7zyzoddBQXmfB43-Mhu1BCPJQ",
+    authDomain: "motika-751ee.firebaseapp.com",
+    projectId: "motika-751ee",
+    storageBucket: "motika-751ee.appspot.com",
+    messagingSenderId: "260880167433",
+    appId: "1:260880167433:web:d0cd51752c25637fd83ed8"
+};
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 </script>
 
 <script src="script.js"></script>
