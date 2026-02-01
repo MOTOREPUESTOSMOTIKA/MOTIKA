@@ -31,7 +31,8 @@ body {
 }
 
 .logo img {
-    width: 500px;
+    width: 120px;
+    max-width: 100%;
 }
 
 .header-texto {
@@ -309,4 +310,6 @@ button.agregado {
     display: block;
     margin: 0 auto;
 }
-
+.header-inner {
+    flex-direction: column;
+}
