@@ -2,49 +2,45 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MOTIKA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-    <div class="logo-container">
-        <img src="img/logo.jpg" alt="Logo MOTIKA">
-    </div>
-
-    <div class="header-texto">
-        <h1>MOTIKA</h1>
-        <p>Tenemos lo que tú necesitas</p>
-        <p>Villa Páez</p>
-    </div>
-
-    <button id="btnAbrirCarrito" class="btn-carrito">🛒</button>
+    <button id="btnCategorias">☰ Categorías</button>
+    <h1 class="logo">MOTIKA</h1>
 </header>
 
-<div class="franja-info">
-    <select id="filtroCategoria">
-        <option value="todas">Todas las Categorías</option>
-    </select>
-
-    <div class="item-info">📍 Villa Páez y Herrán</div>
-    <div class="item-info">🚚 Pedidos dentro de la ciudad</div>
-    <div class="item-info">📲 Consultas por WhatsApp</div>
-</div>
-
-<div id="buscadorContainer">
-    <input type="text" id="buscador" placeholder="Buscar producto...">
-</div>
-
 <main>
-    <div id="productos" class="grid-productos"></div>
+    <div id="productos"></div>
 </main>
 
-<section id="carrito">
+<button id="btnBuscar">🔍</button>
+
+<div id="cartDrawer" class="cart">
     <h2>Carrito</h2>
-    <div id="listaCarrito"></div>
-    <a id="btnComprar" target="_blank">Hacer Pedido</a>
-</section>
+    <div id="cartItems"></div>
+    <button id="cerrarCarrito">Cerrar</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCzd4E8mJ7zyzoddBQXmfB43-Mhu1BCPJQ",
+    authDomain: "motika-751ee.firebaseapp.com",
+    projectId: "motika-751ee",
+    storageBucket: "motika-751ee.appspot.com",
+    messagingSenderId: "260880167433",
+    appId: "1:260880167433:web:d0cd51752c25637fd83ed8"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
 
 <script src="script.js"></script>
 </body>
