@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     const contenedor = document.getElementById("productos");
-    const btnComprar = document.getElementById("btnComprar");
     const buscador = document.getElementById("buscador");
     const filtroCategoria = document.getElementById("filtroCategoria");
 
     const btnAbrirCarrito = document.getElementById("btnAbrirCarrito");
     const carritoPanel = document.getElementById("carrito");
     const listaCarrito = document.getElementById("listaCarrito");
+    const btnComprar = document.getElementById("btnComprar");
 
     let productos = [];
     let carrito = [];
@@ -16,52 +16,43 @@ document.addEventListener("DOMContentLoaded", () => {
         carritoPanel.classList.toggle("abierto");
     };
 
-    document.addEventListener("click", (e) => {
-        if (
-            carritoPanel.classList.contains("abierto") &&
-            !carritoPanel.contains(e.target) &&
-            e.target !== btnAbrirCarrito
-        ) {
-            carritoPanel.classList.remove("abierto");
-        }
-    });
-
-    btnComprar.onclick = () => {
-        carritoPanel.classList.remove("abierto");
-    };
-
     function mostrarProductos(lista) {
         contenedor.innerHTML = "";
+
         lista.forEach(p => {
             const div = document.createElement("div");
             div.className = "producto";
+
+            const botonHTML = p.disponible
+                ? `<button class="btn-agregar">Agregar al carrito</button>`
+                : `<button class="btn-consultar">Consultar disponibilidad</button>`;
+
             div.innerHTML = `
                 <img src="${p.imagen}">
                 <div class="producto-info">
                     <h3>${p.nombre}</h3>
                     <div class="precio">${p.precio}</div>
-                    ${p.disponible
-    ? `<button class="btn-carrito">Agregar al carrito</button>`
-    : `<button class="btn-consultar">Consultar disponibilidad</button>`
-}
+                    ${botonHTML}
                 </div>
             `;
-           const boton = div.querySelector("button");
 
-if (p.disponible) {
-    boton.onclick = () => {
-    carrito.push(p);
-    mostrarCarrito();
-    boton.textContent = "Agregado ✓";
-    boton.disabled = true;
-    boton.classList.add("agregado");
-};
-} else {
-    boton.onclick = () => {
-        const mensaje = `Hola, quisiera saber disponibilidad del producto: ${p.nombre}`;
-        window.open(`https://wa.me/573118612727?text=${encodeURIComponent(mensaje)}`);
-    };
-}
+            const boton = div.querySelector("button");
+
+            if (p.disponible) {
+                boton.onclick = () => {
+                    carrito.push(p);
+                    mostrarCarrito();
+                    boton.textContent = "Agregado ✓";
+                    boton.disabled = true;
+                    boton.classList.add("agregado");
+                };
+            } else {
+                boton.onclick = () => {
+                    const msg = `Hola, quisiera saber disponibilidad del producto: ${p.nombre}`;
+                    window.open(`https://wa.me/573118612727?text=${encodeURIComponent(msg)}`);
+                };
+            }
+
             contenedor.appendChild(div);
         });
     }
@@ -78,42 +69,40 @@ if (p.disponible) {
         btnComprar.href = `https://wa.me/573118612727?text=${mensaje}`;
     }
 
-    filtroCategoria.addEventListener("change", () => {
+    filtroCategoria.onchange = () => {
         if (filtroCategoria.value === "todas") {
             mostrarProductos(productos);
         } else {
             mostrarProductos(productos.filter(p => p.categoria === filtroCategoria.value));
         }
-    });
+    };
 
-    buscador.addEventListener("keyup", () => {
-        const texto = buscador.value.toLowerCase();
-        mostrarProductos(productos.filter(p => p.nombre.toLowerCase().includes(texto)));
-    });
+    buscador.onkeyup = () => {
+        const t = buscador.value.toLowerCase();
+        mostrarProductos(productos.filter(p => p.nombre.toLowerCase().includes(t)));
+    };
 
-    if (typeof db !== "undefined") {
-        db.collection("productos")
-            .where("disponible", "==", true)
-            .onSnapshot((snapshot) => {
-                productos = [];
-                filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
+    db.collection("productos")
+        .where("disponible", "==", true)
+        .onSnapshot(snapshot => {
+            productos = [];
+            filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
 
-                snapshot.forEach(doc => {
-    const p = doc.data();
-    if (p.nombre && p.precio && p.imagen) {
-        productos.push(p);
-    }
-});
-
-                const categorias = [...new Set(productos.map(p => p.categoria))];
-                categorias.forEach(cat => {
-                    const option = document.createElement("option");
-                    option.value = cat;
-                    option.textContent = cat;
-                    filtroCategoria.appendChild(option);
-                });
-
-                mostrarProductos(productos);
+            snapshot.forEach(doc => {
+                const p = doc.data();
+                if (p.nombre && p.precio && p.imagen) {
+                    productos.push(p);
+                }
             });
-    }
+
+            [...new Set(productos.map(p => p.categoria))].forEach(cat => {
+                const o = document.createElement("option");
+                o.value = cat;
+                o.textContent = cat;
+                filtroCategoria.appendChild(o);
+            });
+
+            mostrarProductos(productos);
+        });
+
 });
