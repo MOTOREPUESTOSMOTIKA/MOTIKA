@@ -1,37 +1,38 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
     padding: 20px;
 }
 
 h1 {
-    text-align: center;
+    font-size: 24px;
+    margin-bottom: 12px;
 }
 
 section {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
     margin-bottom: 20px;
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #2f80ed;
-    color: white;
-    border: none;
+input, select {
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #aaa;
     border-radius: 6px;
 }
 
-.producto {
-    display: flex;
-    justify-content: space-between;
+button {
+    padding: 8px 10px;
+    background: #25d366;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+div.producto {
     margin-bottom: 10px;
+    background: #f7f7f7;
+    padding: 8px;
+    border-radius: 6px;
 }
