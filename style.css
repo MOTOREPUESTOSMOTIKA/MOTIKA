@@ -177,4 +177,9 @@ main {
         right: 10px;
     }
 }
+button.agregado {
+    background: #aaa;
+    color: #333;
+    cursor: default;
+}
 
