@@ -8,54 +8,54 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #f7f7f7;
+    background: #f2f2f2;
     color: #222;
 }
 
-/* ===== HEADER ===== */
+/* ================= HEADER ================= */
+
 .header {
     background: #222;
-    padding: 18px;
-    text-align: center;
     color: #fff;
+    padding: 16px;
 }
 
-.header .logo img {
-    width: 110px;
-    height: auto;
+.header-inner {
+    max-width: 1100px;
     margin: auto;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo img {
+    width: 90px;
 }
 
 .header-texto h1 {
-    font-size: 28px;
-    margin-top: 8px;
+    font-size: 26px;
 }
 
 .header-texto p {
-    font-size: 14px;
+    font-size: 13px;
     color: #ccc;
 }
 
-/* ===== FRANJA INFO ===== */
+/* ================= FRANJA ================= */
+
 .franja-info {
     background: #fff;
-    padding: 12px;
+    padding: 10px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    gap: 12px;
     justify-content: space-between;
+    flex-wrap: wrap;
     border-bottom: 1px solid #ddd;
     font-size: 14px;
 }
 
-.franja-info .item-info {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
+/* ================= BUSCADOR ================= */
 
-/* ===== BUSCADOR ===== */
 .buscador-container {
     position: fixed;
     bottom: 15px;
@@ -66,44 +66,55 @@ body {
 .buscador-container input {
     padding: 8px;
     border-radius: 6px;
-    width: 160px;
     border: 1px solid #aaa;
+    width: 160px;
 }
 
-/* ===== BOTON CARRITO ===== */
+/* ================= BOTÓN CARRITO ================= */
+
 .btn-carrito {
     position: fixed;
     top: 20px;
     right: 20px;
     background: #25d366;
-    color: #fff;
-    padding: 14px;
-    font-size: 22px;
+    width: 55px;
+    height: 55px;
     border-radius: 50%;
+    font-size: 24px;
     border: none;
+    color: #fff;
+    cursor: pointer;
     z-index: 1000;
 }
 
-/* ===== PRODUCTOS ===== */
+/* ================= CONTENIDO ================= */
+
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* ================= PRODUCTOS ================= */
+
 .grid-productos {
     display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 16px;
-    padding: 20px;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 }
 
 .producto {
     background: #fff;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
 }
 
 .producto img {
     width: 100%;
-    height: 180px;
+    height: 150px;
     object-fit: cover;
 }
 
@@ -111,43 +122,42 @@ body {
     padding: 12px;
     display: flex;
     flex-direction: column;
+    gap: 6px;
 }
 
 .producto-info h3 {
-    font-size: 16px;
-    margin-bottom: 6px;
+    font-size: 15px;
 }
 
 .precio {
     font-weight: bold;
-    font-size: 15px;
-    margin-bottom: 8px;
+    font-size: 14px;
 }
 
-/* ===== ESTADO DISPONIBILIDAD ===== */
+/* ===== DISPONIBILIDAD ===== */
+
 .estado {
-    font-size: 14px;
-    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 .disponible {
     color: green;
-    font-weight: bold;
 }
 
 .no-disponible {
     color: orange;
-    font-weight: bold;
 }
 
-/* ===== BOTONES PRODUCTO ===== */
+/* ===== BOTONES ===== */
+
 .producto-info button {
-    padding: 10px;
-    font-size: 14px;
+    margin-top: auto;
+    padding: 8px;
     border-radius: 6px;
     border: none;
+    font-size: 14px;
     cursor: pointer;
-    margin-top: auto;
 }
 
 .btn-agregar {
@@ -161,22 +171,21 @@ body {
 }
 
 button.agregado {
-    background: #aaa !important;
-    color: #222 !important;
-    cursor: default;
+    background: #aaa;
+    color: #333;
 }
 
-/* ===== CARRITO ===== */
+/* ================= CARRITO ================= */
+
 .carrito {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 80%;
-    max-width: 300px;
+    width: 300px;
     height: 100%;
     background: #fff;
-    padding: 20px;
-    border-left: 2px solid #ccc;
+    padding: 16px;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.2);
     transition: right 0.3s ease;
     z-index: 1001;
 }
@@ -185,41 +194,37 @@ button.agregado {
     right: 0;
 }
 
-#listaCarrito div {
-    margin-bottom: 8px;
-    font-size: 14px;
-}
-
 #btnComprar {
+    display: block;
+    margin-top: 10px;
     background: #25d366;
     color: #000;
-    text-align: center;
     padding: 10px;
     border-radius: 6px;
+    text-align: center;
     text-decoration: none;
-    display: block;
-    margin-top: 12px;
+    font-weight: bold;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ================= RESPONSIVE ================= */
+
 @media (max-width: 768px) {
-    .franja-info {
+    .header-inner {
         flex-direction: column;
-        gap: 10px;
+        text-align: center;
     }
+
+    .logo img {
+        width: 100px;
+    }
+
     .grid-productos {
         grid-template-columns: repeat(2, 1fr);
-    }
-    .header-texto h1 {
-        font-size: 24px;
     }
 }
 
 @media (max-width: 480px) {
     .grid-productos {
         grid-template-columns: 1fr;
-    }
-    .header-texto h1 {
-        font-size: 22px;
     }
 }
