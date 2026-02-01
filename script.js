@@ -16,6 +16,16 @@ document.addEventListener("DOMContentLoaded", () => {
         carritoPanel.classList.toggle("abierto");
     };
 
+    document.addEventListener("click", (e) => {
+        if (
+            carritoPanel.classList.contains("abierto") &&
+            !carritoPanel.contains(e.target) &&
+            e.target !== btnAbrirCarrito
+        ) {
+            carritoPanel.classList.remove("abierto");
+        }
+    });
+
     function mostrarProductos(lista) {
         contenedor.innerHTML = "";
 
@@ -23,21 +33,21 @@ document.addEventListener("DOMContentLoaded", () => {
             const div = document.createElement("div");
             div.className = "producto";
 
-            const botonHTML = p.disponible
+            const btnHTML = p.disponible
                 ? `<button class="btn-agregar">Agregar al carrito</button>`
                 : `<button class="btn-consultar">Consultar disponibilidad</button>`;
 
             div.innerHTML = `
-    <img src="${p.imagen}">
-    <div class="producto-info">
-        <h3>${p.nombre}</h3>
-        <div class="precio">${p.precio}</div>
-        <div class="estado ${p.disponible ? 'disponible' : 'no-disponible'}">
-            ${p.disponible ? 'Disponible en tienda' : 'Consultar disponibilidad'}
-        </div>
-        ${botonHTML}
-    </div>
-`;
+                <img src="${p.imagen}">
+                <div class="producto-info">
+                    <h3>${p.nombre}</h3>
+                    <div class="precio">${p.precio}</div>
+                    <div class="estado ${p.disponible ? 'disponible' : 'no-disponible'}">
+                        ${p.disponible ? 'Disponible en tienda' : 'Consultar disponibilidad'}
+                    </div>
+                    ${btnHTML}
+                </div>
+            `;
 
             const boton = div.querySelector("button");
 
@@ -51,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 };
             } else {
                 boton.onclick = () => {
-                    const msg = `Hola, quisiera saber disponibilidad del producto: ${p.nombre}`;
+                    const msg = `Hola, quisiera saber la disponibilidad del producto: ${p.nombre}`;
                     window.open(`https://wa.me/573118612727?text=${encodeURIComponent(msg)}`);
                 };
             }
@@ -86,7 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     db.collection("productos")
-        .where("disponible", "==", true)
         .onSnapshot(snapshot => {
             productos = [];
             filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
@@ -99,10 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             [...new Set(productos.map(p => p.categoria))].forEach(cat => {
-                const o = document.createElement("option");
-                o.value = cat;
-                o.textContent = cat;
-                filtroCategoria.appendChild(o);
+                const opt = document.createElement("option");
+                opt.value = cat;
+                opt.textContent = cat;
+                filtroCategoria.appendChild(opt);
             });
 
             mostrarProductos(productos);
