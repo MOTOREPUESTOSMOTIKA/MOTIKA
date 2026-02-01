@@ -82,27 +82,28 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     });
 
-    // ===== FIRESTORE =====
-    db.collection("productos")
-        .where("disponible", "==", true)
-        .onSnapshot((snapshot) => {
-            productos = [];
-            filtroCategoria.innerHTML = `<option value="todas">Todas</option>`;
+    // ===== FIRESTORE (PROTEGIDO) =====
+    if (typeof db !== "undefined") {
+        db.collection("productos")
+            .where("disponible", "==", true)
+            .onSnapshot((snapshot) => {
+                productos = [];
+                filtroCategoria.innerHTML = `<option value="todas">Todas las categorías</option>`;
 
-            snapshot.forEach(doc => {
-                const p = doc.data();
-        productos.push(p);
+                snapshot.forEach(doc => {
+                    productos.push(doc.data());
+                });
+
+                const categorias = [...new Set(productos.map(p => p.categoria))];
+                categorias.forEach(cat => {
+                    const option = document.createElement("option");
+                    option.value = cat;
+                    option.textContent = cat;
+                    filtroCategoria.appendChild(option);
+                });
+
+                mostrarProductos(productos);
             });
-
-            const categorias = [...new Set(productos.map(p => p.categoria))];
-            categorias.forEach(cat => {
-                const option = document.createElement("option");
-                option.value = cat;
-                option.textContent = cat;
-                filtroCategoria.appendChild(option);
-            });
-
-            mostrarProductos(productos);
-        });
+    }
 
 });
