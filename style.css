@@ -97,12 +97,14 @@ main {
 
 /* ================= PRODUCTOS ================= */
 
+/* 🔑 GRID REAL */
 .grid-productos {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
 }
 
+/* 🔑 TARJETA COMPACTA */
 .producto {
     background: #fff;
     border-radius: 10px;
@@ -110,34 +112,39 @@ main {
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
+    width: auto;
 }
 
+/* 🔑 IMAGEN CONTROLADA */
 .producto img {
     width: 100%;
-    height: 150px;
+    height: 140px;
     object-fit: cover;
+    display: block;
 }
 
+/* 🔑 INFO COMPACTA */
 .producto-info {
-    padding: 12px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 }
 
 .producto-info h3 {
-    font-size: 15px;
+    font-size: 14px;
+    line-height: 1.2;
 }
 
 .precio {
     font-weight: bold;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 /* ===== DISPONIBILIDAD ===== */
 
 .estado {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
 }
 
@@ -153,10 +160,10 @@ main {
 
 .producto-info button {
     margin-top: auto;
-    padding: 8px;
+    padding: 6px;
     border-radius: 6px;
     border: none;
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer;
 }
 
@@ -208,6 +215,7 @@ button.agregado {
 
 /* ================= RESPONSIVE ================= */
 
+/* TABLET */
 @media (max-width: 768px) {
     .header-inner {
         flex-direction: column;
@@ -219,10 +227,11 @@ button.agregado {
     }
 
     .grid-productos {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
+/* CELULAR → 🔥 3 COLUMNAS REALES */
 @media (max-width: 480px) {
     .grid-productos {
         grid-template-columns: repeat(3, 1fr);
@@ -230,7 +239,7 @@ button.agregado {
     }
 
     .producto img {
-        height: 110px;
+        height: 100px;
     }
 
     .producto-info {
@@ -238,7 +247,7 @@ button.agregado {
     }
 
     .producto-info h3 {
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .precio {
@@ -246,7 +255,7 @@ button.agregado {
     }
 
     .producto-info button {
-        font-size: 12px;
+        font-size: 11px;
         padding: 6px;
     }
 }
