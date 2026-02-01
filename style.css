@@ -30,12 +30,12 @@ body {
     text-align: center;
 }
 
-.header-texto {
-    text-align: center;
-}
-
 .logo img {
     width: 90px;
+}
+
+.header-texto {
+    text-align: center;
 }
 
 .header-texto h1 {
@@ -58,6 +58,19 @@ body {
     flex-wrap: wrap;
     border-bottom: 1px solid #ddd;
     font-size: 14px;
+}
+
+/* 🔑 BOTÓN CATEGORÍAS (DEBAJO DE FRANJA, IZQUIERDA) */
+.btn-categorias {
+    display: block;
+    margin: 12px 0 0 12px;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #f5f5f5;
+    cursor: pointer;
+    width: fit-content;
 }
 
 /* ================= BUSCADOR ================= */
@@ -103,14 +116,14 @@ main {
 
 /* ================= PRODUCTOS ================= */
 
-/* 🔑 GRID REAL */
+/* GRID */
 .grid-productos {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
 }
 
-/* 🔑 TARJETA COMPACTA */
+/* TARJETA */
 .producto {
     background: #fff;
     border-radius: 10px;
@@ -118,18 +131,16 @@ main {
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
-    width: auto;
 }
 
-/* 🔑 IMAGEN CONTROLADA */
+/* IMAGEN */
 .producto img {
     width: 100%;
     height: 140px;
     object-fit: cover;
-    display: block;
 }
 
-/* 🔑 INFO COMPACTA */
+/* INFO */
 .producto-info {
     padding: 10px;
     display: flex;
@@ -225,7 +236,6 @@ button.agregado {
 @media (max-width: 768px) {
     .header-inner {
         flex-direction: column;
-        text-align: center;
     }
 
     .logo img {
@@ -237,7 +247,7 @@ button.agregado {
     }
 }
 
-/* CELULAR → 🔥 3 COLUMNAS REALES */
+/* CELULAR → 3 COLUMNAS */
 @media (max-width: 480px) {
     .grid-productos {
         grid-template-columns: repeat(3, 1fr);
@@ -265,13 +275,4 @@ button.agregado {
         padding: 6px;
     }
 }
-.btn-categorias {
-    display: inline-block;
-    margin: 10px 0 0 10px;
-    padding: 6px 10px;
-    font-size: 13px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background: #f5f5f5;
-    cursor: pointer;
-}
+
