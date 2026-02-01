@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let productos = [];
     let carrito = [];
 
-    // ===== CARRITO =====
     btnAbrirCarrito.onclick = () => {
         carritoPanel.classList.toggle("abierto");
     };
@@ -31,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
         carritoPanel.classList.remove("abierto");
     };
 
-    // ===== MOSTRAR PRODUCTOS =====
     function mostrarProductos(lista) {
         contenedor.innerHTML = "";
         lista.forEach(p => {
@@ -53,7 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ===== MOSTRAR CARRITO =====
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
         let mensaje = "Hola, quiero comprar:%0A";
@@ -66,7 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
         btnComprar.href = `https://wa.me/573118612727?text=${mensaje}`;
     }
 
-    // ===== FILTROS =====
     filtroCategoria.addEventListener("change", () => {
         if (filtroCategoria.value === "todas") {
             mostrarProductos(productos);
@@ -77,18 +73,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     buscador.addEventListener("keyup", () => {
         const texto = buscador.value.toLowerCase();
-        mostrarProductos(
-            productos.filter(p => p.nombre.toLowerCase().includes(texto))
-        );
+        mostrarProductos(productos.filter(p => p.nombre.toLowerCase().includes(texto)));
     });
 
-    // ===== FIRESTORE (PROTEGIDO) =====
     if (typeof db !== "undefined") {
         db.collection("productos")
             .where("disponible", "==", true)
             .onSnapshot((snapshot) => {
                 productos = [];
-                filtroCategoria.innerHTML = `<option value="todas">Todas las categorías</option>`;
+                filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
 
                 snapshot.forEach(doc => {
                     productos.push(doc.data());
@@ -105,5 +98,4 @@ document.addEventListener("DOMContentLoaded", () => {
                 mostrarProductos(productos);
             });
     }
-
 });
