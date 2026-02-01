@@ -1,13 +1,3 @@
-let productos = [];
-
-db.collection("productos").orderBy("creado", "desc").onSnapshot((snapshot) => {
-    productos = [];
-    snapshot.forEach(doc => {
-        productos.push({ id: doc.id, ...doc.data() });
-    });
-    render();
-});
-
 let categorias = JSON.parse(localStorage.getItem("categorias")) || [];
 
 const nombre = document.getElementById("nombre");
@@ -65,43 +55,21 @@ btnAgregarCategoria.addEventListener("click", () => {
     nombreCategoria.value = "";
 });
 
-function render() {
-    lista.innerHTML = "";
-    productos.forEach((p) => {
-        const div = document.createElement("div");
-        div.innerHTML = `
-            ${p.nombre} - ${p.precio} - ${p.categoria} - 
-            ${p.disponible ? "Disponible" : "No disponible"}
-            <button data-id="${p.id}">Eliminar</button>
-        `;
-        div.querySelector("button").onclick = async () => {
-            await db.collection("productos").doc(p.id).delete();
-        };
-        lista.appendChild(div);
-    });
-}
-
 btnAgregar.addEventListener("click", async () => {
     if (!nombre.value || !precio.value) return;
 
-    try {
-        await db.collection("productos").add({
-            nombre: nombre.value,
-            precio: precio.value,
-            imagen: imagen.value || "https://via.placeholder.com/300",
-            disponible: disponible.checked,
-            categoria: categoriaProducto.value,
-            creado: new Date()
-        });
+    await db.collection("productos").add({
+        nombre: nombre.value,
+        precio: precio.value,
+        imagen: imagen.value || "https://via.placeholder.com/300",
+        disponible: disponible.checked,
+        categoria: categoriaProducto.value
+    });
 
-        nombre.value = "";
-        precio.value = "";
-        imagen.value = "";
-        disponible.checked = false;
-
-    } catch (error) {
-        console.error("Error al guardar producto:", error);
-    }
+    nombre.value = "";
+    precio.value = "";
+    imagen.value = "";
+    disponible.checked = false;
 });
 
 renderCategorias();
