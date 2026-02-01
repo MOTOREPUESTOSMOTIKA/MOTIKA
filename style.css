@@ -25,7 +25,9 @@ body {
     margin: auto;
     display: flex;
     align-items: center;
+    justify-content: center; /* 👈 centra todo */
     gap: 16px;
+    text-align: center;
 }
 
 .logo img {
