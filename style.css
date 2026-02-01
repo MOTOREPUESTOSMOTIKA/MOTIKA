@@ -208,4 +208,79 @@ button.agregado {
         margin-top: 10px;
     }
 }
+/* ====== CORRECCIÓN HEADER ====== */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Limitar tamaño del logo */
+.logo {
+    max-width: 140px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+/* Título estable */
+.header h1 {
+    font-size: 28px;
+    margin: 5px 0;
+}
+
+/* Texto del header */
+.header p {
+    margin: 2px 0;
+    font-size: 14px;
+}
+
+/* ====== BOTÓN CARRITO (NO AFECTARLO) ====== */
+.btn-carrito-fijo {
+    width: 55px;
+    height: 55px;
+    font-size: 22px;
+}
+
+/* ====== BOTONES SOLO DENTRO DE PRODUCTOS ====== */
+.producto-info button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* No tocar otros botones */
+button:not(.btn-agregar):not(.btn-consultar) {
+    all: unset;
+}
+
+/* ====== BOTONES DE PRODUCTO ====== */
+.btn-agregar {
+    background: #000;
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-consultar {
+    background: #ff9800;
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button.agregado {
+    background: #aaa;
+    color: #333;
+    cursor: default;
+}
+
+/* ====== FRANJA INFO EN MÓVIL ====== */
+@media (max-width: 768px) {
+    .franja-info {
+        position: static;
+        margin-top: 10px;
+    }
+}
 
