@@ -25,8 +25,12 @@ body {
     margin: auto;
     display: flex;
     align-items: center;
-    justify-content: center; /* 👈 centra todo */
+    justify-content: center;
     gap: 16px;
+    text-align: center;
+}
+
+.header-texto {
     text-align: center;
 }
 
