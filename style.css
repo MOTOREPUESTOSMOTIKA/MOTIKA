@@ -182,4 +182,30 @@ button.agregado {
     color: #333;
     cursor: default;
 }
+.producto-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.producto-info button {
+    margin-top: 10px;
+}
+
+.btn-consultar {
+    background: #ff9800;
+    color: #fff;
+}
+
+button.agregado {
+    background: #aaa;
+    color: #333;
+    cursor: default;
+}
+
+@media (max-width: 768px) {
+    .franja-info {
+        position: static;
+        margin-top: 10px;
+    }
+}
 
