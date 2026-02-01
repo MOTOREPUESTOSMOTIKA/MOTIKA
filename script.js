@@ -50,9 +50,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 if (p.disponible) {
     boton.onclick = () => {
-        carrito.push(p);
-        mostrarCarrito();
-    };
+    carrito.push(p);
+    mostrarCarrito();
+    boton.textContent = "Agregado ✓";
+    boton.disabled = true;
+    boton.classList.add("agregado");
+};
 } else {
     boton.onclick = () => {
         const mensaje = `Hola, quisiera saber disponibilidad del producto: ${p.nombre}`;
