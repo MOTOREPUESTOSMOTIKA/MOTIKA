@@ -1,4 +1,13 @@
-let productos = JSON.parse(localStorage.getItem("productos")) || [];
+let productos = [];
+
+db.collection("productos").onSnapshot((snapshot) => {
+    productos = [];
+    snapshot.forEach(doc => {
+        productos.push({ id: doc.id, ...doc.data() });
+    });
+    render();
+});
+
 let categorias = JSON.parse(localStorage.getItem("categorias")) || [];
 
 const nombre = document.getElementById("nombre");
@@ -102,4 +111,5 @@ btnAgregar.addEventListener("click", () => {
 renderCategorias();
 cargarCategoriasSelect();
 render();
+
 
