@@ -225,6 +225,28 @@ button.agregado {
 
 @media (max-width: 480px) {
     .grid-productos {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .producto img {
+        height: 110px;
+    }
+
+    .producto-info {
+        padding: 8px;
+    }
+
+    .producto-info h3 {
+        font-size: 13px;
+    }
+
+    .precio {
+        font-size: 12px;
+    }
+
+    .producto-info button {
+        font-size: 12px;
+        padding: 6px;
     }
 }
