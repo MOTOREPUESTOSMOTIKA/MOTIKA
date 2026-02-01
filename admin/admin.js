@@ -1,6 +1,6 @@
 let productos = [];
 
-db.collection("productos").onSnapshot((snapshot) => {
+db.collection("productos").orderBy("creado", "desc").onSnapshot((snapshot) => {
     productos = [];
     snapshot.forEach(doc => {
         productos.push({ id: doc.id, ...doc.data() });
@@ -21,10 +21,6 @@ const lista = document.getElementById("lista");
 const nombreCategoria = document.getElementById("nombreCategoria");
 const btnAgregarCategoria = document.getElementById("agregarCategoria");
 const listaCategorias = document.getElementById("listaCategorias");
-
-function guardar() {
-    localStorage.setItem("productosMOTIKA", JSON.stringify(productos));
-}
 
 function guardarCategorias() {
     localStorage.setItem("categorias", JSON.stringify(categorias));
@@ -71,45 +67,42 @@ btnAgregarCategoria.addEventListener("click", () => {
 
 function render() {
     lista.innerHTML = "";
-    productos.forEach((p, i) => {
+    productos.forEach((p) => {
         const div = document.createElement("div");
         div.innerHTML = `
             ${p.nombre} - ${p.precio} - ${p.categoria} - 
             ${p.disponible ? "Disponible" : "No disponible"}
-            <button onclick="eliminar(${i})">Eliminar</button>
+            <button data-id="${p.id}">Eliminar</button>
         `;
+        div.querySelector("button").onclick = async () => {
+            await db.collection("productos").doc(p.id).delete();
+        };
         lista.appendChild(div);
     });
 }
 
-function eliminar(index) {
-    productos.splice(index, 1);
-    guardar();
-    render();
-}
-
-btnAgregar.addEventListener("click", () => {
+btnAgregar.addEventListener("click", async () => {
     if (!nombre.value || !precio.value) return;
 
-    productos.push({
-        nombre: nombre.value,
-        precio: precio.value,
-        imagen: imagen.value || "https://via.placeholder.com/300",
-        disponible: disponible.checked,
-        categoria: categoriaProducto.value
-    });
+    try {
+        await db.collection("productos").add({
+            nombre: nombre.value,
+            precio: precio.value,
+            imagen: imagen.value || "https://via.placeholder.com/300",
+            disponible: disponible.checked,
+            categoria: categoriaProducto.value,
+            creado: new Date()
+        });
 
-    guardar();
-    render();
+        nombre.value = "";
+        precio.value = "";
+        imagen.value = "";
+        disponible.checked = false;
 
-    nombre.value = "";
-    precio.value = "";
-    imagen.value = "";
-    disponible.checked = false;
+    } catch (error) {
+        console.error("Error al guardar producto:", error);
+    }
 });
 
 renderCategorias();
 cargarCategoriasSelect();
-render();
-
-
