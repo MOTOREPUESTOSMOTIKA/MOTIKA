@@ -96,8 +96,11 @@ if (p.disponible) {
                 filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
 
                 snapshot.forEach(doc => {
-                    productos.push(doc.data());
-                });
+    const p = doc.data();
+    if (p.nombre && p.precio && p.imagen) {
+        productos.push(p);
+    }
+});
 
                 const categorias = [...new Set(productos.map(p => p.categoria))];
                 categorias.forEach(cat => {
