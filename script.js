@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const productos = JSON.parse(localStorage.getItem("productosMOTIKA")) || [];
     const contenedor = document.getElementById("productos");
     const btnComprar = document.getElementById("btnComprar");
     const buscador = document.getElementById("buscador");
@@ -10,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const carritoPanel = document.getElementById("carrito");
     const listaCarrito = document.getElementById("listaCarrito");
 
+    let productos = [];
     let carrito = [];
 
     // ===== CARRITO =====
@@ -30,15 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
     btnComprar.onclick = () => {
         carritoPanel.classList.remove("abierto");
     };
-
-    // ===== CATEGORÍAS =====
-    const categorias = [...new Set(productos.map(p => p.categoria))];
-    categorias.forEach(cat => {
-        const option = document.createElement("option");
-        option.value = cat;
-        option.textContent = cat;
-        filtroCategoria.appendChild(option);
-    });
 
     // ===== MOSTRAR PRODUCTOS =====
     function mostrarProductos(lista) {
@@ -91,7 +82,27 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     });
 
-    // ===== INICIO =====
-    mostrarProductos(productos);
+    // ===== FIRESTORE =====
+    db.collection("productos")
+        .where("disponible", "==", true)
+        .onSnapshot((snapshot) => {
+            productos = [];
+            filtroCategoria.innerHTML = `<option value="todas">Todas</option>`;
+
+            snapshot.forEach(doc => {
+                const p = doc.data();
+        productos.push(p);
+            });
+
+            const categorias = [...new Set(productos.map(p => p.categoria))];
+            categorias.forEach(cat => {
+                const option = document.createElement("option");
+                option.value = cat;
+                option.textContent = cat;
+                filtroCategoria.appendChild(option);
+            });
+
+            mostrarProductos(productos);
+        });
 
 });
