@@ -40,13 +40,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="producto-info">
                     <h3>${p.nombre}</h3>
                     <div class="precio">${p.precio}</div>
-                    <button>Agregar al carrito</button>
+                    ${p.disponible
+    ? `<button class="btn-carrito">Agregar al carrito</button>`
+    : `<button class="btn-consultar">Consultar disponibilidad</button>`
+}
                 </div>
             `;
-            div.querySelector("button").onclick = () => {
-                carrito.push(p);
-                mostrarCarrito();
-            };
+           const boton = div.querySelector("button");
+
+if (p.disponible) {
+    boton.onclick = () => {
+        carrito.push(p);
+        mostrarCarrito();
+    };
+} else {
+    boton.onclick = () => {
+        const mensaje = `Hola, quisiera saber disponibilidad del producto: ${p.nombre}`;
+        window.open(`https://wa.me/573118612727?text=${encodeURIComponent(mensaje)}`);
+    };
+}
             contenedor.appendChild(div);
         });
     }
