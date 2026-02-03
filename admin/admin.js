@@ -71,6 +71,11 @@ btnAgregar.addEventListener("click", async () => {
     imagen.value = "";
     disponible.checked = false;
 });
+
+
+renderCategorias();
+cargarCategoriasSelect();
+
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } 
 from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
@@ -102,6 +107,3 @@ onAuthStateChanged(auth, (user) => {
     adminPanel.style.display = "none";
   }
 });
-
-renderCategorias();
-cargarCategoriasSelect();
