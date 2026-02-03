@@ -317,32 +317,55 @@ button.agregado {
 .header-inner {
     flex-direction: column;
 }
+/* Contenedor principal */
 .header {
     display: flex;
-    flex-direction: column; /* Alinea logo y texto en vertical */
-    align-items: center;    /* Centra todo el contenido */
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    background-color: #1a1a1a; /* El fondo oscuro de tu imagen */
+    background-color: #1a1a1a;
     color: white;
-    padding: 20px;
+    padding: 30px;
+    font-family: 'Arial Black', sans-serif; /* Tipografía gruesa similar al logo */
 }
 
+/* Texto superior: Motorepuestos */
 .header-texto h2 {
-    font-size: 1.2rem;
-    font-weight: 400;       /* Más delgado para "Motorepuestos" */
-    margin-bottom: -10px;   /* Acerca el texto de arriba al de abajo */
-    text-transform: uppercase;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: -5px; /* Lo pega al texto principal */
+    text-transform: none; /* Mantener mayúsculas/minúsculas según el logo */
+    font-style: italic;    /* Inclinación tipo racing */
+    color: #f0f0f0;
 }
 
+/* Texto principal: MOTIKA con efecto metálico */
 .header-texto h1 {
-    font-size: 3rem;
-    font-weight: 800;       /* Más grueso y grande para "MOTIKA" */
-    letter-spacing: 2px;    /* Espaciado entre letras */
+    font-size: 4rem;
+    font-weight: 900;
     margin: 0;
+    font-style: italic; /* Inclinación de velocidad */
+    text-transform: uppercase;
+    
+    /* EFECTO DEGRADADO METALIZADO */
+    background: linear-gradient(to bottom, 
+        #ffffff 0%, 
+        #e2e2e2 45%, 
+        #7a7a7a 50%, 
+        #d1d1d1 55%, 
+        #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* Sombra para dar profundidad */
+    filter: drop-shadow(2px 2px 0px #000);
 }
 
+/* Información inferior */
 .header-texto p {
-    margin: 5px 0;
-    font-style: italic;     /* Opcional, para el eslogan */
-    opacity: 0.8;
+    margin: 8px 0 0 0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    color: #cccccc;
 }
