@@ -115,3 +115,13 @@ btnAgregar.addEventListener("click", async () => {
     alert("Error al agregar producto");
   }
 });
+function mostrarToast(texto, error = false) {
+  const toast = document.getElementById("toast");
+  toast.textContent = texto;
+  toast.style.background = error ? "#e74c3c" : "#2ecc71";
+  toast.style.display = "block";
+
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 2500);
+}
