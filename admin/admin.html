@@ -2,63 +2,81 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Admin - Productos</title>
+  <title>Admin - MOTIKA</title>
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
 
 <!-- LOGIN -->
-<div id="loginBox">
+<div id="loginBox" style="max-width:400px; margin:auto; padding:20px;">
   <h2>Acceso administrador</h2>
 
-  <input type="email" id="email" placeholder="Correo" />
-  <input type="password" id="password" placeholder="Contraseña" />
+  <input type="email" id="email" placeholder="Correo" style="width:100%; padding:8px; margin-top:10px;">
 
-  <button id="btnLogin">Ingresar</button>
+  <input type="password" id="password" placeholder="Contraseña" style="width:100%; padding:8px; margin-top:10px;">
 
-  <p id="loginError" style="color:red; display:none;">
+  <button id="btnLogin" style="width:100%; padding:10px; margin-top:15px; background:#25d366; color:white; border:none; cursor:pointer;">
+    Ingresar
+  </button>
+
+  <p id="loginError" style="color:red; display:none; margin-top:10px;">
     Credenciales incorrectas
   </p>
 </div>
 
 <!-- PANEL ADMIN -->
-<div id="adminPanel" style="display:none;">
+<div id="adminPanel" style="display:none; max-width:800px; margin:auto; padding:20px;">
 
-  <button id="btnLogout" style="background:#e74c3c; margin-bottom:15px;">
+  <button id="btnLogout" style="background:#e74c3c; color:white; padding:10px 15px; border:none; cursor:pointer; margin-bottom:20px;">
     Cerrar sesión
   </button>
 
   <h1>Panel de Administración</h1>
 
-  <section>
-    <input type="text" id="nombre" placeholder="Nombre del producto">
-    <input type="text" id="precio" placeholder="Precio">
+  <!-- MENSAJE DE CONFIRMACIÓN -->
+  <p id="mensajeProducto" style="display:none; color:green; margin-top:10px;">
+    Producto agregado correctamente
+  </p>
 
-    <select id="categoriaProducto"></select>
+  <!-- FORMULARIO AGREGAR PRODUCTO -->
+  <section style="margin-top:20px;">
+    <input type="text" id="nombre" placeholder="Nombre del producto" style="width:100%; padding:8px; margin-top:10px;">
 
-    <label>
-      <input type="checkbox" id="disponible" checked>
+    <input type="text" id="precio" placeholder="Precio" style="width:100%; padding:8px; margin-top:10px;">
+
+    <select id="categoriaProducto" style="width:100%; padding:8px; margin-top:10px;"></select>
+
+    <label style="display:flex; align-items:center; margin-top:10px;">
+      <input type="checkbox" id="disponible" checked style="margin-right:6px;">
       Disponible en tienda
     </label>
 
-    <input type="text" id="imagen" placeholder="URL de imagen">
-    <button id="agregar">Agregar producto</button>
-  </section>
-  
-  <p id="mensajeProducto" style="display:none; color:green; margin-top:10px;">
-  Producto agregado correctamente
-</p>
+    <input type="text" id="imagen" placeholder="URL de imagen" style="width:100%; padding:8px; margin-top:10px;">
 
-  <section>
+    <button id="agregar" style="width:100%; padding:10px; background:#25d366; color:white; border:none; cursor:pointer; margin-top:15px;">
+      Agregar producto
+    </button>
+  </section>
+
+  <!-- CATEGORÍAS -->
+  <section style="margin-top:30px;">
     <h2>Categorías</h2>
-    <input type="text" id="nombreCategoria" placeholder="Nombre de la categoría">
-    <button id="agregarCategoria">Agregar categoría</button>
-    <div id="listaCategorias"></div>
+
+    <input type="text" id="nombreCategoria" placeholder="Nombre de la categoría"
+           style="width:100%; padding:8px; margin-top:10px;">
+
+    <button id="agregarCategoria"
+            style="width:100%; padding:10px; background:#25d366; color:white; border:none; cursor:pointer; margin-top:10px;">
+      Agregar categoría
+    </button>
+
+    <div id="listaCategorias" style="margin-top:15px;"></div>
   </section>
 
-  <section>
+  <!-- PRODUCTOS ACTUALES -->
+  <section style="margin-top:30px;">
     <h2>Productos actuales</h2>
-    <div id="lista"></div>
+    <div id="lista" style="margin-top:15px;"></div>
   </section>
 
 </div>
@@ -84,5 +102,6 @@
 </script>
 
 <script src="admin.js"></script>
+
 </body>
 </html>
