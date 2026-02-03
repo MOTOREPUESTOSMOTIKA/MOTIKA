@@ -71,19 +71,22 @@ async function cargarCategoriasSelect() {
 
 btnAgregarCategoria.addEventListener("click", async () => {
   const nombreCat = nombreCategoria.value.trim();
-  if (!nombreCat) return;
+  if (!nombreCat) {
+    mostrarToast("Escribe un nombre de categoría", true);
+    return;
+  }
 
   try {
     await db.collection("categorias").add({
       nombre: nombreCat
     });
 
-    alert("Categoría agregada correctamente");
+    mostrarToast("Categoría agregada correctamente");
     nombreCategoria.value = "";
     cargarCategoriasSelect();
+
   } catch (error) {
-    console.error(error);
-    alert("Error al agregar categoría");
+    mostrarToast("Error al agregar categoría", true);
   }
 });
 
@@ -102,9 +105,8 @@ btnAgregar.addEventListener("click", async () => {
       categoria: categoriaProducto.value
     });
 
-    mensajeProducto.style.display = "block";
-    setTimeout(() => mensajeProducto.style.display = "none", 3000);
-
+    mostrarToast("Producto agregado correctamente");
+    
     nombre.value = "";
     precio.value = "";
     imagen.value = "";
