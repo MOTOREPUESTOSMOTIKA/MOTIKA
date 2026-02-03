@@ -71,12 +71,19 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
-  firebase.initializeApp({
+  const firebaseConfig = {
     apiKey: "AIzaSyCzd4E8mJ7zyzoddBQXmfB43-Mhu1BCPJQ",
     authDomain: "motika-751ee.firebaseapp.com",
-    projectId: "motika-751ee"
-  });
+    projectId: "motika-751ee",
+    storageBucket: "motika-751ee.appspot.com",
+    messagingSenderId: "260880167433",
+    appId: "1:260880167433:web:d0cd51752c25637fd83ed8"
+  };
+  
+  // Inicializar Firebase
+  firebase.initializeApp(firebaseConfig);
 </script>
+
 
 <script src="admin.js"></script>
 </body>
