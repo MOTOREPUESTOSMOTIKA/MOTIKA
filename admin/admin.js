@@ -7,6 +7,9 @@ const disponible = document.getElementById("disponible");
 const categoriaProducto = document.getElementById("categoriaProducto");
 const btnAgregar = document.getElementById("agregar");
 const lista = document.getElementById("lista");
+await db.collection("productos").add({ ... });
+await db.collection("productos").add({ ... });
+cargarProductos();
 
 const nombreCategoria = document.getElementById("nombreCategoria");
 const btnAgregarCategoria = document.getElementById("agregarCategoria");
@@ -104,3 +107,28 @@ btnAgregar.addEventListener("click", async () => {
 
 renderCategorias();
 cargarCategoriasSelect();
+async function cargarProductos() {
+  lista.innerHTML = "";
+
+  const snapshot = await db.collection("productos").get();
+
+  snapshot.forEach(doc => {
+    const p = doc.data();
+
+    const div = document.createElement("div");
+    div.style.border = "1px solid #ddd";
+    div.style.padding = "10px";
+    div.style.marginBottom = "10px";
+    div.style.borderRadius = "8px";
+
+    div.innerHTML = `
+      <strong>${p.nombre}</strong><br>
+      Precio: $${p.precio}<br>
+      Categoría: ${p.categoria}<br>
+      Estado: ${p.disponible ? "Disponible" : "Consultar"}
+    `;
+
+    lista.appendChild(div);
+  });
+}
+cargarProductos();
