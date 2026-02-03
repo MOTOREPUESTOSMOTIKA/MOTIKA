@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
 
 * {
     margin: 0;
@@ -10,6 +10,8 @@ body {
     font-family: 'Poppins', sans-serif;
     background: #f2f2f2;
     color: #222;
+    /* ✅ TODO EL TEXTO EN NEGRITA */
+    font-weight: 700; 
 }
 
 /* ================= HEADER ================= */
@@ -18,34 +20,63 @@ body {
     background: #222;
     color: #fff;
     padding: 16px;
+    text-align: center;
 }
 
 .header-inner {
     max-width: 1100px;
-    margin: auto;
+    margin: 0 auto;
     display: flex;
+    flex-direction: column; /* Alineación vertical */
     align-items: center;
     justify-content: center;
-    gap: 16px;
-    text-align: center;
+    gap: 10px;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .logo img {
     width: 120px;
     max-width: 100%;
+    display: block;
+    margin: 0 auto;
 }
 
+/* ✅ AJUSTE PARA QUE EL TEXTO SE VEA COMO EL LOGO */
 .header-texto {
     text-align: center;
 }
 
+/* Estilo para "moto repuestos" */
+.header-texto h2 {
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: none;
+    margin-bottom: -8px;
+    color: #fff;
+}
+
+/* Estilo para "MOTIKA" (Efecto metálico e inclinado) */
 .header-texto h1 {
-    font-size: 26px;
+    font-size: 38px;
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    margin: 0;
+    background: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 45%, #7a7a7a 50%, #d1d1d1 55%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(2px 2px 0px #000);
 }
 
 .header-texto p {
     font-size: 13px;
     color: #ccc;
+    margin-top: 5px;
 }
 
 /* ================= FRANJA ================= */
@@ -72,6 +103,7 @@ body {
     background: #f5f5f5;
     cursor: pointer;
     width: fit-content;
+    font-weight: bold;
 }
 
 /* ================= BUSCADOR ================= */
@@ -88,6 +120,7 @@ body {
     border-radius: 6px;
     border: 1px solid #aaa;
     width: 160px;
+    font-weight: bold;
 }
 
 /* ================= BOTÓN CARRITO ================= */
@@ -117,14 +150,12 @@ main {
 
 /* ================= PRODUCTOS ================= */
 
-/* GRID */
 .grid-productos {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
 }
 
-/* TARJETA */
 .producto {
     background: #fff;
     border-radius: 10px;
@@ -134,14 +165,12 @@ main {
     flex-direction: column;
 }
 
-/* IMAGEN */
 .producto img {
     width: 100%;
     height: 140px;
     object-fit: cover;
 }
 
-/* INFO */
 .producto-info {
     padding: 10px;
     display: flex;
@@ -155,15 +184,13 @@ main {
 }
 
 .precio {
-    font-weight: bold;
-    font-size: 13px;
+    font-weight: 900;
+    font-size: 14px;
 }
-
-/* ===== DISPONIBILIDAD ===== */
 
 .estado {
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 900;
 }
 
 .disponible {
@@ -174,8 +201,6 @@ main {
     color: orange;
 }
 
-/* ===== BOTONES ===== */
-
 .producto-info button {
     margin-top: auto;
     padding: 6px;
@@ -183,6 +208,7 @@ main {
     border: none;
     font-size: 13px;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .btn-agregar {
@@ -228,17 +254,12 @@ button.agregado {
     border-radius: 6px;
     text-align: center;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 900;
 }
 
 /* ================= RESPONSIVE ================= */
 
-/* TABLET */
 @media (max-width: 768px) {
-    .header-inner {
-        flex-direction: column;
-    }
-
     .logo img {
         width: 100px;
     }
@@ -248,19 +269,18 @@ button.agregado {
     }
 }
 
-/* CELULAR → 3 COLUMNAS */
 @media (max-width: 480px) {
     .grid-productos {
         grid-template-columns: repeat(3, 1fr);
         gap: 10px;
     }
 
-    .producto img {
-        height: 100px;
+    .header-texto h1 {
+        font-size: 28px;
     }
 
-    .producto-info {
-        padding: 8px;
+    .producto img {
+        height: 100px;
     }
 
     .producto-info h3 {
@@ -275,97 +295,4 @@ button.agregado {
         font-size: 11px;
         padding: 6px;
     }
-}
-.header {
-    background: #222;
-    color: #fff;
-    padding: 16px;
-    text-align: center;
-}
-
-.header-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.logo {
-    display: flex;
-    justify-content: center;
-}
-
-.header-texto {
-    text-align: center;
-}
-/* ===== FORZAR LOGO CENTRADO ===== */
-.logo {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.logo img {
-    display: block;
-    margin: 0 auto;
-}
-.header-inner {
-    flex-direction: column;
-}
-/* ===== HEADER CENTRADO EN PC ===== */
-.header-inner {
-    flex-direction: column;
-}
-/* Contenedor principal */
-.header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    background-color: #1a1a1a;
-    color: white;
-    padding: 30px;
-    font-family: 'Arial Black', sans-serif; /* Tipografía gruesa similar al logo */
-}
-
-/* Texto superior: Motorepuestos */
-.header-texto h2 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-bottom: 1px; /* Lo pega al texto principal */
-    text-transform: none; /* Mantener mayúsculas/minúsculas según el logo */
-    font-style: italic;    /* Inclinación tipo racing */
-    color: #f0f0f0;
-}
-
-/* Texto principal: MOTIKA con efecto metálico */
-.header-texto h1 {
-    font-size: 4rem;
-    font-weight: 900;
-    margin: 0;
-    font-style: italic; /* Inclinación de velocidad */
-    text-transform: uppercase;
-    
-    /* EFECTO DEGRADADO METALIZADO */
-    background: linear-gradient(to bottom, 
-        #ffffff 0%, 
-        #e2e2e2 45%, 
-        #7a7a7a 50%, 
-        #d1d1d1 55%, 
-        #ffffff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    
-    /* Sombra para dar profundidad */
-    filter: drop-shadow(2px 2px 0px #000);
-}
-
-/* Información inferior */
-.header-texto p {
-    margin: 8px 0 0 0;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-    color: #cccccc;
 }
