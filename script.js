@@ -9,8 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const precioTotalDoc = document.getElementById("precioTotal");
 
     let productos = [];
-    
-    // Cargar el carrito desde la memoria al iniciar
     let carrito = JSON.parse(localStorage.getItem("carrito_motika")) || [];
 
     // --- Control del Panel ---
@@ -24,13 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // --- Renderizado de Productos ---
     function mostrarProductos(lista) {
         contenedor.innerHTML = "";
         lista.forEach(p => {
             const div = document.createElement("div");
             div.className = "producto";
-            
             const estaEnCarrito = carrito.some(item => item.nombre === p.nombre);
             const btnHTML = p.disponible
                 ? `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>
@@ -49,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     ${btnHTML}
                 </div>
             `;
-
             const boton = div.querySelector("button");
             boton.onclick = () => {
                 if (p.disponible) {
@@ -66,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Lógica del Carrito ---
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
         if (carrito.length === 0) {
@@ -81,26 +75,35 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         btnComprar.style.display = "block";
+        
+        // --- BOTÓN VACIAR CARRITO ---
+        const btnVaciar = document.createElement("button");
+        btnVaciar.innerText = "Vaciar Carrito 🗑️";
+        btnVaciar.className = "btn-vaciar";
+        btnVaciar.onclick = () => {
+            if(confirm("¿Seguro que quieres vaciar el carrito?")) {
+                vaciarTodo();
+            }
+        };
+        listaCarrito.appendChild(btnVaciar);
+
         let mensaje = "Hola Motika, quiero comprar:%0A";
         let total = 0;
 
         carrito.forEach((p, index) => {
             const itemDiv = document.createElement("div");
             itemDiv.className = "item-carrito-lista";
-            // ✅ DISEÑO NUEVO: X a la izquierda, Nombre al centro, Precio a la derecha
             itemDiv.innerHTML = `
                 <button class="btn-borrar" data-index="${index}">✕</button>
                 <span class="nombre-p">${p.nombre}</span>
                 <span class="precio-p">${p.precio}</span>
             `;
             listaCarrito.appendChild(itemDiv);
-
             mensaje += `- ${p.nombre} (${p.precio})%0A`;
             let valorLimpio = String(p.precio).replace(/[^0-9]/g, "");
             total += parseInt(valorLimpio) || 0;
         });
 
-        // Lógica para el botón de borrar (usando currentTarget para evitar errores al tocar la X)
         document.querySelectorAll(".btn-borrar").forEach(btn => {
             btn.onclick = (e) => {
                 const idx = e.currentTarget.getAttribute("data-index");
@@ -116,7 +119,21 @@ document.addEventListener("DOMContentLoaded", () => {
         btnComprar.href = `https://wa.me/573118612727?text=${mensaje}`;
     }
 
-    // --- Conexión Firebase ---
+    // --- FUNCIÓN PARA LIMPIAR TODO ---
+    function vaciarTodo() {
+        carrito = [];
+        localStorage.removeItem("carrito_motika");
+        mostrarCarrito();
+        mostrarProductos(productos);
+    }
+
+    // Al pulsar "Hacer pedido", vaciamos el carro después de un segundo
+    btnComprar.onclick = () => {
+        setTimeout(() => {
+            vaciarTodo();
+        }, 1000);
+    };
+
     db.collection("productos").onSnapshot(snapshot => {
         productos = [];
         const categoriasSet = new Set();
@@ -127,14 +144,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 if(p.categoria) categoriasSet.add(p.categoria);
             }
         });
-
         filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
         categoriasSet.forEach(cat => {
             const opt = document.createElement("option");
             opt.value = opt.textContent = cat;
             filtroCategoria.appendChild(opt);
         });
-
         mostrarProductos(productos);
         mostrarCarrito();
     });
