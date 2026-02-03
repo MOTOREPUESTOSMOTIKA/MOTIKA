@@ -7,9 +7,6 @@ const disponible = document.getElementById("disponible");
 const categoriaProducto = document.getElementById("categoriaProducto");
 const btnAgregar = document.getElementById("agregar");
 const lista = document.getElementById("lista");
-await db.collection("productos").add({ ... });
-await db.collection("productos").add({ ... });
-cargarProductos();
 
 const nombreCategoria = document.getElementById("nombreCategoria");
 const btnAgregarCategoria = document.getElementById("agregarCategoria");
@@ -20,7 +17,9 @@ const loginBox = document.getElementById("loginBox");
 const adminPanel = document.getElementById("adminPanel");
 const btnLogin = document.getElementById("btnLogin");
 const loginError = document.getElementById("loginError");
+const btnLogout = document.getElementById("btnLogout");
 
+// LOGIN
 btnLogin.addEventListener("click", async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -33,6 +32,12 @@ btnLogin.addEventListener("click", async () => {
   }
 });
 
+// LOGOUT
+btnLogout.addEventListener("click", () => {
+  auth.signOut();
+});
+
+// CONTROL DE SESIÓN
 auth.onAuthStateChanged(user => {
   if (user) {
     loginBox.style.display = "none";
@@ -41,13 +46,8 @@ auth.onAuthStateChanged(user => {
     loginBox.style.display = "block";
     adminPanel.style.display = "none";
   }
-  const btnLogout = document.getElementById("btnLogout");
-
-btnLogout.addEventListener("click", async () => {
-  await auth.signOut();
 });
 
-});
 // CATEGORÍAS
 function guardarCategorias() {
   localStorage.setItem("categorias", JSON.stringify(categorias));
@@ -108,10 +108,11 @@ btnAgregar.addEventListener("click", async () => {
   precio.value = "";
   imagen.value = "";
   disponible.checked = false;
+
+  cargarProductos();
 });
 
-renderCategorias();
-cargarCategoriasSelect();
+// LISTAR PRODUCTOS
 async function cargarProductos() {
   lista.innerHTML = "";
 
@@ -136,4 +137,7 @@ async function cargarProductos() {
     lista.appendChild(div);
   });
 }
+
+renderCategorias();
+cargarCategoriasSelect();
 cargarProductos();
