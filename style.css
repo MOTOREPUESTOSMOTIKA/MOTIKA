@@ -351,3 +351,44 @@ button.agregado {
     padding: 12px 0; /* Más espacio entre productos */
     border-bottom: 1px solid #eee;
 }
+/* Alineación de la X a la izquierda y texto a la derecha */
+.item-carrito-lista {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 5px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Botón X grande y táctil */
+.btn-borrar {
+    background-color: #ffeded;
+    color: #ff2d55;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    min-width: 48px;
+    height: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Contenedor del texto del producto */
+.info-producto-carrito {
+    display: flex;
+    flex-direction: column;
+}
+
+.nombre-p {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.precio-p {
+    font-size: 14px;
+    color: #555;
+}
