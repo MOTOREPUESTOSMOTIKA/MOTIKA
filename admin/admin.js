@@ -41,11 +41,12 @@ auth.onAuthStateChanged(user => {
     loginBox.style.display = "block";
     adminPanel.style.display = "none";
   }
-});
-const btnLogout = document.getElementById("btnLogout");
+  const btnLogout = document.getElementById("btnLogout");
 
 btnLogout.addEventListener("click", async () => {
   await auth.signOut();
+});
+
 });
 // CATEGORÍAS
 function guardarCategorias() {
