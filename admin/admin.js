@@ -33,9 +33,11 @@ btnLogin.addEventListener("click", async () => {
 });
 
 // LOGOUT
-btnLogout.addEventListener("click", () => {
-  auth.signOut();
-});
+if (btnLogout) {
+  btnLogout.addEventListener("click", () => {
+    auth.signOut();
+  });
+}
 
 // CONTROL DE SESIÓN
 auth.onAuthStateChanged(user => {
