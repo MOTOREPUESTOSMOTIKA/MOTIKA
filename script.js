@@ -85,13 +85,15 @@ document.addEventListener("DOMContentLoaded", () => {
         let mensaje = "Hola Motika, quiero comprar:%0A";
         let total = 0;
 
-        carrito.forEach((p, index) => {
-            // ✅ AÑADIMOS: Un botón pequeño para eliminar un solo producto
+carrito.forEach((p, index) => {
             const itemDiv = document.createElement("div");
             itemDiv.className = "item-carrito-lista";
             itemDiv.innerHTML = `
                 <span>${p.nombre}</span>
-                <span>${p.precio} <button class="btn-borrar" data-index="${index}" style="background:none; border:none; color:red; cursor:pointer; font-weight:bold; margin-left:5px;">X</button></span>
+                <div class="precio-borrar">
+                    <span>${p.precio}</span>
+                    <button class="btn-borrar" data-index="${index}">✕</button>
+                </div>
             `;
             listaCarrito.appendChild(itemDiv);
 
