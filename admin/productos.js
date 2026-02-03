@@ -19,17 +19,16 @@ async function cargarProductos() {
     const div = document.createElement("div");
     div.style.border = "1px solid #ccc";
     div.style.padding = "10px";
-    div.style.marginBottom = "10px";
+    div.style.marginBottom = "8px";
     div.style.borderRadius = "6px";
-
-    const estado = p.disponible ? "Disponible" : "Consultar";
+    div.style.display = "flex";
+    div.style.justifyContent = "space-between";
+    div.style.alignItems = "center";
 
     div.innerHTML = `
-      <strong>${p.nombre}</strong><br>
-      Precio: $${p.precio}<br>
-      Categoría: ${p.categoria}<br>
-      Estado: ${estado}<br><br>
-      <button onclick="eliminarProducto('${doc.id}')">
+      <span>${p.nombre}</span>
+      <button onclick="eliminarProducto('${doc.id}')"
+              style="background:#e74c3c; color:white; border:none; padding:6px 10px; cursor:pointer;">
         Eliminar
       </button>
     `;
