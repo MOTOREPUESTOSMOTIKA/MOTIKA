@@ -71,6 +71,37 @@ btnAgregar.addEventListener("click", async () => {
     imagen.value = "";
     disponible.checked = false;
 });
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+const auth = getAuth();
+
+const loginBox = document.getElementById("loginBox");
+const adminPanel = document.getElementById("adminPanel");
+const btnLogin = document.getElementById("btnLogin");
+const loginError = document.getElementById("loginError");
+
+btnLogin.addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    loginError.style.display = "none";
+  } catch (error) {
+    loginError.style.display = "block";
+  }
+});
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loginBox.style.display = "none";
+    adminPanel.style.display = "block";
+  } else {
+    loginBox.style.display = "block";
+    adminPanel.style.display = "none";
+  }
+});
 
 renderCategorias();
 cargarCategoriasSelect();
