@@ -36,8 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
                    </button>`
                 : `<button class="btn-consultar">Consultar disponibilidad</button>`;
 
+            // ✅ CORRECCIÓN DE IMAGEN: referrerpolicy evita bloqueos y onerror pone una imagen de repuesto
             div.innerHTML = `
-                <img src="${p.imagen}">
+                <img src="${p.imagen}" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/150?text=Motika+Repuestos'">
                 <div class="producto-info">
                     <h3>${p.nombre}</h3>
                     <div class="precio">${p.precio}</div>
@@ -53,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (p.disponible) {
                     carrito.push(p);
                     mostrarCarrito();
-                    mostrarProductos(lista); // Refresca para mostrar el "Agregado"
+                    mostrarProductos(lista); 
                 } else {
                     const msg = `Hola, quisiera saber la disponibilidad del: ${p.nombre}`;
                     window.open(`https://wa.me/573118612727?text=${encodeURIComponent(msg)}`);
@@ -63,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Lógica del Carrito con Limpieza de Precios ---
+    // --- Lógica del Carrito ---
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
         if (carrito.length === 0) {
@@ -89,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>`;
             mensaje += `- ${p.nombre} (${p.precio})%0A`;
 
-            // LIMPIEZA DINÁMICA: Quita cualquier símbolo que no sea número para sumar
             let valorLimpio = String(p.precio).replace(/[^0-9]/g, "");
             total += parseInt(valorLimpio) || 0;
         });
@@ -106,13 +106,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         snapshot.forEach(doc => {
             const p = doc.data();
+            // ✅ CORRECCIÓN: Quitamos p.imagen del IF para que cargue el producto aunque la URL falle
             if (p.nombre && p.precio) {
                 productos.push(p);
                 if(p.categoria) categoriasSet.add(p.categoria);
             }
         });
 
-        // Actualizar selector de categorías
         filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
         categoriasSet.forEach(cat => {
             const opt = document.createElement("option");
@@ -124,7 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarCarrito();
     });
 
-    // --- Filtros ---
     buscador.onkeyup = () => {
         const t = buscador.value.toLowerCase();
         mostrarProductos(productos.filter(p => p.nombre.toLowerCase().includes(t)));
