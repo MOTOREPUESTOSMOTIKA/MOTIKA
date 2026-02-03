@@ -9,7 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const precioTotalDoc = document.getElementById("precioTotal");
 
     let productos = [];
-    let carrito = [];
+    
+    // ✅ CAMBIO: Cargar el carrito desde la memoria al iniciar
+    let carrito = JSON.parse(localStorage.getItem("carrito_motika")) || [];
 
     // --- Control del Panel ---
     btnAbrirCarrito.onclick = () => carritoPanel.classList.toggle("abierto");
@@ -36,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
                    </button>`
                 : `<button class="btn-consultar">Consultar disponibilidad</button>`;
 
-            // ✅ CORRECCIÓN DE IMAGEN: referrerpolicy evita bloqueos y onerror pone una imagen de repuesto
             div.innerHTML = `
                 <img src="${p.imagen}" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/150?text=Motika+Repuestos'">
                 <div class="producto-info">
@@ -53,6 +54,8 @@ document.addEventListener("DOMContentLoaded", () => {
             boton.onclick = () => {
                 if (p.disponible) {
                     carrito.push(p);
+                    // ✅ CAMBIO: Guardar en memoria al agregar
+                    localStorage.setItem("carrito_motika", JSON.stringify(carrito));
                     mostrarCarrito();
                     mostrarProductos(lista); 
                 } else {
@@ -83,15 +86,29 @@ document.addEventListener("DOMContentLoaded", () => {
         let total = 0;
 
         carrito.forEach((p, index) => {
-            listaCarrito.innerHTML += `
-                <div class="item-carrito-lista">
-                    <span>${p.nombre}</span>
-                    <span>${p.precio}</span>
-                </div>`;
-            mensaje += `- ${p.nombre} (${p.precio})%0A`;
+            // ✅ AÑADIMOS: Un botón pequeño para eliminar un solo producto
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "item-carrito-lista";
+            itemDiv.innerHTML = `
+                <span>${p.nombre}</span>
+                <span>${p.precio} <button class="btn-borrar" data-index="${index}" style="background:none; border:none; color:red; cursor:pointer; font-weight:bold; margin-left:5px;">X</button></span>
+            `;
+            listaCarrito.appendChild(itemDiv);
 
+            mensaje += `- ${p.nombre} (${p.precio})%0A`;
             let valorLimpio = String(p.precio).replace(/[^0-9]/g, "");
             total += parseInt(valorLimpio) || 0;
+        });
+
+        // ✅ LÓGICA PARA EL BOTÓN DE BORRAR
+        document.querySelectorAll(".btn-borrar").forEach(btn => {
+            btn.onclick = (e) => {
+                const idx = e.target.getAttribute("data-index");
+                carrito.splice(idx, 1);
+                localStorage.setItem("carrito_motika", JSON.stringify(carrito));
+                mostrarCarrito();
+                mostrarProductos(productos); // Para habilitar el botón "Agregar" de nuevo
+            };
         });
 
         if(precioTotalDoc) precioTotalDoc.innerText = `$${total.toLocaleString('es-CO')}`;
@@ -103,10 +120,8 @@ document.addEventListener("DOMContentLoaded", () => {
     db.collection("productos").onSnapshot(snapshot => {
         productos = [];
         const categoriasSet = new Set();
-
         snapshot.forEach(doc => {
             const p = doc.data();
-            // ✅ CORRECCIÓN: Quitamos p.imagen del IF para que cargue el producto aunque la URL falle
             if (p.nombre && p.precio) {
                 productos.push(p);
                 if(p.categoria) categoriasSet.add(p.categoria);
@@ -121,9 +136,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         mostrarProductos(productos);
-        mostrarCarrito();
+        mostrarCarrito(); // ✅ Se asegura de mostrar lo que había en memoria
     });
 
+    // --- Filtros ---
     buscador.onkeyup = () => {
         const t = buscador.value.toLowerCase();
         mostrarProductos(productos.filter(p => p.nombre.toLowerCase().includes(t)));
