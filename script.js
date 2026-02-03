@@ -1,315 +1,145 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
+document.addEventListener("DOMContentLoaded", () => {
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    const contenedor = document.getElementById("productos");
+    const buscador = document.getElementById("buscador");
+    const filtroCategoria = document.getElementById("filtroCategoria");
 
-body {
-    font-family: 'Poppins', sans-serif;
-    background: #f2f2f2;
-    color: #222;
-    /* ✅ TODO EL TEXTO EN NEGRITA */
-    font-weight: 700; 
-}
+    const btnAbrirCarrito = document.getElementById("btnAbrirCarrito");
+    const carritoPanel = document.getElementById("carrito");
+    const listaCarrito = document.getElementById("listaCarrito");
+    const btnComprar = document.getElementById("btnComprar");
+    const precioTotalDoc = document.getElementById("precioTotal");
 
-/* ================= HEADER ================= */
+    let productos = [];
+    let carrito = [];
 
-.header {
-    background: #222;
-    color: #fff;
-    padding: 16px;
-    text-align: center;
-}
+    btnAbrirCarrito.onclick = () => {
+        carritoPanel.classList.toggle("abierto");
+    };
 
-.header-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column; /* Alineación vertical */
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
+    document.addEventListener("click", (e) => {
+        if (
+            carritoPanel.classList.contains("abierto") &&
+            !carritoPanel.contains(e.target) &&
+            e.target !== btnAbrirCarrito
+        ) {
+            carritoPanel.classList.remove("arbierto");
+            carritoPanel.classList.remove("abierto");
+        }
+    });
 
-.logo {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
+    function mostrarProductos(lista) {
+        contenedor.innerHTML = "";
 
-.logo img {
-    width: 120px;
-    max-width: 100%;
-    display: block;
-    margin: 0 auto;
-}
+        lista.forEach(p => {
+            const div = document.createElement("div");
+            div.className = "producto";
 
-/* ✅ AJUSTE PARA QUE EL TEXTO SE VEA COMO EL LOGO */
-.header-texto {
-    text-align: center;
-}
+            const btnHTML = p.disponible
+                ? `<button class="btn-agregar">Agregar al carrito</button>`
+                : `<button class="btn-consultar">Consultar disponibilidad</button>`;
 
-/* Estilo para "moto repuestos" */
-.header-texto h2 {
-    font-size: 16px;
-    font-weight: 400;
-    text-transform: none;
-    margin-bottom: -8px;
-    color: #fff;
-}
+            div.innerHTML = `
+                <img src="${p.imagen}">
+                <div class="producto-info">
+                    <h3>${p.nombre}</h3>
+                    <div class="precio">${p.precio}</div>
+                    <div class="estado ${p.disponible ? 'disponible' : 'no-disponible'}">
+                        ${p.disponible ? 'Disponible en tienda' : 'Consultar disponibilidad'}
+                    </div>
+                    ${btnHTML}
+                </div>
+            `;
 
-/* Estilo para "MOTIKA" (Efecto metálico e inclinado) */
-.header-texto h1 {
-    font-size: 38px;
-    font-weight: 900;
-    font-style: italic;
-    text-transform: uppercase;
-    margin: 0;
-    background: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 45%, #7a7a7a 50%, #d1d1d1 55%, #ffffff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(2px 2px 0px #000);
-}
+            const boton = div.querySelector("button");
 
-.header-texto p {
-    font-size: 13px;
-    color: #ccc;
-    margin-top: 5px;
-}
+            if (p.disponible) {
+                boton.onclick = () => {
+                    carrito.push(p);
+                    mostrarCarrito();
+                    boton.textContent = "Agregado ✓";
+                    boton.disabled = true;
+                    boton.classList.add("agregado");
+                };
+            } else {
+                boton.onclick = () => {
+                    const msg = `Hola, quisiera saber la disponibilidad del producto: ${p.nombre}`;
+                    window.open(`https://wa.me/573118612727?text=${encodeURIComponent(msg)}`);
+                };
+            }
 
-/* ================= FRANJA ================= */
-
-.franja-info {
-    background: #fff;
-    padding: 10px;
-    display: flex;
-    gap: 12px;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    border-bottom: 1px solid #ddd;
-    font-size: 14px;
-}
-
-/* ================= BUSCADOR ================= */
-
-.buscador-container {
-    position: fixed;
-    bottom: 15px;
-    right: 15px;
-    z-index: 1000;
-}
-
-.buscador-container input {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #aaa;
-    width: 160px;
-    font-weight: bold;
-}
-
-/* ================= BOTÓN CARRITO ================= */
-
-.btn-carrito {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #25d366;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    font-size: 24px;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    z-index: 1000;
-}
-
-/* ================= CONTENIDO ================= */
-
-main {
-    max-width: 1100px;
-    margin: auto;
-    padding: 20px;
-}
-
-/* ================= PRODUCTOS ================= */
-
-.grid-productos {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-}
-
-.producto {
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-}
-
-.producto img {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-}
-
-.producto-info {
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.producto-info h3 {
-    font-size: 14px;
-    line-height: 1.2;
-}
-
-.precio {
-    font-weight: 900;
-    font-size: 14px;
-}
-
-.estado {
-    font-size: 12px;
-    font-weight: 900;
-}
-
-.disponible {
-    color: green;
-}
-
-.no-disponible {
-    color: orange;
-}
-
-.producto-info button {
-    margin-top: auto;
-    padding: 6px;
-    border-radius: 6px;
-    border: none;
-    font-size: 13px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.btn-agregar {
-    background: #ff2d55;
-    color: #fff;
-}
-
-.btn-consultar {
-    background: #ff9800;
-    color: #fff;
-}
-
-button.agregado {
-    background: #aaa;
-    color: #333;
-}
-
-/* ================= CARRITO ================= */
-
-.carrito {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 300px;
-    height: 100%;
-    background: #fff;
-    padding: 16px;
-    box-shadow: -2px 0 8px rgba(0,0,0,0.2);
-    transition: right 0.3s ease;
-    z-index: 1001;
-    display: flex;
-    flex-direction: column;
-}
-
-.carrito.abierto {
-    right: 0;
-}
-
-.carrito-vacio-msg {
-    text-align: center;
-    padding-top: 50px;
-    color: #888;
-}
-
-.item-carrito-lista {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 4px;
-    font-size: 14px;
-}
-
-.total-carrito {
-    margin-top: auto;
-    padding: 15px 0;
-    border-top: 2px solid #222;
-    display: flex;
-    justify-content: space-between;
-    font-size: 18px;
-    font-weight: 900;
-}
-
-#precioTotal {
-    color: #ff2d55;
-}
-
-#btnComprar {
-    display: block;
-    margin-top: 10px;
-    background: #25d366;
-    color: #fff;
-    padding: 12px;
-    border-radius: 6px;
-    text-align: center;
-    text-decoration: none;
-    font-weight: 900;
-}
-
-/* ================= RESPONSIVE ================= */
-
-@media (max-width: 768px) {
-    .logo img {
-        width: 100px;
+            contenedor.appendChild(div);
+        });
     }
 
-    .grid-productos {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
+    function mostrarCarrito() {
+        listaCarrito.innerHTML = "";
+        
+        if (carrito.length === 0) {
+            listaCarrito.innerHTML = `
+                <div class="carrito-vacio-msg">
+                    <p style="font-size: 50px;">☹️</p>
+                    <p>Tu carrito está vacío</p>
+                </div>`;
+            precioTotalDoc.innerText = "$0";
+            btnComprar.style.display = "none";
+            return;
+        }
 
-@media (max-width: 480px) {
-    .grid-productos {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
+        btnComprar.style.display = "block";
+        let mensaje = "Hola, quiero comprar:%0A";
+        let total = 0;
+
+        carrito.forEach(p => {
+            listaCarrito.innerHTML += `<div class="item-carrito-lista"><span>${p.nombre}</span> <span>${p.precio}</span></div>`;
+            mensaje += `- ${p.nombre} (${p.precio})%0A`;
+            
+            // Limpiar el precio (quitar $ y puntos) para sumar
+            let valorNumerico = parseFloat(p.precio.replace(/[^0-9.-]+/g,""));
+            total += valorNumerico;
+        });
+
+        precioTotalDoc.innerText = `$${total.toLocaleString('es-CO')}`;
+        mensaje += `%0ATotal: $${total.toLocaleString('es-CO')}`;
+        btnComprar.href = `https://wa.me/573118612727?text=${mensaje}`;
     }
 
-    .header-texto h1 {
-        font-size: 28px;
-    }
+    // Ejecutar una vez al inicio para mostrar carita triste
+    mostrarCarrito();
 
-    .producto img {
-        height: 100px;
-    }
+    filtroCategoria.onchange = () => {
+        if (filtroCategoria.value === "todas") {
+            mostrarProductos(productos);
+        } else {
+            mostrarProductos(productos.filter(p => p.categoria === filtroCategoria.value));
+        }
+    };
 
-    .producto-info h3 {
-        font-size: 12px;
-    }
+    buscador.onkeyup = () => {
+        const t = buscador.value.toLowerCase();
+        mostrarProductos(productos.filter(p => p.nombre.toLowerCase().includes(t)));
+    };
 
-    .precio {
-        font-size: 12px;
-    }
+    db.collection("productos")
+        .onSnapshot(snapshot => {
+            productos = [];
+            filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
 
-    .producto-info button {
-        font-size: 11px;
-        padding: 6px;
-    }
-}
+            snapshot.forEach(doc => {
+                const p = doc.data();
+                if (p.nombre && p.precio && p.imagen) {
+                    productos.push(p);
+                }
+            });
+
+            [...new Set(productos.map(p => p.categoria))].forEach(cat => {
+                const opt = document.createElement("option");
+                opt.value = cat;
+                opt.textContent = cat;
+                filtroCategoria.appendChild(opt);
+            });
+
+            mostrarProductos(productos);
+        });
+
+});
