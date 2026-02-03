@@ -343,24 +343,17 @@ button.agregado {
     color: white;
 }
 
-/* Ajuste para que el nombre del producto no se pegue al precio */
+/* Alineación en 3 columnas: X | Nombre | Precio */
 .item-carrito-lista {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 50px 1fr auto; /* X fija, Nombre flexible, Precio automático */
     align-items: center;
-    padding: 12px 0; /* Más espacio entre productos */
-    border-bottom: 1px solid #eee;
-}
-/* Alineación de la X a la izquierda y texto a la derecha */
-.item-carrito-lista {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 12px 5px;
+    gap: 10px;
+    padding: 12px 0;
     border-bottom: 1px solid #eee;
 }
 
-/* Botón X grande y táctil */
+/* El botón X */
 .btn-borrar {
     background-color: #ffeded;
     color: #ff2d55;
@@ -368,27 +361,27 @@ button.agregado {
     border-radius: 10px;
     font-size: 20px;
     font-weight: bold;
-    min-width: 48px;
-    height: 48px;
+    width: 45px;
+    height: 45px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
 }
 
-/* Contenedor del texto del producto */
-.info-producto-carrito {
-    display: flex;
-    flex-direction: column;
-}
-
+/* El nombre del producto con un margen a la izquierda */
 .nombre-p {
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 600;
+    padding-left: 5px; /* Empuja el texto un poco más a la derecha de la X */
+    text-align: left;
 }
 
+/* El precio alineado a la derecha */
 .precio-p {
     font-size: 14px;
-    color: #555;
+    font-weight: 700;
+    color: #333;
+    text-align: right;
+    padding-right: 5px;
 }
