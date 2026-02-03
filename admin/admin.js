@@ -12,6 +12,8 @@ const nombreCategoria = document.getElementById("nombreCategoria");
 const btnAgregarCategoria = document.getElementById("agregarCategoria");
 const listaCategorias = document.getElementById("listaCategorias");
 
+const mensajeProducto = document.getElementById("mensajeProducto");
+
 // LOGIN
 const loginBox = document.getElementById("loginBox");
 const adminPanel = document.getElementById("adminPanel");
