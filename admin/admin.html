@@ -12,76 +12,57 @@
   <h2>Acceso administrador</h2>
 
   <input type="email" id="email" placeholder="Correo" style="width:100%; padding:8px; margin-top:10px;">
-
   <input type="password" id="password" placeholder="Contraseña" style="width:100%; padding:8px; margin-top:10px;">
 
-  <button id="btnLogin" style="width:100%; padding:10px; margin-top:15px; background:#25d366; color:white; border:none; cursor:pointer;">
+  <button id="btnLogin" style="width:100%; padding:10px; margin-top:15px; background:#25d366; color:white; border:none;">
     Ingresar
   </button>
 
-  <p id="loginError" style="color:red; display:none; margin-top:10px;">
-    Credenciales incorrectas
-  </p>
+  <p id="loginError" style="color:red; display:none;">Credenciales incorrectas</p>
 </div>
 
-<!-- PANEL ADMIN -->
+<!-- PANEL -->
 <div id="adminPanel" style="display:none; max-width:800px; margin:auto; padding:20px;">
 
-  <button id="btnLogout" style="background:#e74c3c; color:white; padding:10px 15px; border:none; cursor:pointer; margin-bottom:20px;">
+  <button id="btnLogout" style="background:#e74c3c; color:white; padding:8px 12px; border:none;">
     Cerrar sesión
   </button>
 
   <h1>Panel de Administración</h1>
-  
-<button onclick="location.href='productos.html'"
-        style="background:#3498db; color:white; padding:10px 15px; border:none; cursor:pointer; margin-bottom:20px;">
-  Gestionar productos
-</button>
 
-  <!-- MENSAJE DE CONFIRMACIÓN -->
-  <p id="mensajeProducto" style="display:none; color:green; margin-top:10px;">
+  <button onclick="location.href='productos.html'"
+    style="background:#3498db; color:white; padding:10px; border:none; margin-bottom:20px;">
+    Gestionar productos
+  </button>
+
+  <p id="mensajeProducto" style="display:none; color:green;">
     Producto agregado correctamente
   </p>
 
-  <!-- FORMULARIO AGREGAR PRODUCTO -->
-  <section style="margin-top:20px;">
-    <input type="text" id="nombre" placeholder="Nombre del producto" style="width:100%; padding:8px; margin-top:10px;">
-
-    <input type="text" id="precio" placeholder="Precio" style="width:100%; padding:8px; margin-top:10px;">
-
+  <!-- PRODUCTOS -->
+  <section>
+    <input id="nombre" placeholder="Nombre del producto" style="width:100%; padding:8px;">
+    <input id="precio" placeholder="Precio" style="width:100%; padding:8px; margin-top:10px;">
     <select id="categoriaProducto" style="width:100%; padding:8px; margin-top:10px;"></select>
 
-    <label style="display:flex; align-items:center; margin-top:10px;">
-      <input type="checkbox" id="disponible" checked style="margin-right:6px;">
-      Disponible en tienda
+    <label style="margin-top:10px; display:block;">
+      <input type="checkbox" id="disponible" checked> Disponible
     </label>
 
-    <input type="text" id="imagen" placeholder="URL de imagen" style="width:100%; padding:8px; margin-top:10px;">
+    <input id="imagen" placeholder="URL imagen" style="width:100%; padding:8px; margin-top:10px;">
 
-    <button id="agregar" style="width:100%; padding:10px; background:#25d366; color:white; border:none; cursor:pointer; margin-top:15px;">
+    <button id="agregar" style="width:100%; padding:10px; margin-top:10px;">
       Agregar producto
     </button>
   </section>
 
   <!-- CATEGORÍAS -->
   <section style="margin-top:30px;">
-    <h2>Categorías</h2>
-
-    <input type="text" id="nombreCategoria" placeholder="Nombre de la categoría"
-           style="width:100%; padding:8px; margin-top:10px;">
-
-    <button id="agregarCategoria"
-            style="width:100%; padding:10px; background:#25d366; color:white; border:none; cursor:pointer; margin-top:10px;">
+    <h3>Agregar categoría</h3>
+    <input id="nombreCategoria" placeholder="Nombre categoría" style="width:100%; padding:8px;">
+    <button id="agregarCategoria" style="width:100%; padding:10px; margin-top:10px;">
       Agregar categoría
     </button>
-
-    <div id="listaCategorias" style="display:none;"></div>
-  </section>
-
-  <!-- PRODUCTOS ACTUALES -->
-  <section style="margin-top:30px;">
-    
-  <div id="lista" style="display:none;"></div>
   </section>
 
 </div>
@@ -92,21 +73,15 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCzd4E8mJ7zyzoddBQXmfB43-Mhu1BCPJQ",
-    authDomain: "motika-751ee.firebaseapp.com",
-    projectId: "motika-751ee",
-    storageBucket: "motika-751ee.appspot.com",
-    messagingSenderId: "260880167433",
-    appId: "1:260880167433:web:d0cd51752c25637fd83ed8"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const auth = firebase.auth();
+firebase.initializeApp({
+  apiKey: "AIzaSyCzd4E8mJ7zyzoddBQXmfB43-Mhu1BCPJQ",
+  authDomain: "motika-751ee.firebaseapp.com",
+  projectId: "motika-751ee"
+});
+const db = firebase.firestore();
+const auth = firebase.auth();
 </script>
 
 <script src="admin.js"></script>
-
 </body>
 </html>
