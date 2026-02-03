@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const carritoPanel = document.getElementById("carrito");
     const listaCarrito = document.getElementById("listaCarrito");
     const btnComprar = document.getElementById("btnComprar");
+    const precioTotalDoc = document.getElementById("precioTotal");
 
     let productos = [];
     let carrito = [];
@@ -22,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
             !carritoPanel.contains(e.target) &&
             e.target !== btnAbrirCarrito
         ) {
+            carritoPanel.classList.remove("arbierto");
             carritoPanel.classList.remove("abierto");
         }
     });
@@ -72,15 +74,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
+        
+        if (carrito.length === 0) {
+            listaCarrito.innerHTML = `
+                <div class="carrito-vacio-msg">
+                    <p style="font-size: 50px;">☹️</p>
+                    <p>Tu carrito está vacío</p>
+                </div>`;
+            precioTotalDoc.innerText = "$0";
+            btnComprar.style.display = "none";
+            return;
+        }
+
+        btnComprar.style.display = "block";
         let mensaje = "Hola, quiero comprar:%0A";
+        let total = 0;
 
         carrito.forEach(p => {
-            listaCarrito.innerHTML += `<div>${p.nombre} - ${p.precio}</div>`;
+            listaCarrito.innerHTML += `<div class="item-carrito-lista"><span>${p.nombre}</span> <span>${p.precio}</span></div>`;
             mensaje += `- ${p.nombre} (${p.precio})%0A`;
+            
+            // Limpiar el precio (quitar $ y puntos) para sumar
+            let valorNumerico = parseFloat(p.precio.replace(/[^0-9.-]+/g,""));
+            total += valorNumerico;
         });
 
+        precioTotalDoc.innerText = `$${total.toLocaleString('es-CO')}`;
+        mensaje += `%0ATotal: $${total.toLocaleString('es-CO')}`;
         btnComprar.href = `https://wa.me/573118612727?text=${mensaje}`;
     }
+
+    // Ejecutar una vez al inicio para mostrar carita triste
+    mostrarCarrito();
 
     filtroCategoria.onchange = () => {
         if (filtroCategoria.value === "todas") {
