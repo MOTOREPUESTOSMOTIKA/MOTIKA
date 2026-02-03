@@ -313,3 +313,41 @@ button.agregado {
         padding: 6px;
     }
 }
+/* Contenedor del precio y el botón para alinearlos */
+.precio-borrar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* El botón de la X mejorado */
+.btn-borrar {
+    background-color: #ffeded; /* Un fondo rojo muy clarito */
+    color: #ff2d55;           /* El rojo de tu marca */
+    border: none;
+    border-radius: 8px;       /* Bordes redondeados */
+    font-size: 20px;          /* X más grande */
+    font-weight: bold;
+    width: 45px;              /* Ancho táctil ideal para dedos */
+    height: 45px;             /* Alto táctil ideal para dedos */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    -webkit-tap-highlight-color: transparent; /* Quita el cuadro azul al tocar en Android */
+}
+
+.btn-borrar:active {
+    background-color: #ff2d55; /* Al tocar se pone rojo fuerte */
+    color: white;
+}
+
+/* Ajuste para que el nombre del producto no se pegue al precio */
+.item-carrito-lista {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0; /* Más espacio entre productos */
+    border-bottom: 1px solid #eee;
+}
