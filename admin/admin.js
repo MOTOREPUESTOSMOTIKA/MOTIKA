@@ -107,7 +107,11 @@ btnAgregar.addEventListener("click", async () => {
     disponible: disponible.checked,
     categoria: categoriaProducto.value
   });
+mensajeProducto.style.display = "block";
 
+setTimeout(() => {
+  mensajeProducto.style.display = "none";
+}, 3000);
   nombre.value = "";
   precio.value = "";
   imagen.value = "";
