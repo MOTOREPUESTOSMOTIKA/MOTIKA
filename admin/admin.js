@@ -12,75 +12,7 @@ const nombreCategoria = document.getElementById("nombreCategoria");
 const btnAgregarCategoria = document.getElementById("agregarCategoria");
 const listaCategorias = document.getElementById("listaCategorias");
 
-function guardarCategorias() {
-    localStorage.setItem("categorias", JSON.stringify(categorias));
-}
-
-function cargarCategoriasSelect() {
-    categoriaProducto.innerHTML = "";
-    categorias.forEach(cat => {
-        const option = document.createElement("option");
-        option.value = cat;
-        option.textContent = cat;
-        categoriaProducto.appendChild(option);
-    });
-}
-
-function renderCategorias() {
-    listaCategorias.innerHTML = "";
-    categorias.forEach((cat, index) => {
-        const div = document.createElement("div");
-        div.textContent = cat;
-
-        const btnEliminar = document.createElement("button");
-        btnEliminar.textContent = "Eliminar";
-        btnEliminar.onclick = () => {
-            categorias.splice(index, 1);
-            guardarCategorias();
-            renderCategorias();
-            cargarCategoriasSelect();
-        };
-
-        div.appendChild(btnEliminar);
-        listaCategorias.appendChild(div);
-    });
-}
-
-btnAgregarCategoria.addEventListener("click", () => {
-    if (!nombreCategoria.value.trim()) return;
-    categorias.push(nombreCategoria.value.trim());
-    guardarCategorias();
-    renderCategorias();
-    cargarCategoriasSelect();
-    nombreCategoria.value = "";
-});
-
-btnAgregar.addEventListener("click", async () => {
-    if (!nombre.value || !precio.value) return;
-
-    await db.collection("productos").add({
-        nombre: nombre.value,
-        precio: precio.value,
-        imagen: imagen.value || "https://via.placeholder.com/300",
-        disponible: disponible.checked,
-        categoria: categoriaProducto.value
-    });
-
-    nombre.value = "";
-    precio.value = "";
-    imagen.value = "";
-    disponible.checked = false;
-});
-
-
-renderCategorias();
-cargarCategoriasSelect();
-
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } 
-from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-
-const auth = getAuth();
-
+// LOGIN
 const loginBox = document.getElementById("loginBox");
 const adminPanel = document.getElementById("adminPanel");
 const btnLogin = document.getElementById("btnLogin");
@@ -91,14 +23,14 @@ btnLogin.addEventListener("click", async () => {
   const password = document.getElementById("password").value;
 
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    await auth.signInWithEmailAndPassword(email, password);
     loginError.style.display = "none";
   } catch (error) {
     loginError.style.display = "block";
   }
 });
 
-onAuthStateChanged(auth, (user) => {
+auth.onAuthStateChanged(user => {
   if (user) {
     loginBox.style.display = "none";
     adminPanel.style.display = "block";
@@ -107,3 +39,68 @@ onAuthStateChanged(auth, (user) => {
     adminPanel.style.display = "none";
   }
 });
+
+// CATEGORÍAS
+function guardarCategorias() {
+  localStorage.setItem("categorias", JSON.stringify(categorias));
+}
+
+function cargarCategoriasSelect() {
+  categoriaProducto.innerHTML = "";
+  categorias.forEach(cat => {
+    const option = document.createElement("option");
+    option.value = cat;
+    option.textContent = cat;
+    categoriaProducto.appendChild(option);
+  });
+}
+
+function renderCategorias() {
+  listaCategorias.innerHTML = "";
+  categorias.forEach((cat, index) => {
+    const div = document.createElement("div");
+    div.textContent = cat;
+
+    const btnEliminar = document.createElement("button");
+    btnEliminar.textContent = "Eliminar";
+    btnEliminar.onclick = () => {
+      categorias.splice(index, 1);
+      guardarCategorias();
+      renderCategorias();
+      cargarCategoriasSelect();
+    };
+
+    div.appendChild(btnEliminar);
+    listaCategorias.appendChild(div);
+  });
+}
+
+btnAgregarCategoria.addEventListener("click", () => {
+  if (!nombreCategoria.value.trim()) return;
+  categorias.push(nombreCategoria.value.trim());
+  guardarCategorias();
+  renderCategorias();
+  cargarCategoriasSelect();
+  nombreCategoria.value = "";
+});
+
+// PRODUCTOS
+btnAgregar.addEventListener("click", async () => {
+  if (!nombre.value || !precio.value) return;
+
+  await db.collection("productos").add({
+    nombre: nombre.value,
+    precio: precio.value,
+    imagen: imagen.value || "https://via.placeholder.com/300",
+    disponible: disponible.checked,
+    categoria: categoriaProducto.value
+  });
+
+  nombre.value = "";
+  precio.value = "";
+  imagen.value = "";
+  disponible.checked = false;
+});
+
+renderCategorias();
+cargarCategoriasSelect();
