@@ -87,3 +87,33 @@ section {
   border-radius: 6px;
   margin-bottom: 15px;
 }
+/* Ajuste para que el contenedor ocupe casi todo el ancho en celular */
+.container {
+    width: 95%;          /* En pantallas pequeñas, usa casi todo el ancho */
+    max-width: 600px;    /* En PC, no deja que se estire demasiado y se vea feo */
+    margin: 20px auto;   /* Lo centra */
+    padding: 15px;       /* Espacio interno para que no pegue el texto al borde */
+    box-sizing: border-box; /* Evita que el padding rompa el ancho */
+}
+
+/* Ajuste para que los inputs y botones no se salgan */
+input, select, button {
+    width: 100%;         /* Se estiran al 100% del contenedor */
+    margin-bottom: 12px;
+    padding: 12px;       /* Más gorditos para que sea fácil tocarlos con el dedo */
+    font-size: 16px;     /* Evita que el iPhone haga zoom automático al escribir */
+}
+
+/* Para los botones de abajo (Gestionar y Cerrar) */
+.bottom-actions {
+    display: flex;
+    flex-direction: column; /* En celular, uno arriba del otro */
+    gap: 10px;
+}
+
+/* Si la pantalla es grande (PC), los botones pueden ir de lado */
+@media (min-width: 600px) {
+    .bottom-actions {
+        flex-direction: row; 
+    }
+}
