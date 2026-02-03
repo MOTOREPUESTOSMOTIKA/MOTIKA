@@ -1,101 +1,76 @@
 body {
-    font-family: 'Poppins', sans-serif;
-    background: #fff;
-    padding: 20px;
-}
-
-h1 {
-    font-size: 24px;
-    margin-bottom: 12px;
-}
-
-section {
-    margin-bottom: 20px;
-}
-
-input, select {
-    padding: 8px;
-    margin-bottom: 8px;
-    border: 1px solid #aaa;
-    border-radius: 6px;
-}
-
-button {
-    padding: 8px 10px;
-    background: #25d366;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 5px;
-}
-
-div.producto {
-    margin-bottom: 10px;
-    background: #f7f7f7;
-    padding: 8px;
-    border-radius: 6px;
-}
-body {
   font-family: Arial, sans-serif;
   background: #f4f6f8;
   margin: 0;
-  padding: 20px;
+  padding: 0;
 }
 
-#loginBox, #adminPanel {
-  max-width: 600px;
-  margin: auto;
-  background: #fff;
+/* CONTENEDORES */
+.container {
+  max-width: 800px;
+  margin: 30px auto;
   padding: 20px;
+  background: white;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,.1);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
-h1, h2 {
-  margin-top: 0;
+/* INPUTS */
+input, select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+  box-sizing: border-box;
 }
 
-section {
-  margin-bottom: 25px;
-}
-
-input, select, button {
+/* BOTONES */
+.btn {
   width: 100%;
   padding: 10px;
-  margin-top: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-button {
-  background: #25d366;
-  color: white;
-  font-weight: bold;
   border: none;
+  border-radius: 6px;
+  font-weight: 600;
   cursor: pointer;
 }
 
-button:hover {
+.btn-green {
+  background: #2ecc71;
+  color: white;
+}
+
+.btn-blue {
+  background: #3498db;
+  color: white;
+}
+
+.btn-red {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn:hover {
   opacity: 0.9;
 }
 
-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
+/* SECCIONES */
+section {
+  margin-top: 25px;
 }
 
-#listaCategorias div {
+/* BOTONES FINALES */
+.bottom-actions {
+  margin-top: 30px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-#listaCategorias button {
-  width: auto;
-  padding: 6px 10px;
-  background: #e74c3c;
+/* TOAST */
+#toast {
+  display: none;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 15px 0;
+  font-weight: 600;
+  color: white;
 }
