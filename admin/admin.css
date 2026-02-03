@@ -1,38 +1,55 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
   background: #f4f6f8;
   margin: 0;
-  padding: 0;
+  padding: 20px;
 }
 
-/* CONTENEDORES */
+/* CONTENEDOR GENERAL */
 .container {
   max-width: 800px;
-  margin: 30px auto;
-  padding: 20px;
+  margin: auto;
   background: white;
+  padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* TITULOS */
+h1, h2, h3 {
+  margin-top: 0;
 }
 
 /* INPUTS */
-input, select {
+input,
+select {
   width: 100%;
   padding: 8px;
   margin-top: 10px;
-  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-/* BOTONES */
+/* SECCIONES */
+section {
+  margin-top: 25px;
+}
+
+/* BOTONES BASE */
 .btn {
   width: 100%;
   padding: 10px;
+  margin-top: 10px;
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
   font-weight: 600;
   cursor: pointer;
 }
 
+/* COLORES */
 .btn-green {
   background: #2ecc71;
   color: white;
@@ -48,13 +65,9 @@ input, select {
   color: white;
 }
 
+/* HOVER */
 .btn:hover {
   opacity: 0.9;
-}
-
-/* SECCIONES */
-section {
-  margin-top: 25px;
 }
 
 /* BOTONES FINALES */
@@ -62,15 +75,15 @@ section {
   margin-top: 30px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 /* TOAST */
 #toast {
   display: none;
-  padding: 12px 16px;
-  border-radius: 6px;
-  margin: 15px 0;
-  font-weight: 600;
+  padding: 12px;
+  background: #2ecc71;
   color: white;
+  border-radius: 6px;
+  margin-bottom: 15px;
 }
