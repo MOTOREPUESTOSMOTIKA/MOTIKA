@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let productos = [];
     
-    // ✅ CAMBIO: Cargar el carrito desde la memoria al iniciar
+    // Cargar el carrito desde la memoria al iniciar
     let carrito = JSON.parse(localStorage.getItem("carrito_motika")) || [];
 
     // --- Control del Panel ---
@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
             boton.onclick = () => {
                 if (p.disponible) {
                     carrito.push(p);
-                    // ✅ CAMBIO: Guardar en memoria al agregar
                     localStorage.setItem("carrito_motika", JSON.stringify(carrito));
                     mostrarCarrito();
                     mostrarProductos(lista); 
@@ -85,14 +84,14 @@ document.addEventListener("DOMContentLoaded", () => {
         let mensaje = "Hola Motika, quiero comprar:%0A";
         let total = 0;
 
-carrito.forEach((p, index) => {
+        carrito.forEach((p, index) => {
             const itemDiv = document.createElement("div");
             itemDiv.className = "item-carrito-lista";
             itemDiv.innerHTML = `
-                <span>${p.nombre}</span>
-                <div class="precio-borrar">
-                    <span>${p.precio}</span>
-                    <button class="btn-borrar" data-index="${index}">✕</button>
+                <button class="btn-borrar" data-index="${index}">✕</button>
+                <div class="info-producto-carrito">
+                    <span class="nombre-p">${p.nombre}</span>
+                    <span class="precio-p">${p.precio}</span>
                 </div>
             `;
             listaCarrito.appendChild(itemDiv);
@@ -102,14 +101,14 @@ carrito.forEach((p, index) => {
             total += parseInt(valorLimpio) || 0;
         });
 
-        // ✅ LÓGICA PARA EL BOTÓN DE BORRAR
+        // Lógica para borrar productos individualmente
         document.querySelectorAll(".btn-borrar").forEach(btn => {
             btn.onclick = (e) => {
-                const idx = e.target.getAttribute("data-index");
+                const idx = e.currentTarget.getAttribute("data-index");
                 carrito.splice(idx, 1);
                 localStorage.setItem("carrito_motika", JSON.stringify(carrito));
                 mostrarCarrito();
-                mostrarProductos(productos); // Para habilitar el botón "Agregar" de nuevo
+                mostrarProductos(productos); 
             };
         });
 
@@ -138,7 +137,7 @@ carrito.forEach((p, index) => {
         });
 
         mostrarProductos(productos);
-        mostrarCarrito(); // ✅ Se asegura de mostrar lo que había en memoria
+        mostrarCarrito();
     });
 
     // --- Filtros ---
