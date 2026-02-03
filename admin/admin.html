@@ -14,7 +14,7 @@
   <input type="email" id="email" placeholder="Correo" style="width:100%; padding:8px; margin-top:10px;">
   <input type="password" id="password" placeholder="Contraseña" style="width:100%; padding:8px; margin-top:10px;">
 
-  <button id="btnLogin" style="width:100%; padding:10px; margin-top:15px; background:#25d366; color:white; border:none;">
+  <button id="btnLogin" type="button" style="width:100%; padding:10px; margin-top:15px; background:#25d366; color:white; border:none;">
     Ingresar
   </button>
 
@@ -24,29 +24,27 @@
 <!-- PANEL -->
 <div id="adminPanel" style="display:none; max-width:800px; margin:auto; padding:20px;">
 
-  <button id="btnLogout" style="background:#e74c3c; color:white; padding:8px 12px; border:none;">
+  <button id="btnLogout" type="button" style="background:#e74c3c; color:white; padding:8px 12px; border:none;">
     Cerrar sesión
   </button>
 
   <h1>Panel de Administración</h1>
-  
-  <div id="toast" style="
-  display:none;
-  padding:12px 16px;
-  background:#2ecc71;
-  color:white;
-  border-radius:6px;
-  margin:15px 0;
-  font-weight:600;
-">
-</div>
 
-  <button onclick="location.href='productos.html'"
+  <!-- TOAST -->
+  <div id="toast" style="
+    display:none;
+    padding:12px 16px;
+    background:#2ecc71;
+    color:white;
+    border-radius:6px;
+    margin:15px 0;
+    font-weight:600;
+  "></div>
+
+  <button type="button" onclick="location.href='productos.html'"
     style="background:#3498db; color:white; padding:10px; border:none; margin-bottom:20px;">
     Gestionar productos
   </button>
-
-
 
   <!-- PRODUCTOS -->
   <section>
@@ -60,8 +58,8 @@
 
     <input id="imagen" placeholder="URL imagen" style="width:100%; padding:8px; margin-top:10px;">
 
-  <button id="agregar" type="button" style="width:100%; padding:10px; margin-top:10px;">
-  Agregar producto
+    <button id="agregar" type="button" style="width:100%; padding:10px; margin-top:10px;">
+      Agregar producto
     </button>
   </section>
 
@@ -69,7 +67,7 @@
   <section style="margin-top:30px;">
     <h3>Agregar categoría</h3>
     <input id="nombreCategoria" placeholder="Nombre categoría" style="width:100%; padding:8px;">
-    <button id="agregarCategoria" style="width:100%; padding:10px; margin-top:10px;">
+    <button id="agregarCategoria" type="button" style="width:100%; padding:10px; margin-top:10px;">
       Agregar categoría
     </button>
   </section>
