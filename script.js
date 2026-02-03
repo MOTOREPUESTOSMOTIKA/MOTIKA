@@ -87,12 +87,11 @@ document.addEventListener("DOMContentLoaded", () => {
         carrito.forEach((p, index) => {
             const itemDiv = document.createElement("div");
             itemDiv.className = "item-carrito-lista";
+            // ✅ DISEÑO NUEVO: X a la izquierda, Nombre al centro, Precio a la derecha
             itemDiv.innerHTML = `
                 <button class="btn-borrar" data-index="${index}">✕</button>
-                <div class="info-producto-carrito">
-                    <span class="nombre-p">${p.nombre}</span>
-                    <span class="precio-p">${p.precio}</span>
-                </div>
+                <span class="nombre-p">${p.nombre}</span>
+                <span class="precio-p">${p.precio}</span>
             `;
             listaCarrito.appendChild(itemDiv);
 
@@ -101,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
             total += parseInt(valorLimpio) || 0;
         });
 
-        // Lógica para borrar productos individualmente
+        // Lógica para el botón de borrar (usando currentTarget para evitar errores al tocar la X)
         document.querySelectorAll(".btn-borrar").forEach(btn => {
             btn.onclick = (e) => {
                 const idx = e.currentTarget.getAttribute("data-index");
@@ -140,7 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarCarrito();
     });
 
-    // --- Filtros ---
     buscador.onkeyup = () => {
         const t = buscador.value.toLowerCase();
         mostrarProductos(productos.filter(p => p.nombre.toLowerCase().includes(t)));
