@@ -16,10 +16,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function mostrarProductos(lista) {
         const fragmento = document.createDocumentFragment();
         contenedor.innerHTML = "";
+        
         lista.forEach(p => {
             const div = document.createElement("div");
             div.className = "producto";
             const estaEnCarrito = carrito.some(item => item.nombre === p.nombre);
+            
             let btnHTML = "";
             let estadoTexto = "";
             let estadoClase = "";
@@ -39,17 +41,22 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const urlImagen = p.imagen && p.imagen !== "" ? p.imagen : 'https://via.placeholder.com/300x300?text=Motika+Repuestos';
+            
+            // Estructura optimizada: Se fuerza a que la imagen y la info tengan espacios definidos
             div.innerHTML = `
-                <div class="contenedor-img">
-                    <img src="${urlImagen}" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/300x300?text=Error+al+cargar'">
+                <div class="contenedor-img" style="height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f9f9f9;">
+                    <img src="${urlImagen}" loading="lazy" referrerpolicy="no-referrer" 
+                         style="max-width: 100%; max-height: 100%; object-fit: contain;"
+                         onerror="this.src='https://via.placeholder.com/300x300?text=Error+al+cargar'">
                 </div>
-                <div class="producto-info">
-                    <h3>${p.nombre}</h3>
-                    <div class="precio">${p.precio}</div>
-                    <div class="estado ${estadoClase}">${estadoTexto}</div>
+                <div class="producto-info" style="padding: 10px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1;">
+                    <h3 style="font-size: 15px; margin: 5px 0; height: 40px; overflow: hidden;">${p.nombre}</h3>
+                    <div class="precio" style="font-weight: bold; color: #2c3e50;">${p.precio}</div>
+                    <div class="estado ${estadoClase}" style="font-size: 12px; margin: 5px 0;">${estadoTexto}</div>
                     ${btnHTML}
                 </div>
             `;
+
             const boton = div.querySelector("button");
             boton.onclick = () => {
                 if (p.estado === "disponible" || p.estado === "encargar") {
@@ -106,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnComprar.href = `https://wa.me/573118612727?text=${mensajeFinal}`;
     }
 
+    // Carga de productos desde Firebase
     db.collection("productos").get().then(snapshot => {
         productos = [];
         const categoriasSet = new Set();
