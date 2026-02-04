@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const nombre = document.getElementById("nombre");
   const precio = document.getElementById("precio");
   const imagen = document.getElementById("imagen");
-  const disponible = document.getElementById("disponible");
+  // ✅ Cambio: Ahora buscaremos un select llamado "estado" en el HTML
+  const estadoProducto = document.getElementById("estado"); 
   const categoriaProducto = document.getElementById("categoriaProducto");
   const btnAgregar = document.getElementById("agregar");
 
@@ -68,28 +69,36 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarCategoriasSelect();
   });
 
-  // ================= PRODUCTOS =================
+  // ================= PRODUCTOS (CON 3 ESTADOS) =================
   btnAgregar.addEventListener("click", async () => {
-    if (!nombre.value || !precio.value) return;
+    if (!nombre.value || !precio.value) {
+        return mostrarToast("Nombre y Precio son obligatorios", true);
+    }
+
+    const estadoSeleccionado = estadoProducto.value;
 
     await db.collection("productos").add({
       nombre: nombre.value,
-      precio: precio.value, // ⚠️ STRING como antes
+      precio: precio.value,
       imagen: imagen.value || "https://via.placeholder.com/300",
-      disponible: disponible.checked,
-      categoria: categoriaProducto.value
+      categoria: categoriaProducto.value,
+      estado: estadoSeleccionado, // Guardamos: disponible, encargar o consultar
+      // Mantenemos disponible como boolean por si otros archivos lo usan
+      disponible: estadoSeleccionado === "disponible" 
     });
 
     mostrarToast("Producto agregado correctamente");
 
+    // Limpiar campos
     nombre.value = "";
     precio.value = "";
     imagen.value = "";
-    disponible.checked = true;
+    estadoProducto.value = "disponible"; // Reset a disponible por defecto
   });
 
   function mostrarToast(texto, error = false) {
     const toast = document.getElementById("toast");
+    if(!toast) return alert(texto); // Por si no tienes el div toast
     toast.textContent = texto;
     toast.style.background = error ? "#e74c3c" : "#2ecc71";
     toast.style.display = "block";
