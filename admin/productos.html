@@ -2,46 +2,60 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Gestión de Productos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestión de Productos - MOTIKA</title>
+<style>
+  body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+  h1 { text-align: center; color: #2c3e50; margin-bottom: 10px; }
+  
+  .header-actions { max-width: 1200px; margin: 0 auto 20px auto; display: flex; justify-content: space-between; align-items: center; }
+  .btn-volver { background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+
+  /* Buscador arriba y ancho completo */
+  .search-container { max-width: 1200px; margin: 0 auto 20px auto; }
+  #buscador { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-size: 16px; box-sizing: border-box; }
+
+  /* Contenedor Principal: Productos (Grande) y Categorías (Pequeño) */
+  .main-layout { display: flex; gap: 25px; max-width: 1200px; margin: 0 auto; align-items: flex-start; }
+  
+  /* Lado de Productos: Cuadrícula */
+  .productos-section { flex: 3; } /* Ocupa el 75% del espacio */
+  #listaProductos { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 15px; 
+  }
+
+  /* Lado de Categorías: Lista lateral */
+  .categorias-section { flex: 1; min-width: 250px; background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+
+  /* Tarjetas de Producto */
+  .product-item { background: #fff; border: 1px solid #edf2f7; padding: 15px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
+  .product-info h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: #2d3748; }
+  
+  /* Estilos del editor dentro de la tarjeta */
+  .edit-box { background: #f8fafc; padding: 10px; border-radius: 8px; border-top: 3px solid #3498db; margin-top: 10px; }
+  .edit-box input, .edit-box select { width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box; }
+</style>
 </head>
 <body>
 
-<h1>Gestión de Productos</h1>
+<div class="header-actions">
+  <button class="btn-volver" onclick="location.href='admin.html'">← Volver al Panel</button>
+  <h1>Gestión de Productos</h1>
+  <div style="width: 100px;"></div> </div>
 
-<button onclick="location.href='admin.html'">Volver</button>
-<hr>
-  
-<style>
-  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
-  h1 { text-align: center; color: #2c3e50; }
-  
-  /* Contenedor principal */
-  .main-container { display: flex; flex-wrap: wrap; gap: 20px; max-width: 1200px; margin: 0 auto; }
-  .section-card { flex: 1; min-width: 300px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+<div class="search-container">
+  <input type="text" id="buscador" placeholder="🔍 Buscar por nombre o categoría...">
+</div>
 
-  /* Tarjetas de producto */
-  .product-item { background: #fff; border: 1px solid #edf2f7; padding: 15px; margin-bottom: 12px; border-radius: 10px; transition: transform 0.2s; }
-  .product-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-  
-  .product-info h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: #2d3748; }
-  .badge { padding: 4px 8px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
-  
-  /* Editor */
-  .edit-box { background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #3498db; margin-top: 10px; }
-  .edit-box input, .edit-box select { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box; }
-</style>
-
-
-<div style="display:flex; gap:40px;">
-  <div style="flex:1;">
+<div class="main-layout">
+  <div class="productos-section">
     <h3>Productos actuales</h3>
     <div id="listaProductos"></div>
   </div>
   
-  <input type="text" id="buscador" placeholder="🔍 Buscar por nombre o categoría..." style="width:100%; padding:12px; margin-bottom:20px; border-radius:8px; border:1px solid #ddd; box-sizing: border-box;">
-
-
-  <div style="flex:1;">
+  <div class="categorias-section">
     <h3>Categorías actuales</h3>
     <div id="listaCategorias"></div>
   </div>
