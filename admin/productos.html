@@ -24,6 +24,34 @@
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
     gap: 15px; 
+      /* Configuración general de la cuadrícula */
+  #listaProductos { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 15px; 
+  }
+
+  /* 🔥 AJUSTE PARA CELULARES (Pantallas de menos de 600px) */
+  @media (max-width: 600px) {
+    #listaProductos {
+      /* Esto obliga a que siempre haya 2 columnas en el móvil */
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 8px; /* Espacio más pequeño para que quepan bien */
+    }
+    
+    .product-item {
+      padding: 10px; /* Reducimos el margen interno en móvil */
+    }
+    
+    .product-info h4 {
+      font-size: 14px; /* Texto un poco más pequeño para que no se amontone */
+    }
+    
+    .btn-group {
+      flex-direction: column; /* Botones uno sobre otro en móvil para que no se salgan */
+    }
+  }
+
   }
 
   /* Lado de Categorías: Lista lateral */
