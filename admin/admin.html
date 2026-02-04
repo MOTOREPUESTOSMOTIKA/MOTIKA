@@ -21,7 +21,13 @@
       margin-bottom: 5px;
       display: block;
     }
-    /* Estilo para la vista previa de la foto */
+    .opcion-foto {
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px dashed #ccc;
+      margin-bottom: 10px;
+    }
     #preview-container {
       text-align: center;
       margin-bottom: 10px;
@@ -47,7 +53,6 @@
 
 <div id="adminPanel" class="container" style="display:none;">
   <h1>Panel de Administración</h1>
-
   <div id="toast"></div>
 
   <section>
@@ -65,16 +70,22 @@
       <option value="consultar">Solo Consultar (WhatsApp directo)</option>
     </select>
 
-    <label>📷 Foto del producto:</label>
-    <input type="file" id="archivoImagen" accept="image/*">
+    <label>📷 Imagen del producto:</label>
+    <div class="opcion-foto">
+      <small>Opción 1: Subir archivo (Cámara/Galería)</small>
+      <input type="file" id="archivoImagen" accept="image/*">
+      
+      <div style="text-align:center; margin: 5px 0; font-weight:bold; color:#777;">— O —</div>
+      
+      <small>Opción 2: Pegar enlace directo</small>
+      <input type="text" id="urlImagen" placeholder="https://ejemplo.com/foto.jpg">
+    </div>
     
     <div id="preview-container">
       <img id="img-preview" src="" alt="Vista previa">
     </div>
 
-    <button id="agregar" type="button" class="btn btn-green">
-      Agregar producto
-    </button>
+    <button id="agregar" type="button" class="btn btn-green">Agregar producto</button>
   </section>
 
   <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
@@ -82,18 +93,12 @@
   <section>
     <h3>Agregar categoría</h3>
     <input id="nombreCategoria" placeholder="Nombre categoría">
-    <button id="agregarCategoria" type="button" class="btn btn-green">
-      Agregar categoría
-    </button>
+    <button id="agregarCategoria" type="button" class="btn btn-green">Agregar categoría</button>
   </section>
 
   <div class="bottom-actions">
-    <button type="button" onclick="location.href='productos.html'" class="btn btn-blue">
-      Gestionar productos
-    </button>
-    <button id="btnLogout" type="button" class="btn btn-red">
-      Cerrar sesión
-    </button>
+    <button type="button" onclick="location.href='productos.html'" class="btn btn-blue">Gestionar productos</button>
+    <button id="btnLogout" type="button" class="btn btn-red">Cerrar sesión</button>
   </div>
 </div>
 
@@ -115,3 +120,4 @@
 <script src="admin.js"></script>
 </body>
 </html>
+
