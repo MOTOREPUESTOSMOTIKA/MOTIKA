@@ -45,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 btnHTML = `<button class="btn-consultar" style="background-color: #ff9800;">WhatsApp</button>`;
             }
 
-            // AJUSTE DE IMAGEN: Si no hay imagen, pone un placeholder de Motika
             const urlImagen = p.imagen && p.imagen !== "" ? p.imagen : 'https://via.placeholder.com/300x300?text=Motika+Repuestos';
 
             div.innerHTML = `
@@ -108,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
             total += parseInt(valorLimpio) || 0;
         });
 
-        // Eventos borrar
         document.querySelectorAll(".btn-borrar").forEach(btn => {
             btn.onclick = (e) => {
                 const idx = e.currentTarget.getAttribute("data-index");
@@ -135,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarProductos(productos);
     }
 
-    // --- Firebase ---
+    // --- Firebase con ORDEN ALFABÉTICO ---
     db.collection("productos").onSnapshot(snapshot => {
         productos = [];
         const categoriasSet = new Set();
@@ -146,14 +144,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 if(p.categoria) categoriasSet.add(p.categoria);
             }
         });
+
+        // 🔥 ORDENAR DE LA A a la Z
+        productos.sort((a, b) => a.nombre.localeCompare(b.nombre));
         
         filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
-        categoriasSet.forEach(cat => {
+        
+        // Ordenar categorías también
+        const categoriasOrdenadas = Array.from(categoriasSet).sort();
+        categoriasOrdenadas.forEach(cat => {
             const opt = document.createElement("option");
             opt.value = opt.textContent = cat;
             filtroCategoria.appendChild(opt);
         });
+
         mostrarProductos(productos);
+        mostrarCarrito();
     });
 
     buscador.onkeyup = () => {
