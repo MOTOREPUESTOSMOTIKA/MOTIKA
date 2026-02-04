@@ -5,15 +5,12 @@ const buscador = document.getElementById("buscador");
 let productosGlobales = [];
 let categoriasDisponibles = [];
 
-// ================================
-// CONTROL DE SESIÓN
-// ================================
+// TU API KEY DE IMGBB
+const IMGBB_API_KEY = "c9c201374e8b952b54f76ac5acd6c23b"; 
+
 auth.onAuthStateChanged(user => {
-  if (!user) {
-    window.location.href = "admin.html";
-  } else {
-    inicializarDatos();
-  }
+  if (!user) { window.location.href = "admin.html"; } 
+  else { inicializarDatos(); }
 });
 
 async function inicializarDatos() {
@@ -22,96 +19,96 @@ async function inicializarDatos() {
 }
 
 // ================================
-// GESTIÓN DE CATEGORÍAS
+// FUNCIÓN PARA SUBIR FOTOS
+// ================================
+async function subirImagen(archivo) {
+  const formData = new FormData();
+  formData.append("image", archivo);
+  try {
+    const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+      method: "POST",
+      body: formData
+    });
+    const data = await response.json();
+    return data.success ? data.data.url : null;
+  } catch (e) { return null; }
+}
+
+// ================================
+// CARGAR CATEGORÍAS
 // ================================
 async function cargarCategorias() {
   const snapshot = await db.collection("categorias").get();
   listaCategorias.innerHTML = "";
   categoriasDisponibles = [];
-
   snapshot.forEach(doc => {
     const cat = doc.data();
     categoriasDisponibles.push(cat.nombre);
-
     const div = document.createElement("div");
-    div.style = "border:1px solid #eee; padding:10px; margin-bottom:5px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; background:#fff;";
-    div.innerHTML = `
-      <span><strong>${cat.nombre}</strong></span>
-      <button onclick="eliminarCategoria('${doc.id}')" style="background:#e74c3c; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Eliminar</button>
-    `;
+    div.style = "border-bottom:1px solid #eee; padding:8px; display:flex; justify-content:space-between; align-items:center; background:white; border-radius:8px; margin-bottom:5px;";
+    div.innerHTML = `<span><strong>${cat.nombre}</strong></span><button onclick="eliminarCategoria('${doc.id}')" style="color:white; border:none; background:#e74c3c; padding:5px 10px; border-radius:5px; cursor:pointer;">✖</button>`;
     listaCategorias.appendChild(div);
   });
 }
 
 // ================================
-// GESTIÓN DE PRODUCTOS
+// CARGAR PRODUCTOS
 // ================================
 async function cargarProductos() {
-  listaProductos.innerHTML = "<p>Cargando productos...</p>";
+  listaProductos.innerHTML = "<p>Cargando inventario...</p>";
   const snapshot = await db.collection("productos").get();
   productosGlobales = [];
-
-  snapshot.forEach(doc => {
-    productosGlobales.push({ id: doc.id, ...doc.data() });
-  });
-
+  snapshot.forEach(doc => { productosGlobales.push({ id: doc.id, ...doc.data() }); });
+  
+  // Ordenar alfabéticamente también en la gestión
+  productosGlobales.sort((a, b) => a.nombre.localeCompare(b.nombre));
+  
   renderizarProductos(productosGlobales);
 }
 
 function renderizarProductos(lista) {
   listaProductos.innerHTML = "";
-  
-  if (lista.length === 0) {
-    listaProductos.innerHTML = "<p>No se encontraron productos.</p>";
-    return;
-  }
-
   lista.forEach(p => {
     const div = document.createElement("div");
     div.className = "product-item";
-
-    let opcionesCategoria = categoriasDisponibles.map(cat => {
-        const seleccionada = (p.categoria === cat) ? "selected" : "";
-        return `<option value="${cat}" ${seleccionada}>${cat}</option>`;
-    }).join("");
+    let opcionesCat = categoriasDisponibles.map(c => `<option value="${c}" ${p.categoria === c ? 'selected' : ''}>${c}</option>`).join("");
 
     div.innerHTML = `
       <div id="view-${p.id}">
         <div class="product-info">
+          <img src="${p.imagen || 'https://via.placeholder.com/50'}" style="width:50px; height:50px; float:right; border-radius:8px; object-fit:cover; margin-left:10px;">
           <h4>${p.nombre}</h4>
-          <small>Precio: ${p.precio} | <b>${p.categoria || 'Sin categoría'}</b></small><br>
-          <span style="color:${p.estado === 'disponible' ? '#27ae60' : (p.estado === 'encargar' ? '#3498db' : '#f39c12')}; font-size:12px; font-weight:bold;">
-            ● ${p.estado || 'disponible'}
-          </span>
+          <small>${p.precio} | <b>${p.categoria || 'Sin Cat.'}</b></small><br>
+          <span style="color:${p.estado === 'disponible' ? '#27ae60' : (p.estado === 'encargar' ? '#3498db' : '#f39c12')}; font-size:11px; font-weight:bold;">● ${p.estado || 'disponible'}</span>
         </div>
-        <div style="display:flex; gap:8px; margin-top:10px;">
-          <button onclick="mostrarFormularioEdicion('${p.id}')" style="background:#3498db; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; flex:1;">Editar</button>
-          <button onclick="eliminarProducto('${p.id}')" style="background:#e74c3c; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; flex:1;">Eliminar</button>
+        <div class="btn-group">
+          <button class="btn-edit" onclick="mostrarFormularioEdicion('${p.id}')">Editar</button>
+          <button class="btn-delete" onclick="eliminarProducto('${p.id}')">Borrar</button>
         </div>
       </div>
 
       <div id="edit-${p.id}" class="edit-box" style="display:none;">
-        <label style="font-size:12px; font-weight:bold;">Nombre:</label>
-        <input type="text" id="edit-nombre-${p.id}" value="${p.nombre}">
-        
-        <label style="font-size:12px; font-weight:bold;">Precio:</label>
-        <input type="text" id="edit-precio-${p.id}" value="${p.precio}">
-
-        <label style="font-size:12px; font-weight:bold;">Categoría:</label>
-        <select id="edit-categoria-${p.id}">
-          ${opcionesCategoria}
-        </select>
-        
-        <label style="font-size:12px; font-weight:bold;">Estado:</label>
+        <label>Nombre:</label><input type="text" id="edit-nombre-${p.id}" value="${p.nombre}">
+        <label>Precio:</label><input type="text" id="edit-precio-${p.id}" value="${p.precio}">
+        <label>Categoría:</label><select id="edit-categoria-${p.id}">${opcionesCat}</select>
+        <label>Estado:</label>
         <select id="edit-estado-${p.id}">
           <option value="disponible" ${p.estado === 'disponible' ? 'selected' : ''}>Disponible</option>
           <option value="encargar" ${p.estado === 'encargar' ? 'selected' : ''}>Para Encargar</option>
-          <option value="consultar" ${p.estado === 'consultar' ? 'selected' : ''}>Solo Consultar</option>
+          <option value="consultar" ${p.estado === 'consultar' ? 'selected' : ''}>Consultar</option>
         </select>
 
-        <div style="display:flex; gap:10px;">
-          <button onclick="actualizarProducto('${p.id}')" style="background:#2ecc71; color:white; border:none; padding:10px; flex:1; border-radius:6px; font-weight:bold; cursor:pointer;">Guardar</button>
-          <button onclick="cancelarEdicion('${p.id}')" style="background:#95a5a6; color:white; border:none; padding:10px; flex:1; border-radius:6px; cursor:pointer;">Cancelar</button>
+        <div style="background:#fff; padding:10px; border:1px solid #ddd; border-radius:8px; margin-top:10px;">
+            <label style="color:#2c3e50">📷 Opción A: Subir nueva foto</label>
+            <input type="file" id="file-${p.id}" accept="image/*">
+            
+            <label style="color:#2c3e50; margin-top:5px;">🔗 Opción B: Cambiar link</label>
+            <input type="text" id="edit-link-${p.id}" value="${p.imagen || ''}" placeholder="Pegar URL aquí">
+        </div>
+        
+        <div class="btn-group" style="margin-top:15px;">
+          <button class="btn-edit" style="background:#2ecc71" onclick="actualizarProducto('${p.id}')">Guardar</button>
+          <button class="btn-delete" style="background:#95a5a6" onclick="cancelarEdicion('${p.id}')">Cerrar</button>
         </div>
       </div>
     `;
@@ -119,59 +116,62 @@ function renderizarProductos(lista) {
   });
 }
 
-// FUNCIONES DE CONTROL (Asegúrate de que existan)
-window.mostrarFormularioEdicion = function(id) {
+// ================================
+// ACTUALIZAR PRODUCTO
+// ================================
+window.actualizarProducto = async id => {
+  const fileInput = document.getElementById(`file-${id}`);
+  const linkInput = document.getElementById(`edit-link-${id}`);
+  let urlFinal = linkInput.value.trim();
+
+  // Si hay un archivo seleccionado, tiene prioridad y se sube
+  if (fileInput.files.length > 0) {
+    const btn = document.querySelector(`#edit-${id} .btn-edit`);
+    btn.innerText = "Subiendo...";
+    btn.disabled = true;
+
+    const subida = await subirImagen(fileInput.files[0]);
+    if (subida) urlFinal = subida;
+    else {
+        alert("Error al subir imagen");
+        btn.innerText = "Guardar";
+        btn.disabled = false;
+        return;
+    }
+  }
+
+  try {
+    await db.collection("productos").doc(id).update({
+      nombre: document.getElementById(`edit-nombre-${id}`).value,
+      precio: document.getElementById(`edit-precio-${id}`).value,
+      categoria: document.getElementById(`edit-categoria-${id}`).value,
+      estado: document.getElementById(`edit-estado-${id}`).value,
+      imagen: urlFinal
+    });
+    alert("✅ Cambios guardados");
+    cargarProductos();
+  } catch (e) { alert("Error al guardar"); }
+}
+
+window.mostrarFormularioEdicion = id => {
   document.getElementById(`view-${id}`).style.display = "none";
   document.getElementById(`edit-${id}`).style.display = "block";
 }
 
-window.cancelarEdicion = function(id) {
+window.cancelarEdicion = id => {
   document.getElementById(`view-${id}`).style.display = "block";
   document.getElementById(`edit-${id}`).style.display = "none";
 }
 
-window.actualizarProducto = async function(id) {
-  const nuevoNombre = document.getElementById(`edit-nombre-${id}`).value;
-  const nuevoPrecio = document.getElementById(`edit-precio-${id}`).value;
-  const nuevaCategoria = document.getElementById(`edit-categoria-${id}`).value;
-  const nuevoEstado = document.getElementById(`edit-estado-${id}`).value;
-
-  try {
-    await db.collection("productos").doc(id).update({
-      nombre: nuevoNombre,
-      precio: nuevoPrecio,
-      categoria: nuevaCategoria,
-      estado: nuevoEstado
-    });
-    alert("✅ Producto actualizado");
-    cargarProductos();
-  } catch (error) {
-    alert("❌ Error al guardar");
-  }
+window.eliminarProducto = async id => {
+  if (confirm("¿Borrar?")) { await db.collection("productos").doc(id).delete(); cargarProductos(); }
 }
 
-window.eliminarProducto = async function(id) {
-  if (confirm("¿Eliminar este repuesto?")) {
-    await db.collection("productos").doc(id).delete();
-    cargarProductos();
-  }
+window.eliminarCategoria = async id => {
+    if (confirm("¿Borrar categoría?")) { await db.collection("categorias").doc(id).delete(); inicializarDatos(); }
 }
 
-window.eliminarCategoria = async function(id) {
-  if (confirm("¿Eliminar categoría?")) {
-    await db.collection("categorias").doc(id).delete();
-    inicializarDatos();
-  }
-}
-
-// Lógica del buscador
-if (buscador) {
-    buscador.addEventListener("input", (e) => {
-        const termino = e.target.value.toLowerCase();
-        const filtrados = productosGlobales.filter(p => 
-            p.nombre.toLowerCase().includes(termino) || 
-            (p.categoria && p.categoria.toLowerCase().includes(termino))
-        );
-        renderizarProductos(filtrados);
-    });
-}
+buscador.addEventListener("input", e => {
+  const t = e.target.value.toLowerCase();
+  renderizarProductos(productosGlobales.filter(p => p.nombre.toLowerCase().includes(t) || (p.categoria && p.categoria.toLowerCase().includes(t))));
+});
