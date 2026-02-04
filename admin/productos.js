@@ -175,21 +175,3 @@ if (buscador) {
         renderizarProductos(filtrados);
     });
 }
-async function subirImagen(archivo) {
-  const apiKey = "TU_API_KEY_AQUI"; // <--- PEGA AQUÍ TU LLAVE DE IMGBB
-  const formData = new FormData();
-  formData.append("image", archivo);
-
-  try {
-    const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
-      method: "POST",
-      body: formData
-    });
-    const data = await response.json();
-    return data.data.url; // Este es el link directo de tu foto
-  } catch (error) {
-    console.error("Error al subir:", error);
-    alert("No se pudo subir la imagen");
-    return null;
-  }
-}
