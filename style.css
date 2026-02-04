@@ -350,5 +350,30 @@ button.agregado { background: #aaa; color: #333; }
     justify-content: space-between;
     height: 100%; /* Para que todas midan lo mismo en la cuadrícula */
 }
+/* Esto quita cualquier espacio extra en las tarjetas */
+.producto {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eee;
+    height: 100%;
+}
+
+.contenedor-img {
+    margin: 0;
+    padding: 0;
+    line-height: 0; /* Evita huecos fantasma debajo de la imagen */
+}
+
+.contenedor-img img {
+    transition: transform 0.3s ease;
+}
+
+/* Efecto opcional: un pequeño zoom al tocar la foto */
+.producto:hover .contenedor-img img {
+    transform: scale(1.05);
+}
 
  
