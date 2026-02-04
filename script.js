@@ -27,13 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
             let estadoClase = "";
 
             if (p.estado === "disponible") {
-                estadoTexto = "En Tienda";
+                estadoTexto = "Tienda";
                 estadoClase = "disponible";
-                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>${estaEnCarrito ? 'Agregado ✓' : 'Agregar'}</button>`;
+                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>${estaEnCarrito ? 'Listo' : 'Agregar'}</button>`;
             } else if (p.estado === "encargar") {
-                estadoTexto = "Por Encargo";
+                estadoTexto = "Encargo";
                 estadoClase = "encargo";
-                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color: #3498db;">${estaEnCarrito ? 'Agregado ✓' : 'Encargar'}</button>`;
+                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color: #3498db;">${estaEnCarrito ? 'Listo' : 'Pedir'}</button>`;
             } else {
                 estadoTexto = "Consultar";
                 estadoClase = "no-disponible";
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             div.innerHTML = `
                 <div class="contenedor-img">
-                    <img src="${urlImagen}" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/300x300?text=Error+Carga'">
+                    <img src="${urlImagen}" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/300x300?text=Error'">
                 </div>
                 <div class="producto-info">
                     <h3>${p.nombre}</h3>
