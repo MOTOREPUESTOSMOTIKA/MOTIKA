@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="admin.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Un pequeño ajuste para que el selector se vea bien */
     select, input {
       width: 100%;
       padding: 10px;
@@ -14,6 +13,7 @@
       border-radius: 6px;
       border: 1px solid #ccc;
       font-family: 'Poppins', sans-serif;
+      box-sizing: border-box;
     }
     label {
       font-weight: bold;
@@ -21,20 +21,27 @@
       margin-bottom: 5px;
       display: block;
     }
+    /* Estilo para la vista previa de la foto */
+    #preview-container {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    #img-preview {
+      max-width: 150px;
+      border-radius: 10px;
+      display: none;
+      margin: 0 auto;
+      border: 2px solid #ddd;
+    }
   </style>
 </head>
 <body>
 
 <div id="loginBox" class="container">
   <h2>Acceso administrador</h2>
-
   <input type="email" id="email" placeholder="Correo">
   <input type="password" id="password" placeholder="Contraseña">
-
-  <button id="btnLogin" type="button" class="btn btn-green">
-    Ingresar
-  </button>
-
+  <button id="btnLogin" type="button" class="btn btn-green">Ingresar</button>
   <p id="loginError" style="color:red; display:none;">Credenciales incorrectas</p>
 </div>
 
@@ -58,7 +65,12 @@
       <option value="consultar">Solo Consultar (WhatsApp directo)</option>
     </select>
 
-    <input id="imagen" placeholder="URL imagen (ImgBB)">
+    <label>📷 Foto del producto:</label>
+    <input type="file" id="archivoImagen" accept="image/*">
+    
+    <div id="preview-container">
+      <img id="img-preview" src="" alt="Vista previa">
+    </div>
 
     <button id="agregar" type="button" class="btn btn-green">
       Agregar producto
@@ -79,7 +91,6 @@
     <button type="button" onclick="location.href='productos.html'" class="btn btn-blue">
       Gestionar productos
     </button>
-
     <button id="btnLogout" type="button" class="btn btn-red">
       Cerrar sesión
     </button>
@@ -99,10 +110,8 @@
     messagingSenderId: "260880167433",
     appId: "1:260880167433:web:d0cd51752c25637fd83ed8"
   };
-  
   firebase.initializeApp(firebaseConfig);
 </script>
-
 <script src="admin.js"></script>
 </body>
 </html>
