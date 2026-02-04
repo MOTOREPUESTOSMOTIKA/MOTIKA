@@ -97,3 +97,23 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarCarrito();
     });
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const btnAbrirCarrito = document.getElementById("btnAbrirCarrito");
+    const carritoPanel = document.getElementById("carrito");
+
+    // FUNCIÓN PARA ABRIR Y CERRAR TOCANDO EL MISMO BOTÓN
+    btnAbrirCarrito.onclick = (e) => {
+        e.stopPropagation(); // Evita errores de clic
+        carritoPanel.classList.toggle("abierto");
+    };
+
+    // CERRAR SI SE TOCA FUERA DEL CARRITO
+    document.addEventListener("click", (e) => {
+        if (!carritoPanel.contains(e.target) && e.target !== btnAbrirCarrito) {
+            carritoPanel.classList.remove("abierto");
+        }
+    });
+
+    // ... (Mantén aquí el resto de tu código de mostrarProductos y mostrarCarrito que ya funcionaba bien)
+});
+
