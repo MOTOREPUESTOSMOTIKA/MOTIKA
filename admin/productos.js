@@ -5,7 +5,6 @@ const buscador = document.getElementById("buscador");
 let productosGlobales = [];
 let categoriasDisponibles = [];
 
-// TU API KEY DE IMGBB
 const IMGBB_API_KEY = "c9c201374e8b952b54f76ac5acd6c23b"; 
 
 auth.onAuthStateChanged(user => {
@@ -18,9 +17,6 @@ async function inicializarDatos() {
     await cargarProductos();
 }
 
-// ================================
-// FUNCIÓN PARA SUBIR FOTOS
-// ================================
 async function subirImagen(archivo) {
   const formData = new FormData();
   formData.append("image", archivo);
@@ -34,9 +30,6 @@ async function subirImagen(archivo) {
   } catch (e) { return null; }
 }
 
-// ================================
-// CARGAR CATEGORÍAS
-// ================================
 async function cargarCategorias() {
   const snapshot = await db.collection("categorias").get();
   listaCategorias.innerHTML = "";
@@ -51,16 +44,13 @@ async function cargarCategorias() {
   });
 }
 
-// ================================
-// CARGAR PRODUCTOS
-// ================================
 async function cargarProductos() {
   listaProductos.innerHTML = "<p>Cargando inventario...</p>";
   const snapshot = await db.collection("productos").get();
   productosGlobales = [];
   snapshot.forEach(doc => { productosGlobales.push({ id: doc.id, ...doc.data() }); });
   
-  // Ordenar alfabéticamente también en la gestión
+  // Ordenar alfabéticamente A-Z
   productosGlobales.sort((a, b) => a.nombre.localeCompare(b.nombre));
   
   renderizarProductos(productosGlobales);
@@ -76,7 +66,7 @@ function renderizarProductos(lista) {
     div.innerHTML = `
       <div id="view-${p.id}">
         <div class="product-info">
-          <img src="${p.imagen || 'https://via.placeholder.com/50'}" style="width:50px; height:50px; float:right; border-radius:8px; object-fit:cover; margin-left:10px;">
+          <img src="${p.imagen || 'https://via.placeholder.com/50'}" style="width:50px; height:50px; float:right; border-radius:8px; object-fit:cover;">
           <h4>${p.nombre}</h4>
           <small>${p.precio} | <b>${p.categoria || 'Sin Cat.'}</b></small><br>
           <span style="color:${p.estado === 'disponible' ? '#27ae60' : (p.estado === 'encargar' ? '#3498db' : '#f39c12')}; font-size:11px; font-weight:bold;">● ${p.estado || 'disponible'}</span>
@@ -87,7 +77,7 @@ function renderizarProductos(lista) {
         </div>
       </div>
 
-      <div id="edit-${p.id}" class="edit-box" style="display:none;">
+      <div id="edit-${p.id}" class="edit-box" style="display:none; background:#f9f9f9; padding:15px; border-radius:10px; border:1px solid #ddd;">
         <label>Nombre:</label><input type="text" id="edit-nombre-${p.id}" value="${p.nombre}">
         <label>Precio:</label><input type="text" id="edit-precio-${p.id}" value="${p.precio}">
         <label>Categoría:</label><select id="edit-categoria-${p.id}">${opcionesCat}</select>
@@ -98,17 +88,16 @@ function renderizarProductos(lista) {
           <option value="consultar" ${p.estado === 'consultar' ? 'selected' : ''}>Consultar</option>
         </select>
 
-        <div style="background:#fff; padding:10px; border:1px solid #ddd; border-radius:8px; margin-top:10px;">
-            <label style="color:#2c3e50">📷 Opción A: Subir nueva foto</label>
-            <input type="file" id="file-${p.id}" accept="image/*">
-            
-            <label style="color:#2c3e50; margin-top:5px;">🔗 Opción B: Cambiar link</label>
-            <input type="text" id="edit-link-${p.id}" value="${p.imagen || ''}" placeholder="Pegar URL aquí">
+        <div style="margin-top:10px; padding:10px; border:1px dashed #bbb; border-radius:8px;">
+            <label>📷 Nueva foto (Archivo):</label>
+            <input type="file" id="file-${p.id}" accept="image/*" style="margin-bottom:10px;">
+            <label>🔗 O cambiar Link:</label>
+            <input type="text" id="edit-link-${p.id}" value="${p.imagen || ''}">
         </div>
         
         <div class="btn-group" style="margin-top:15px;">
-          <button class="btn-edit" style="background:#2ecc71" onclick="actualizarProducto('${p.id}')">Guardar</button>
-          <button class="btn-delete" style="background:#95a5a6" onclick="cancelarEdicion('${p.id}')">Cerrar</button>
+          <button class="btn-edit" onclick="actualizarProducto('${p.id}')">Guardar</button>
+          <button class="btn-delete" onclick="cancelarEdicion('${p.id}')">Cerrar</button>
         </div>
       </div>
     `;
@@ -116,28 +105,17 @@ function renderizarProductos(lista) {
   });
 }
 
-// ================================
-// ACTUALIZAR PRODUCTO
-// ================================
 window.actualizarProducto = async id => {
   const fileInput = document.getElementById(`file-${id}`);
   const linkInput = document.getElementById(`edit-link-${id}`);
+  const btnGuardar = document.querySelector(`#edit-${id} .btn-edit`);
   let urlFinal = linkInput.value.trim();
 
-  // Si hay un archivo seleccionado, tiene prioridad y se sube
   if (fileInput.files.length > 0) {
-    const btn = document.querySelector(`#edit-${id} .btn-edit`);
-    btn.innerText = "Subiendo...";
-    btn.disabled = true;
-
+    btnGuardar.innerText = "Subiendo...";
+    btnGuardar.disabled = true;
     const subida = await subirImagen(fileInput.files[0]);
     if (subida) urlFinal = subida;
-    else {
-        alert("Error al subir imagen");
-        btn.innerText = "Guardar";
-        btn.disabled = false;
-        return;
-    }
   }
 
   try {
@@ -150,7 +128,11 @@ window.actualizarProducto = async id => {
     });
     alert("✅ Cambios guardados");
     cargarProductos();
-  } catch (e) { alert("Error al guardar"); }
+  } catch (e) { 
+    alert("Error al guardar"); 
+    btnGuardar.innerText = "Guardar";
+    btnGuardar.disabled = false;
+  }
 }
 
 window.mostrarFormularioEdicion = id => {
@@ -164,11 +146,17 @@ window.cancelarEdicion = id => {
 }
 
 window.eliminarProducto = async id => {
-  if (confirm("¿Borrar?")) { await db.collection("productos").doc(id).delete(); cargarProductos(); }
+  if (confirm("¿Borrar producto?")) { 
+    await db.collection("productos").doc(id).delete(); 
+    cargarProductos(); 
+  }
 }
 
 window.eliminarCategoria = async id => {
-    if (confirm("¿Borrar categoría?")) { await db.collection("categorias").doc(id).delete(); inicializarDatos(); }
+    if (confirm("¿Borrar categoría?")) { 
+      await db.collection("categorias").doc(id).delete(); 
+      inicializarDatos(); 
+    }
 }
 
 buscador.addEventListener("input", e => {
