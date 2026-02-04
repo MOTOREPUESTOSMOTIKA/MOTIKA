@@ -44,15 +44,15 @@ document.addEventListener("DOMContentLoaded", () => {
                            </button>`;
             } else if (p.estado === "encargar") {
                 estadoTexto = "Bajo pedido (Encargo)";
-                estadoClase = "no-disponible"; // Usamos el color naranja
+                estadoClase = "encargo"; // <--- CAMBIADO PARA AZUL
                 btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color: #3498db;">
                             ${estaEnCarrito ? 'Agregado ✓' : 'Encargar Repuesto'}
                            </button>`;
             } else {
                 // Estado: consultar o por defecto
                 estadoTexto = "Consultar disponibilidad";
-                estadoClase = "no-disponible";
-                btnHTML = `<button class="btn-consultar">Consultar por WhatsApp</button>`;
+                estadoClase = "no-disponible"; // SE MANTIENE NARANJA
+                btnHTML = `<button class="btn-consultar" style="background-color: #ff9800;">Consultar por WhatsApp</button>`;
             }
 
             div.innerHTML = `
@@ -195,4 +195,3 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarProductos(cat === "todas" ? productos : productos.filter(p => p.categoria === cat));
     };
 });
-
