@@ -5,12 +5,8 @@ const buscador = document.getElementById("buscador");
 let productosGlobales = [];
 let categoriasDisponibles = [];
 
-// TU API KEY DE IMGBB
 const IMGBB_API_KEY = "c9c201374e8b952b54f76ac5acd6c23b"; 
 
-// ==========================================
-// CONTROL DE SESIÓN
-// ==========================================
 auth.onAuthStateChanged(user => {
   if (!user) { 
     window.location.href = "admin.html"; 
@@ -24,9 +20,6 @@ async function inicializarDatos() {
     await cargarProductos();
 }
 
-// ==========================================
-// FUNCIÓN PARA SUBIR FOTOS A IMGBB
-// ==========================================
 async function subirImagen(archivo) {
   const formData = new FormData();
   formData.append("image", archivo);
@@ -38,14 +31,10 @@ async function subirImagen(archivo) {
     const data = await response.json();
     return data.success ? data.data.url : null;
   } catch (e) { 
-    console.error("Error al subir:", e);
     return null; 
   }
 }
 
-// ==========================================
-// GESTIÓN DE CATEGORÍAS
-// ==========================================
 async function cargarCategorias() {
   const snapshot = await db.collection("categorias").get();
   listaCategorias.innerHTML = "";
@@ -63,9 +52,6 @@ async function cargarCategorias() {
   });
 }
 
-// ==========================================
-// GESTIÓN DE PRODUCTOS
-// ==========================================
 async function cargarProductos() {
   listaProductos.innerHTML = "<p>Cargando inventario...</p>";
   const snapshot = await db.collection("productos").get();
@@ -73,15 +59,14 @@ async function cargarProductos() {
   snapshot.forEach(doc => { 
     productosGlobales.push({ id: doc.id, ...doc.data() }); 
   });
-  
-  // Ordenar alfabéticamente de la A a la Z
   productosGlobales.sort((a, b) => a.nombre.localeCompare(b.nombre));
-  
   renderizarProductos(productosGlobales);
 }
 
 function renderizarProductos(lista) {
+  const fragmento = document.createDocumentFragment();
   listaProductos.innerHTML = "";
+  
   lista.forEach(p => {
     const div = document.createElement("div");
     div.className = "product-item";
@@ -92,89 +77,62 @@ function renderizarProductos(lista) {
     div.innerHTML = `
       <div id="view-${p.id}">
         <div class="product-info">
-          <img src="${p.imagen || 'https://via.placeholder.com/60'}" style="width:60px; height:60px; float:right; border-radius:12px; object-fit:cover; border: 1px solid #eee;">
+          <img src="${p.imagen || 'https://via.placeholder.com/60'}" loading="lazy" style="width:60px; height:60px; float:right; border-radius:12px; object-fit:cover; border: 1px solid #eee;">
           <h4 style="margin:0; color:#2c3e50;">${p.nombre}</h4>
           <p style="margin:5px 0; font-size:14px;">${p.precio} | <b style="color:#7f8c8d;">${p.categoria || 'Sin Cat.'}</b></p>
           <span style="color:${p.estado === 'disponible' ? '#27ae60' : (p.estado === 'encargar' ? '#3498db' : '#f39c12')}; font-size:12px; font-weight:bold;">
             ● ${p.estado || 'disponible'}
           </span>
         </div>
-        
         <div class="btn-group" style="margin-top:15px; display:flex; gap:10px;">
-          <button class="btn-edit" onclick="mostrarFormularioEdicion('${p.id}')" 
-            style="background-color: #3498db; color: white; border: none; padding: 10px; border-radius: 8px; flex:1; cursor:pointer; font-weight:bold;">
-            Editar
-          </button>
-          <button class="btn-delete" onclick="eliminarProducto('${p.id}')" 
-            style="background-color: #e74c3c; color: white; border: none; padding: 10px; border-radius: 8px; flex:1; cursor:pointer; font-weight:bold;">
-            Eliminar
-          </button>
+          <button class="btn-edit" onclick="mostrarFormularioEdicion('${p.id}')" style="background-color: #3498db; color: white; border: none; padding: 10px; border-radius: 8px; flex:1; cursor:pointer; font-weight:bold;">Editar</button>
+          <button class="btn-delete" onclick="eliminarProducto('${p.id}')" style="background-color: #e74c3c; color: white; border: none; padding: 10px; border-radius: 8px; flex:1; cursor:pointer; font-weight:bold;">Eliminar</button>
         </div>
       </div>
-
       <div id="edit-${p.id}" class="edit-box" style="display:none; background:#ffffff; padding:15px; border-radius:12px; border:2px solid #3498db;">
         <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:5px;">Nombre:</label>
         <input type="text" id="edit-nombre-${p.id}" value="${p.nombre}" style="width:100%; padding:8px; margin-bottom:10px; border-radius:6px; border:1px solid #ccc; box-sizing:border-box;">
-        
         <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:5px;">Precio:</label>
         <input type="text" id="edit-precio-${p.id}" value="${p.precio}" style="width:100%; padding:8px; margin-bottom:10px; border-radius:6px; border:1px solid #ccc; box-sizing:border-box;">
-        
         <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:5px;">Categoría:</label>
         <select id="edit-categoria-${p.id}" style="width:100%; padding:8px; margin-bottom:10px; border-radius:6px; border:1px solid #ccc;">${opcionesCat}</select>
-        
         <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:5px;">Estado:</label>
         <select id="edit-estado-${p.id}" style="width:100%; padding:8px; margin-bottom:10px; border-radius:6px; border:1px solid #ccc;">
           <option value="disponible" ${p.estado === 'disponible' ? 'selected' : ''}>Disponible</option>
           <option value="encargar" ${p.estado === 'encargar' ? 'selected' : ''}>Para Encargar</option>
           <option value="consultar" ${p.estado === 'consultar' ? 'selected' : ''}>Consultar</option>
         </select>
-
         <div style="margin-top:10px; padding:10px; background:#f8f9fa; border-radius:8px; border:1px dashed #3498db;">
             <label style="font-size:11px; color:#34495e; font-weight:bold;">📷 Opción A: Nueva Foto</label>
             <input type="file" id="file-${p.id}" accept="image/*" style="font-size:11px; margin-bottom:10px; width:100%;">
-            
             <label style="font-size:11px; color:#34495e; font-weight:bold;">🔗 Opción B: Cambiar Link</label>
             <input type="text" id="edit-link-${p.id}" value="${p.imagen || ''}" style="width:100%; padding:6px; font-size:11px; border-radius:4px; border:1px solid #ddd; box-sizing:border-box;">
         </div>
-        
         <div class="btn-group" style="margin-top:15px; display:flex; gap:10px;">
-          <button class="btn-edit" onclick="actualizarProducto('${p.id}')" 
-            style="background-color: #27ae60; color: white; border: none; padding: 10px; border-radius: 8px; flex:1; cursor:pointer; font-weight:bold;">
-            Guardar
-          </button>
-          <button class="btn-delete" onclick="cancelarEdicion('${p.id}')" 
-            style="background-color: #95a5a6; color: white; border: none; padding: 10px; border-radius: 8px; flex:1; cursor:pointer; font-weight:bold;">
-            Cerrar
-          </button>
+          <button class="btn-edit" onclick="actualizarProducto('${p.id}')" style="background-color: #27ae60; color: white; border: none; padding: 10px; border-radius: 8px; flex:1; cursor:pointer; font-weight:bold;">Guardar</button>
+          <button class="btn-delete" onclick="cancelarEdicion('${p.id}')" style="background-color: #95a5a6; color: white; border: none; padding: 10px; border-radius: 8px; flex:1; cursor:pointer; font-weight:bold;">Cerrar</button>
         </div>
       </div>
     `;
-    listaProductos.appendChild(div);
+    fragmento.appendChild(div);
   });
+  listaProductos.appendChild(fragmento);
 }
 
-// ==========================================
-// FUNCIONES DE ACCIÓN
-// ==========================================
 window.actualizarProducto = async id => {
   const fileInput = document.getElementById(`file-${id}`);
   const linkInput = document.getElementById(`edit-link-${id}`);
   const btnGuardar = document.querySelector(`#edit-${id} button[onclick*="actualizarProducto"]`);
-  
   let urlFinal = linkInput.value.trim();
 
-  // Si hay un archivo, subimos a ImgBB
   if (fileInput.files.length > 0) {
-    const textoOriginal = btnGuardar.innerText;
     btnGuardar.innerText = "Subiendo...";
     btnGuardar.disabled = true;
-
     const subida = await subirImagen(fileInput.files[0]);
-    if (subida) {
-      urlFinal = subida;
-    } else {
+    if (subida) urlFinal = subida;
+    else {
       alert("Error al subir la imagen");
-      btnGuardar.innerText = textoOriginal;
+      btnGuardar.innerText = "Guardar";
       btnGuardar.disabled = false;
       return;
     }
@@ -188,43 +146,27 @@ window.actualizarProducto = async id => {
       estado: document.getElementById(`edit-estado-${id}`).value,
       imagen: urlFinal
     });
-    alert("✅ Producto actualizado con éxito");
+    alert("✅ Producto actualizado");
     cargarProductos();
-  } catch (e) { 
-    alert("❌ Error al guardar en Firebase"); 
-  }
+  } catch (e) { alert("❌ Error"); }
 }
 
 window.mostrarFormularioEdicion = id => {
   document.getElementById(`view-${id}`).style.display = "none";
   document.getElementById(`edit-${id}`).style.display = "block";
 }
-
 window.cancelarEdicion = id => {
   document.getElementById(`view-${id}`).style.display = "block";
   document.getElementById(`edit-${id}`).style.display = "none";
 }
-
 window.eliminarProducto = async id => {
-  if (confirm("¿Estás seguro de eliminar este producto?")) { 
-    await db.collection("productos").doc(id).delete(); 
-    cargarProductos(); 
-  }
+  if (confirm("¿Eliminar?")) { await db.collection("productos").doc(id).delete(); cargarProductos(); }
 }
-
 window.eliminarCategoria = async id => {
-  if (confirm("¿Borrar categoría?")) { 
-    await db.collection("categorias").doc(id).delete(); 
-    inicializarDatos(); 
-  }
+  if (confirm("¿Borrar?")) { await db.collection("categorias").doc(id).delete(); inicializarDatos(); }
 }
 
-// BUSCADOR EN TIEMPO REAL
 buscador.addEventListener("input", e => {
   const t = e.target.value.toLowerCase();
-  const filtrados = productosGlobales.filter(p => 
-    p.nombre.toLowerCase().includes(t) || 
-    (p.categoria && p.categoria.toLowerCase().includes(t))
-  );
-  renderizarProductos(filtrados);
+  renderizarProductos(productosGlobales.filter(p => p.nombre.toLowerCase().includes(t) || (p.categoria && p.categoria.toLowerCase().includes(t))));
 });
