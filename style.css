@@ -162,5 +162,60 @@ main {
     .contenedor-img { height: 100px; }
     .producto-info h3, .precio { font-size: 11px; }
 }
+/* ================= FRANJA INFO (VUELVE A LA IZQUIERDA) ================= */
+.franja-info {
+    background: #fff;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column; /* Uno debajo del otro como en la captura */
+    align-items: flex-start; /* Alineado a la izquierda */
+    gap: 8px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+/* ================= BUSCADOR Y CATEGORÍAS (POSICIÓN ORIGINAL) ================= */
+.buscador-container {
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    background: #fff;
+}
+
+/* ================= CORRECCIÓN CARRITO ================= */
+.carrito {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    height: 100%;
+    background: #fff;
+    z-index: 2000;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+}
+
+.carrito.abierto { 
+    right: 0 !important; 
+}
+
+/* El botón flotante del carrito */
+.btn-carrito {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #25d366;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    z-index: 2100; /* Siempre por encima para poder cerrar */
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
 
 
