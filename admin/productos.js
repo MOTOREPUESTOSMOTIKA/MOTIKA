@@ -1,8 +1,8 @@
 const listaProductos = document.getElementById("listaProductos");
 const listaCategorias = document.getElementById("listaCategorias");
-const buscador = document.getElementById("buscador"); // Asegúrate de agregar este ID en tu HTML
+const buscador = document.getElementById("buscador");
 
-let productosGlobales = []; // Guardamos los productos aquí para filtrar sin volver a consultar Firebase
+let productosGlobales = [];
 let categoriasDisponibles = [];
 
 // ================================
@@ -49,7 +49,7 @@ async function cargarCategorias() {
 async function cargarProductos() {
   listaProductos.innerHTML = "<p>Cargando productos...</p>";
   const snapshot = await db.collection("productos").get();
-  productosGlobales = []; // Limpiamos la lista global
+  productosGlobales = [];
 
   snapshot.forEach(doc => {
     productosGlobales.push({ id: doc.id, ...doc.data() });
@@ -58,7 +58,6 @@ async function cargarProductos() {
   renderizarProductos(productosGlobales);
 }
 
-// Función separada para poder filtrar sin recargar desde la base de datos
 function renderizarProductos(lista) {
   listaProductos.innerHTML = "";
   
@@ -70,7 +69,6 @@ function renderizarProductos(lista) {
   lista.forEach(p => {
     const div = document.createElement("div");
     div.className = "product-item";
-    div.style = "background:white; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;";
 
     let opcionesCategoria = categoriasDisponibles.map(cat => {
         const seleccionada = (p.categoria === cat) ? "selected" : "";
@@ -78,27 +76,39 @@ function renderizarProductos(lista) {
     }).join("");
 
     div.innerHTML = `
-      <div id="view-${p.id}" style="display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <h4 style="margin:0; color:#2c3e50;">${p.nombre}</h4>
-          <small style="color:#7f8c8d;">Precio: ${p.precio} | <b>${p.categoria || 'Sin categoría'}</b></small><br>
+      <div id="view-${p.id}">
+        <div class="product-info">
+          <h4>${p.nombre}</h4>
+          <small>Precio: ${p.precio} | <b>${p.categoria || 'Sin categoría'}</b></small><br>
           <span style="color:${p.estado === 'disponible' ? '#27ae60' : (p.estado === 'encargar' ? '#3498db' : '#f39c12')}; font-size:12px; font-weight:bold;">
             ● ${p.estado || 'disponible'}
           </span>
         </div>
-        <div style="display:flex; gap:8px;">
-          <button onclick="mostrarFormularioEdicion('${p.id}')" style="background:#3498db; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Editar</button>
-          <button onclick="eliminarProducto('${p.id}')" style="background:#e74c3c; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Eliminar</button>
+        <div style="display:flex; gap:8px; margin-top:10px;">
+          <button onclick="mostrarFormularioEdicion('${p.id}')" style="background:#3498db; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; flex:1;">Editar</button>
+          <button onclick="eliminarProducto('${p.id}')" style="background:#e74c3c; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; flex:1;">Eliminar</button>
         </div>
       </div>
 
-      <div id="edit-${p.id}" style="display:none; margin-top:15px; padding-top:15px; border-top:1px solid #eee;">
+      <div id="edit-${p.id}" class="edit-box" style="display:none;">
         <label style="font-size:12px; font-weight:bold;">Nombre:</label>
-        <input type="text" id="edit-nombre-${p.id}" value="${p.nombre}" style="width:100%; padding:8px; margin-bottom:10px; border:1px solid #ddd; border-radius:4px;">
+        <input type="text" id="edit-nombre-${p.id}" value="${p.nombre}">
+        
+        <label style="font-size:12px; font-weight:bold;">Precio:</label>
+        <input type="text" id="edit-precio-${p.id}" value="${p.precio}">
+
         <label style="font-size:12px; font-weight:bold;">Categoría:</label>
-        <select id="edit-categoria-${p.id}" style="width:100%; padding:8px; margin-bottom:10px; border:1px solid #ddd; border-radius:4px;">
+        <select id="edit-categoria-${p.id}">
           ${opcionesCategoria}
         </select>
+        
+        <label style="font-size:12px; font-weight:bold;">Estado:</label>
+        <select id="edit-estado-${p.id}">
+          <option value="disponible" ${p.estado === 'disponible' ? 'selected' : ''}>Disponible</option>
+          <option value="encargar" ${p.estado === 'encargar' ? 'selected' : ''}>Para Encargar</option>
+          <option value="consultar" ${p.estado === 'consultar' ? 'selected' : ''}>Solo Consultar</option>
+        </select>
+
         <div style="display:flex; gap:10px;">
           <button onclick="actualizarProducto('${p.id}')" style="background:#2ecc71; color:white; border:none; padding:10px; flex:1; border-radius:6px; font-weight:bold; cursor:pointer;">Guardar</button>
           <button onclick="cancelarEdicion('${p.id}')" style="background:#95a5a6; color:white; border:none; padding:10px; flex:1; border-radius:6px; cursor:pointer;">Cancelar</button>
@@ -107,6 +117,51 @@ function renderizarProductos(lista) {
     `;
     listaProductos.appendChild(div);
   });
+}
+
+// FUNCIONES DE CONTROL (Asegúrate de que existan)
+window.mostrarFormularioEdicion = function(id) {
+  document.getElementById(`view-${id}`).style.display = "none";
+  document.getElementById(`edit-${id}`).style.display = "block";
+}
+
+window.cancelarEdicion = function(id) {
+  document.getElementById(`view-${id}`).style.display = "block";
+  document.getElementById(`edit-${id}`).style.display = "none";
+}
+
+window.actualizarProducto = async function(id) {
+  const nuevoNombre = document.getElementById(`edit-nombre-${id}`).value;
+  const nuevoPrecio = document.getElementById(`edit-precio-${id}`).value;
+  const nuevaCategoria = document.getElementById(`edit-categoria-${id}`).value;
+  const nuevoEstado = document.getElementById(`edit-estado-${id}`).value;
+
+  try {
+    await db.collection("productos").doc(id).update({
+      nombre: nuevoNombre,
+      precio: nuevoPrecio,
+      categoria: nuevaCategoria,
+      estado: nuevoEstado
+    });
+    alert("✅ Producto actualizado");
+    cargarProductos();
+  } catch (error) {
+    alert("❌ Error al guardar");
+  }
+}
+
+window.eliminarProducto = async function(id) {
+  if (confirm("¿Eliminar este repuesto?")) {
+    await db.collection("productos").doc(id).delete();
+    cargarProductos();
+  }
+}
+
+window.eliminarCategoria = async function(id) {
+  if (confirm("¿Eliminar categoría?")) {
+    await db.collection("categorias").doc(id).delete();
+    inicializarDatos();
+  }
 }
 
 // Lógica del buscador
@@ -120,5 +175,3 @@ if (buscador) {
         renderizarProductos(filtrados);
     });
 }
-
-// --- Las funciones de actualizar/eliminar se mantienen igual que la versión anterior ---
