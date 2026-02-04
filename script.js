@@ -22,38 +22,58 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // --- Renderizado de Productos con Lógica de 3 Estados ---
     function mostrarProductos(lista) {
         contenedor.innerHTML = "";
         lista.forEach(p => {
             const div = document.createElement("div");
             div.className = "producto";
+            
             const estaEnCarrito = carrito.some(item => item.nombre === p.nombre);
-            const btnHTML = p.disponible
-                ? `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>
-                    ${estaEnCarrito ? 'Agregado ✓' : 'Agregar al carrito'}
-                   </button>`
-                : `<button class="btn-consultar">Consultar disponibilidad</button>`;
+            
+            let btnHTML = "";
+            let estadoTexto = "";
+            let estadoClase = "";
+
+            // Lógica según el estado definido en el Admin
+            if (p.estado === "disponible") {
+                estadoTexto = "Disponible en tienda";
+                estadoClase = "disponible";
+                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>
+                            ${estaEnCarrito ? 'Agregado ✓' : 'Agregar al carrito'}
+                           </button>`;
+            } else if (p.estado === "encargar") {
+                estadoTexto = "Bajo pedido (Encargo)";
+                estadoClase = "no-disponible"; // Usamos el color naranja
+                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color: #3498db;">
+                            ${estaEnCarrito ? 'Agregado ✓' : 'Encargar Repuesto'}
+                           </button>`;
+            } else {
+                // Estado: consultar o por defecto
+                estadoTexto = "Consultar disponibilidad";
+                estadoClase = "no-disponible";
+                btnHTML = `<button class="btn-consultar">Consultar por WhatsApp</button>`;
+            }
 
             div.innerHTML = `
                 <img src="${p.imagen}" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/150?text=Motika+Repuestos'">
                 <div class="producto-info">
                     <h3>${p.nombre}</h3>
                     <div class="precio">${p.precio}</div>
-                    <div class="estado ${p.disponible ? 'disponible' : 'no-disponible'}">
-                        ${p.disponible ? 'Disponible en tienda' : 'Consultar disponibilidad'}
-                    </div>
+                    <div class="estado ${estadoClase}">${estadoTexto}</div>
                     ${btnHTML}
                 </div>
             `;
+
             const boton = div.querySelector("button");
             boton.onclick = () => {
-                if (p.disponible) {
+                if (p.estado === "disponible" || p.estado === "encargar") {
                     carrito.push(p);
                     localStorage.setItem("carrito_motika", JSON.stringify(carrito));
                     mostrarCarrito();
                     mostrarProductos(lista); 
                 } else {
-                    const msg = `Hola, quisiera saber la disponibilidad del: ${p.nombre}`;
+                    const msg = `Hola Motika, quisiera saber la disponibilidad del: ${p.nombre}`;
                     window.open(`https://wa.me/573118612727?text=${encodeURIComponent(msg)}`);
                 }
             };
@@ -61,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // --- Lógica del Carrito con Separación de Mensaje ---
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
         if (carrito.length === 0) {
@@ -76,34 +97,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
         btnComprar.style.display = "block";
         
-        // --- BOTÓN VACIAR CARRITO ---
         const btnVaciar = document.createElement("button");
         btnVaciar.innerText = "Vaciar Carrito 🗑️";
         btnVaciar.className = "btn-vaciar";
-        btnVaciar.onclick = () => {
-            if(confirm("¿Seguro que quieres vaciar el carrito?")) {
-                vaciarTodo();
-            }
-        };
+        btnVaciar.onclick = () => { if(confirm("¿Seguro que quieres vaciar el carrito?")) vaciarTodo(); };
         listaCarrito.appendChild(btnVaciar);
 
-        let mensaje = "Hola Motika, quiero comprar:%0A";
         let total = 0;
+        let listaTienda = "";
+        let listaEncargo = "";
 
         carrito.forEach((p, index) => {
             const itemDiv = document.createElement("div");
             itemDiv.className = "item-carrito-lista";
             itemDiv.innerHTML = `
                 <button class="btn-borrar" data-index="${index}">✕</button>
-                <span class="nombre-p">${p.nombre}</span>
+                <span class="nombre-p">${p.nombre} ${p.estado === 'encargar' ? '<br><small style="color:#3498db;">(Para encargar)</small>' : ''}</span>
                 <span class="precio-p">${p.precio}</span>
             `;
             listaCarrito.appendChild(itemDiv);
-            mensaje += `- ${p.nombre} (${p.precio})%0A`;
+
+            // Clasificación para el mensaje de WhatsApp
+            if (p.estado === 'encargar') {
+                listaEncargo += `- ${p.nombre} (${p.precio})%0A`;
+            } else {
+                listaTienda += `- ${p.nombre} (${p.precio})%0A`;
+            }
+
             let valorLimpio = String(p.precio).replace(/[^0-9]/g, "");
             total += parseInt(valorLimpio) || 0;
         });
 
+        // Eventos para borrar
         document.querySelectorAll(".btn-borrar").forEach(btn => {
             btn.onclick = (e) => {
                 const idx = e.currentTarget.getAttribute("data-index");
@@ -114,12 +139,20 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         });
 
+        // Construcción del mensaje de WhatsApp estructurado
+        let mensajeFinal = "Hola Motika! 👋 Quiero realizar el siguiente pedido:%0A%0A";
+        if (listaTienda !== "") {
+            mensajeFinal += "*PRODUCTOS EN TIENDA:*%0A" + listaTienda + "%0A";
+        }
+        if (listaEncargo !== "") {
+            mensajeFinal += "*PRODUCTOS PARA ENCARGAR:*%0A" + listaEncargo + "%0A";
+        }
+        mensajeFinal += "*Total a pagar: $" + total.toLocaleString('es-CO') + "*";
+
         if(precioTotalDoc) precioTotalDoc.innerText = `$${total.toLocaleString('es-CO')}`;
-        mensaje += `%0A*Total: $${total.toLocaleString('es-CO')}*`;
-        btnComprar.href = `https://wa.me/573118612727?text=${mensaje}`;
+        btnComprar.href = `https://wa.me/573118612727?text=${mensajeFinal}`;
     }
 
-    // --- FUNCIÓN PARA LIMPIAR TODO ---
     function vaciarTodo() {
         carrito = [];
         localStorage.removeItem("carrito_motika");
@@ -127,13 +160,11 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarProductos(productos);
     }
 
-    // Al pulsar "Hacer pedido", vaciamos el carro después de un segundo
     btnComprar.onclick = () => {
-        setTimeout(() => {
-            vaciarTodo();
-        }, 1000);
+        setTimeout(() => { vaciarTodo(); }, 1500);
     };
 
+    // --- Conexión Firebase ---
     db.collection("productos").onSnapshot(snapshot => {
         productos = [];
         const categoriasSet = new Set();
@@ -164,3 +195,4 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarProductos(cat === "todas" ? productos : productos.filter(p => p.categoria === cat));
     };
 });
+
