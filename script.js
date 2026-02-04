@@ -27,32 +27,29 @@ document.addEventListener("DOMContentLoaded", () => {
             let estadoClase = "";
 
             if (p.estado === "disponible") {
-                estadoTexto = "Disponible en tienda";
+                estadoTexto = "En Tienda";
                 estadoClase = "disponible";
-                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>${estaEnCarrito ? 'Agregado ✓' : 'Agregar al carrito'}</button>`;
+                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>${estaEnCarrito ? 'Agregado ✓' : 'Agregar'}</button>`;
             } else if (p.estado === "encargar") {
-                estadoTexto = "Bajo pedido (Encargo)";
+                estadoTexto = "Por Encargo";
                 estadoClase = "encargo";
-                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color: #3498db;">${estaEnCarrito ? 'Agregado ✓' : 'Encargar Repuesto'}</button>`;
+                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color: #3498db;">${estaEnCarrito ? 'Agregado ✓' : 'Encargar'}</button>`;
             } else {
-                estadoTexto = "Consultar disponibilidad";
+                estadoTexto = "Consultar";
                 estadoClase = "no-disponible";
-                btnHTML = `<button class="btn-consultar" style="background-color: #ff9800;">WhatsApp</button>`;
+                btnHTML = `<button class="btn-consultar">WhatsApp</button>`;
             }
 
-            const urlImagen = p.imagen && p.imagen !== "" ? p.imagen : 'https://via.placeholder.com/300x300?text=Motika+Repuestos';
+            const urlImagen = p.imagen && p.imagen !== "" ? p.imagen : 'https://via.placeholder.com/300x300?text=Sin+Foto';
             
-            // Estructura optimizada: Se fuerza a que la imagen y la info tengan espacios definidos
             div.innerHTML = `
-                <div class="contenedor-img" style="height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f9f9f9;">
-                    <img src="${urlImagen}" loading="lazy" referrerpolicy="no-referrer" 
-                         style="max-width: 100%; max-height: 100%; object-fit: contain;"
-                         onerror="this.src='https://via.placeholder.com/300x300?text=Error+al+cargar'">
+                <div class="contenedor-img">
+                    <img src="${urlImagen}" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/300x300?text=Error+Carga'">
                 </div>
-                <div class="producto-info" style="padding: 10px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1;">
-                    <h3 style="font-size: 15px; margin: 5px 0; height: 40px; overflow: hidden;">${p.nombre}</h3>
-                    <div class="precio" style="font-weight: bold; color: #2c3e50;">${p.precio}</div>
-                    <div class="estado ${estadoClase}" style="font-size: 12px; margin: 5px 0;">${estadoTexto}</div>
+                <div class="producto-info">
+                    <h3>${p.nombre}</h3>
+                    <div class="precio">$${p.precio}</div>
+                    <div class="estado ${estadoClase}">● ${estadoTexto}</div>
                     ${btnHTML}
                 </div>
             `;
@@ -77,23 +74,21 @@ document.addEventListener("DOMContentLoaded", () => {
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
         if (carrito.length === 0) {
-            listaCarrito.innerHTML = `<div class="carrito-vacio-msg"><p style="font-size: 50px;">☹️</p><p>Tu carrito está vacío</p></div>`;
+            listaCarrito.innerHTML = `<div class="carrito-vacio-msg"><p style="font-size: 50px;">☹️</p><p>Vacío</p></div>`;
             if(precioTotalDoc) precioTotalDoc.innerText = "$0";
             btnComprar.style.display = "none";
             return;
         }
         btnComprar.style.display = "block";
         let total = 0;
-        let listaTienda = "";
-        let listaEncargo = "";
+        let listaTexto = "Hola Motika! 👋 Pedido:%0A%0A";
 
         carrito.forEach((p, index) => {
             const itemDiv = document.createElement("div");
             itemDiv.className = "item-carrito-lista";
             itemDiv.innerHTML = `<button class="btn-borrar" data-index="${index}">✕</button><span class="nombre-p">${p.nombre}</span><span class="precio-p">${p.precio}</span>`;
             listaCarrito.appendChild(itemDiv);
-            if (p.estado === 'encargar') listaEncargo += `- ${p.nombre} (${p.precio})%0A`;
-            else listaTienda += `- ${p.nombre} (${p.precio})%0A`;
+            listaTexto += `- ${p.nombre} (${p.precio})%0A`;
             let valorLimpio = String(p.precio).replace(/[^0-9]/g, "");
             total += parseInt(valorLimpio) || 0;
         });
@@ -108,12 +103,10 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         });
 
-        let mensajeFinal = `Hola Motika! 👋 Pedido:%0A%0A${listaTienda !== "" ? "*TIENDA:*%0A" + listaTienda + "%0A" : ""}${listaEncargo !== "" ? "*ENCARGO:*%0A" + listaEncargo + "%0A" : ""}*Total: $${total.toLocaleString('es-CO')}*`;
         if(precioTotalDoc) precioTotalDoc.innerText = `$${total.toLocaleString('es-CO')}`;
-        btnComprar.href = `https://wa.me/573118612727?text=${mensajeFinal}`;
+        btnComprar.href = `https://wa.me/573118612727?text=${listaTexto}%0A*Total: $${total.toLocaleString('es-CO')}*`;
     }
 
-    // Carga de productos desde Firebase
     db.collection("productos").get().then(snapshot => {
         productos = [];
         const categoriasSet = new Set();
@@ -125,12 +118,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
         productos.sort((a, b) => a.nombre.localeCompare(b.nombre));
-        filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
+        
+        filtroCategoria.innerHTML = `<option value="todas">Todas</option>`;
         Array.from(categoriasSet).sort().forEach(cat => {
             const opt = document.createElement("option");
             opt.value = opt.textContent = cat;
             filtroCategoria.appendChild(opt);
         });
+
         mostrarProductos(productos);
         mostrarCarrito();
     });
