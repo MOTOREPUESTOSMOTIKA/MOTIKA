@@ -301,4 +301,28 @@ button.agregado { background: #aaa; color: #333; }
     .producto img { height: 100px; }
     .producto-info h3, .precio { font-size: 12px; }
 }
+/* Color verde para lo que hay en tienda */
+.disponible {
+    color: #27ae60;
+    font-weight: 900;
+}
+
+/* Color naranja para consultar */
+.no-disponible {
+    color: #f39c12;
+    font-weight: 900;
+}
+
+/* NUEVO: Color azul para los encargos */
+.encargo {
+    color: #3498db;
+    font-weight: 900;
+}
+
+/* Opcional: Si quieres que el botón de consultar sea naranja también */
+.btn-consultar {
+    background: #f39c12;
+    color: #fff;
+}
+
  
