@@ -4,11 +4,27 @@
   <meta charset="UTF-8">
   <title>Admin - MOTIKA</title>
   <link rel="stylesheet" href="admin.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Un pequeño ajuste para que el selector se vea bien */
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-family: 'Poppins', sans-serif;
+    }
+    label {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 5px;
+      display: block;
+    }
+  </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="loginBox" class="container">
   <h2>Acceso administrador</h2>
 
@@ -22,30 +38,35 @@
   <p id="loginError" style="color:red; display:none;">Credenciales incorrectas</p>
 </div>
 
-<!-- PANEL -->
 <div id="adminPanel" class="container" style="display:none;">
   <h1>Panel de Administración</h1>
 
   <div id="toast"></div>
 
-  <!-- PRODUCTOS -->
   <section>
+    <h3>Agregar nuevo producto</h3>
     <input id="nombre" placeholder="Nombre del producto">
-    <input id="precio" placeholder="Precio">
+    <input id="precio" placeholder="Precio (Ej: $25.000)">
+    
+    <label>Categoría:</label>
     <select id="categoriaProducto"></select>
 
-    <label style="margin-top:10px; display:block;">
-      <input type="checkbox" id="disponible" checked> Disponible
-    </label>
+    <label>Estado de venta:</label>
+    <select id="estado">
+      <option value="disponible">Disponible en Tienda (Carrito)</option>
+      <option value="encargar">Para Encargar (Carrito)</option>
+      <option value="consultar">Solo Consultar (WhatsApp directo)</option>
+    </select>
 
-    <input id="imagen" placeholder="URL imagen">
+    <input id="imagen" placeholder="URL imagen (ImgBB)">
 
     <button id="agregar" type="button" class="btn btn-green">
       Agregar producto
     </button>
   </section>
 
-  <!-- CATEGORÍAS -->
+  <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
   <section>
     <h3>Agregar categoría</h3>
     <input id="nombreCategoria" placeholder="Nombre categoría">
@@ -54,7 +75,6 @@
     </button>
   </section>
 
-  <!-- BOTONES FINALES -->
   <div class="bottom-actions">
     <button type="button" onclick="location.href='productos.html'" class="btn btn-blue">
       Gestionar productos
@@ -66,7 +86,6 @@
   </div>
 </div>
 
-<!-- 🔥 FIREBASE COMPAT (COMO ANTES FUNCIONABA) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -81,10 +100,8 @@
     appId: "1:260880167433:web:d0cd51752c25637fd83ed8"
   };
   
-  // Inicializar Firebase
   firebase.initializeApp(firebaseConfig);
 </script>
-
 
 <script src="admin.js"></script>
 </body>
