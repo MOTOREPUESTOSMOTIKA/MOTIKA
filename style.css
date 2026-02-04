@@ -10,7 +10,6 @@ body {
     font-family: 'Poppins', sans-serif;
     background: #f2f2f2;
     color: #222;
-    /* ✅ TODO EL TEXTO EN NEGRITA */
     font-weight: 700; 
 }
 
@@ -27,16 +26,10 @@ body {
     max-width: 1100px;
     margin: 0 auto;
     display: flex;
-    flex-direction: column; /* Alineación vertical */
+    flex-direction: column; 
     align-items: center;
     justify-content: center;
     gap: 10px;
-}
-
-.logo {
-    display: flex;
-    justify-content: center;
-    width: 100%;
 }
 
 .logo img {
@@ -46,12 +39,6 @@ body {
     margin: 0 auto;
 }
 
-/* ✅ AJUSTE PARA QUE EL TEXTO SE VEA COMO EL LOGO */
-.header-texto {
-    text-align: center;
-}
-
-/* Estilo para "moto repuestos" */
 .header-texto h2 {
     font-size: 16px;
     font-weight: 400;
@@ -60,7 +47,6 @@ body {
     color: #fff;
 }
 
-/* Estilo para "MOTIKA" (Efecto metálico e inclinado) */
 .header-texto h1 {
     font-size: 38px;
     font-weight: 900;
@@ -109,7 +95,7 @@ body {
     font-weight: bold;
 }
 
-/* ================= BOTÓN CARRITO ================= */
+/* ================= BOTÓN CARRITO FLOTANTE ================= */
 
 .btn-carrito {
     position: fixed;
@@ -124,17 +110,16 @@ body {
     color: #fff;
     cursor: pointer;
     z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-/* ================= CONTENIDO ================= */
+/* ================= PRODUCTOS ================= */
 
 main {
     max-width: 1100px;
     margin: auto;
     padding: 20px;
 }
-
-/* ================= PRODUCTOS ================= */
 
 .grid-productos {
     display: grid;
@@ -176,20 +161,14 @@ main {
 
 .estado {
     font-size: 12px;
-    font-weight: 900;
 }
 
-.disponible {
-    color: green;
-}
-
-.no-disponible {
-    color: orange;
-}
+.disponible { color: green; }
+.no-disponible { color: orange; }
 
 .producto-info button {
     margin-top: auto;
-    padding: 6px;
+    padding: 8px;
     border-radius: 6px;
     border: none;
     font-size: 13px;
@@ -197,28 +176,17 @@ main {
     font-weight: bold;
 }
 
-.btn-agregar {
-    background: #ff2d55;
-    color: #fff;
-}
+.btn-agregar { background: #ff2d55; color: #fff; }
+.btn-consultar { background: #ff9800; color: #fff; }
+button.agregado { background: #aaa; color: #333; }
 
-.btn-consultar {
-    background: #ff9800;
-    color: #fff;
-}
-
-button.agregado {
-    background: #aaa;
-    color: #333;
-}
-
-/* ================= CARRITO ================= */
+/* ================= PANEL DEL CARRITO ================= */
 
 .carrito {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 300px;
+    width: 320px; /* Un poco más ancho para las 3 columnas */
     height: 100%;
     background: #fff;
     padding: 16px;
@@ -239,13 +207,62 @@ button.agregado {
     color: #888;
 }
 
+/* DISEÑO DE FILA: [X] [NOMBRE] [PRECIO] */
 .item-carrito-lista {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
+    display: grid;
+    grid-template-columns: 50px 1fr auto; 
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
     border-bottom: 1px solid #eee;
-    padding-bottom: 4px;
-    font-size: 14px;
+}
+
+.btn-borrar {
+    background-color: #ffeded;
+    color: #ff2d55;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-borrar:active {
+    background-color: #ff2d55;
+    color: white;
+}
+
+.nombre-p {
+    font-size: 13px;
+    font-weight: 700;
+    padding-left: 5px; /* Lo separa de la X */
+    text-align: left;
+}
+
+.precio-p {
+    font-size: 13px;
+    font-weight: 900;
+    color: #333;
+    text-align: right;
+}
+
+.btn-vaciar {
+    width: 100%;
+    background-color: transparent;
+    color: #999;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 .total-carrito {
@@ -258,9 +275,7 @@ button.agregado {
     font-weight: 900;
 }
 
-#precioTotal {
-    color: #ff2d55;
-}
+#precioTotal { color: #ff2d55; }
 
 #btnComprar {
     display: block;
@@ -277,129 +292,13 @@ button.agregado {
 /* ================= RESPONSIVE ================= */
 
 @media (max-width: 768px) {
-    .logo img {
-        width: 100px;
-    }
-
-    .grid-productos {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    .grid-productos { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (max-width: 480px) {
-    .grid-productos {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
-
-    .header-texto h1 {
-        font-size: 28px;
-    }
-
-    .producto img {
-        height: 100px;
-    }
-
-    .producto-info h3 {
-        font-size: 12px;
-    }
-
-    .precio {
-        font-size: 12px;
-    }
-
-    .producto-info button {
-        font-size: 11px;
-        padding: 6px;
-    }
+    .grid-productos { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .header-texto h1 { font-size: 28px; }
+    .producto img { height: 100px; }
+    .producto-info h3, .precio { font-size: 12px; }
 }
-/* Contenedor del precio y el botón para alinearlos */
-.precio-borrar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* El botón de la X mejorado */
-.btn-borrar {
-    background-color: #ffeded; /* Un fondo rojo muy clarito */
-    color: #ff2d55;           /* El rojo de tu marca */
-    border: none;
-    border-radius: 8px;       /* Bordes redondeados */
-    font-size: 20px;          /* X más grande */
-    font-weight: bold;
-    width: 45px;              /* Ancho táctil ideal para dedos */
-    height: 45px;             /* Alto táctil ideal para dedos */
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-    -webkit-tap-highlight-color: transparent; /* Quita el cuadro azul al tocar en Android */
-}
-
-.btn-borrar:active {
-    background-color: #ff2d55; /* Al tocar se pone rojo fuerte */
-    color: white;
-}
-
-/* Alineación en 3 columnas: X | Nombre | Precio */
-.item-carrito-lista {
-    display: grid;
-    grid-template-columns: 50px 1fr auto; /* X fija, Nombre flexible, Precio automático */
-    align-items: center;
-    gap: 10px;
-    padding: 12px 0;
-    border-bottom: 1px solid #eee;
-}
-
-/* El botón X */
-.btn-borrar {
-    background-color: #ffeded;
-    color: #ff2d55;
-    border: none;
-    border-radius: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    width: 45px;
-    height: 45px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* El nombre del producto con un margen a la izquierda */
-.nombre-p {
-    font-size: 14px;
-    font-weight: 600;
-    padding-left: 5px; /* Empuja el texto un poco más a la derecha de la X */
-    text-align: left;
-}
-
-/* El precio alineado a la derecha */
-.precio-p {
-    font-size: 14px;
-    font-weight: 700;
-    color: #333;
-    text-align: right;
-    padding-right: 5px;
-}
-.btn-vaciar {
-    width: 100%;
-    background-color: transparent;
-    color: #999;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 15px;
-    font-size: 13px;
-    transition: all 0.2s;
-}
-
-.btn-vaciar:hover {
-    background-color: #fff1f1;
-    color: #ff2d55;
-    border-color: #ff2d55;
-}
+ 
