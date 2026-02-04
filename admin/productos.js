@@ -20,6 +20,20 @@ async function cargarProductos() {
   listaProductos.innerHTML = "<p>Cargando productos...</p>";
   const snapshot = await db.collection("productos").get();
   listaProductos.innerHTML = "";
+  
+  // ... dentro de cargarProductos() ...
+    let colorEstado = "green";
+    let textoEstado = "Disponible";
+    if (p.estado === "encargar") { 
+        colorEstado = "#3498db"; // Azul para encargo
+        textoEstado = "Para Encargar"; 
+    }
+    if (p.estado === "consultar") { 
+        colorEstado = "#f39c12"; // Naranja para consultar
+        textoEstado = "Solo Consultar"; 
+    }
+// ...
+
 
   snapshot.forEach(doc => {
     const p = doc.data();
