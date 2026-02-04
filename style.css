@@ -324,5 +324,31 @@ button.agregado { background: #aaa; color: #333; }
     background: #f39c12;
     color: #fff;
 }
+/* Asegura que el contenedor de la imagen no deje huecos */
+.contenedor-img {
+    width: 100%;
+    height: 180px; /* Altura fija para que todos los cuadros sean iguales */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f9f9f9;
+}
+
+/* Evita que la imagen se recorte feo */
+.contenedor-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Cambiamos cover por contain para que se vea toda la pieza */
+    padding: 10px;
+}
+
+/* Ajuste para que las tarjetas de producto no se amontonen */
+.producto {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; /* Para que todas midan lo mismo en la cuadrícula */
+}
 
  
