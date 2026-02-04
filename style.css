@@ -1,10 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
+@@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -13,43 +9,39 @@ body {
     font-weight: 700; 
 }
 
-/* ================= HEADER ORIGINAL ================= */
-.header {
-    background: #222;
-    color: #fff;
-    padding: 16px;
-    text-align: center;
+/* HEADER */
+.header { background: #222; color: #fff; padding: 16px; text-align: center; }
+.logo img { width: 120px; display: block; margin: 0 auto; }
+
+/* CONTACTO (Alineado a la izquierda como antes) */
+.franja-info {
+    background: #fff;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
 }
 
-.logo img {
-    width: 120px;
-    margin: 0 auto;
-    display: block;
-}
-
-/* ================= INTERFAZ DE FILTROS (ARRIBA) ================= */
+/* FILTROS */
 .buscador-container {
     padding: 10px;
     display: flex;
-    justify-content: center;
     gap: 10px;
     background: #fff;
-    border-bottom: 1px solid #ddd;
+    justify-content: flex-start;
 }
 
 .buscador-container input, .buscador-container select {
     padding: 8px;
     border-radius: 6px;
     border: 1px solid #ccc;
-    font-size: 13px;
 }
 
-/* ================= GRID 3 COLUMNAS ================= */
-main {
-    max-width: 1100px;
-    margin: auto;
-    padding: 15px;
-}
+/* PRODUCTOS (3 Columnas en móvil) */
+main { max-width: 1100px; margin: auto; padding: 15px; }
 
 .grid-productos {
     display: grid;
@@ -64,64 +56,40 @@ main {
     display: flex;
     flex-direction: column;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    height: 100%; /* Para que todas las tarjetas midan lo mismo */
-}
-
-.contenedor-img {
-    width: 100%;
-    height: 140px;
-    overflow: hidden;
-}
-
-.contenedor-img img {
-    width: 100%;
     height: 100%;
-    object-fit: cover; /* Esto elimina los huecos vacíos */
 }
+
+.contenedor-img { width: 100%; height: 140px; overflow: hidden; }
+.contenedor-img img { width: 100%; height: 100%; object-fit: cover; }
 
 .producto-info {
     padding: 10px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Empuja el botón al fondo */
+    flex-grow: 1;
     gap: 4px;
 }
 
-.producto-info h3 {
-    font-size: 14px;
-    height: 34px;
-    overflow: hidden;
-}
-
-.precio {
-    font-weight: 900;
-    font-size: 15px;
-}
-
-.estado {
-    font-size: 12px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
+.estado { font-size: 12px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
 .disponible { color: #27ae60; }
 .encargo { color: #3498db; }
 .no-disponible { color: #ff9800; }
 
 .producto-info button {
-    margin-top: auto; /* Alinea los botones perfectamente al fondo */
+    margin-top: auto;
     padding: 10px;
     border-radius: 8px;
     border: none;
     font-weight: bold;
+    color: #fff;
     cursor: pointer;
 }
 
-.btn-agregar { background: #27ae60; color: #fff; }
-.btn-encargar { background: #3498db; color: #fff; }
-.btn-consultar { background: #ff9800; color: #fff; }
+.btn-agregar { background: #27ae60; }
+.btn-encargar { background: #3498db; }
+.btn-consultar { background: #ff9800; }
 
-/* ================= CARRITO ORIGINAL ================= */
+/* CARRITO */
 .carrito {
     position: fixed;
     top: 0;
@@ -139,70 +107,14 @@ main {
 
 .carrito.abierto { right: 0; }
 
-.carrito-vacio-msg {
-    text-align: center;
-    margin-top: 50px;
-}
-
-.total-carrito {
+.total-container {
     margin-top: auto;
     border-top: 2px solid #eee;
     padding-top: 15px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 18px;
-    font-weight: 900;
 }
 
-#precioTotal { color: #ff2d55; } /* Color rojo para el total */
+#precioTotal { color: #ff2d55; font-size: 20px; }
 
-/* ================= RESPONSIVE 3 COLUMNAS ================= */
-@media (max-width: 480px) {
-    .grid-productos { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .contenedor-img { height: 100px; }
-    .producto-info h3, .precio { font-size: 11px; }
-}
-/* ================= FRANJA INFO (VUELVE A LA IZQUIERDA) ================= */
-.franja-info {
-    background: #fff;
-    padding: 10px 15px;
-    display: flex;
-    flex-direction: column; /* Uno debajo del otro como en la captura */
-    align-items: flex-start; /* Alineado a la izquierda */
-    gap: 8px;
-    border-bottom: 1px solid #ddd;
-    font-size: 14px;
-}
-
-/* ================= BUSCADOR Y CATEGORÍAS (POSICIÓN ORIGINAL) ================= */
-.buscador-container {
-    padding: 10px;
-    display: flex;
-    gap: 10px;
-    background: #fff;
-}
-
-/* ================= CORRECCIÓN CARRITO ================= */
-.carrito {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 300px;
-    height: 100%;
-    background: #fff;
-    z-index: 2000;
-    transition: 0.3s;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    box-shadow: -2px 0 10px rgba(0,0,0,0.2);
-}
-
-.carrito.abierto { 
-    right: 0 !important; 
-}
-
-/* El botón flotante del carrito */
 .btn-carrito {
     position: fixed;
     top: 20px;
@@ -211,11 +123,13 @@ main {
     width: 55px;
     height: 55px;
     border-radius: 50%;
-    z-index: 2100; /* Siempre por encima para poder cerrar */
+    z-index: 2100;
     border: none;
     color: white;
     font-size: 24px;
-    cursor: pointer;
 }
 
-
+@media (max-width: 480px) {
+    .grid-productos { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .contenedor-img { height: 100px; }
+}
