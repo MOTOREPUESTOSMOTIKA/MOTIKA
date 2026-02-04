@@ -26,21 +26,22 @@ document.addEventListener("DOMContentLoaded", () => {
             let estadoTexto = "";
             let estadoClase = "";
 
+            // Restaurando Textos Originales
             if (p.estado === "disponible") {
-                estadoTexto = "Tienda";
+                estadoTexto = "DISPONIBLE EN TIENDA";
                 estadoClase = "disponible";
-                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>${estaEnCarrito ? 'Listo' : 'Agregar'}</button>`;
+                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>${estaEnCarrito ? 'Agregado ✓' : 'Agregar al carrito'}</button>`;
             } else if (p.estado === "encargar") {
-                estadoTexto = "Encargo";
+                estadoTexto = "BAJO PEDIDO (ENCARGO)";
                 estadoClase = "encargo";
-                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color: #3498db;">${estaEnCarrito ? 'Listo' : 'Pedir'}</button>`;
+                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color: #3498db;">${estaEnCarrito ? 'Agregado ✓' : 'Encargar Repuesto'}</button>`;
             } else {
-                estadoTexto = "Consultar";
+                estadoTexto = "CONSULTAR DISPONIBILIDAD";
                 estadoClase = "no-disponible";
                 btnHTML = `<button class="btn-consultar">WhatsApp</button>`;
             }
 
-            const urlImagen = p.imagen && p.imagen !== "" ? p.imagen : 'https://via.placeholder.com/300x300?text=Sin+Foto';
+            const urlImagen = p.imagen && p.imagen !== "" ? p.imagen : 'https://via.placeholder.com/300x300?text=Motika';
             
             div.innerHTML = `
                 <div class="contenedor-img">
@@ -48,8 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 <div class="producto-info">
                     <h3>${p.nombre}</h3>
-                    <div class="precio">$${p.precio}</div>
-                    <div class="estado ${estadoClase}">● ${estadoTexto}</div>
+                    <div class="precio">${p.precio}</div>
+                    <div class="estado ${estadoClase}">${estadoTexto}</div>
                     ${btnHTML}
                 </div>
             `;
@@ -74,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
         if (carrito.length === 0) {
-            listaCarrito.innerHTML = `<div class="carrito-vacio-msg"><p style="font-size: 50px;">☹️</p><p>Vacío</p></div>`;
+            listaCarrito.innerHTML = `<div class="carrito-vacio-msg"><p style="font-size: 50px;">☹️</p><p>Tu carrito está vacío</p></div>`;
             if(precioTotalDoc) precioTotalDoc.innerText = "$0";
             btnComprar.style.display = "none";
             return;
@@ -107,36 +108,18 @@ document.addEventListener("DOMContentLoaded", () => {
         btnComprar.href = `https://wa.me/573118612727?text=${listaTexto}%0A*Total: $${total.toLocaleString('es-CO')}*`;
     }
 
+    // Carga inicial
     db.collection("productos").get().then(snapshot => {
         productos = [];
-        const categoriasSet = new Set();
-        snapshot.forEach(doc => {
-            const p = doc.data();
-            if (p.nombre && p.precio) {
-                productos.push(p);
-                if(p.categoria) categoriasSet.add(p.categoria);
-            }
-        });
+        snapshot.forEach(doc => productos.push(doc.data()));
         productos.sort((a, b) => a.nombre.localeCompare(b.nombre));
-        
-        filtroCategoria.innerHTML = `<option value="todas">Todas</option>`;
-        Array.from(categoriasSet).sort().forEach(cat => {
-            const opt = document.createElement("option");
-            opt.value = opt.textContent = cat;
-            filtroCategoria.appendChild(opt);
-        });
-
         mostrarProductos(productos);
         mostrarCarrito();
     });
 
+    // Filtros mantenidos
     buscador.onkeyup = () => {
         const t = buscador.value.toLowerCase();
         mostrarProductos(productos.filter(p => p.nombre.toLowerCase().includes(t)));
-    };
-
-    filtroCategoria.onchange = () => {
-        const cat = filtroCategoria.value;
-        mostrarProductos(cat === "todas" ? productos : productos.filter(p => p.categoria === cat));
     };
 });
