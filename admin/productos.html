@@ -12,9 +12,25 @@
 <hr>
   
 <style>
-  .edit-box input { display: block; margin-bottom: 5px; width: 100%; padding: 5px; }
-  .btn-editar { background: #3498db; color: white; border: none; padding: 6px 10px; cursor: pointer; margin-right: 5px; border-radius: 4px; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+  h1 { text-align: center; color: #2c3e50; }
+  
+  /* Contenedor principal */
+  .main-container { display: flex; flex-wrap: wrap; gap: 20px; max-width: 1200px; margin: 0 auto; }
+  .section-card { flex: 1; min-width: 300px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+  /* Tarjetas de producto */
+  .product-item { background: #fff; border: 1px solid #edf2f7; padding: 15px; margin-bottom: 12px; border-radius: 10px; transition: transform 0.2s; }
+  .product-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+  
+  .product-info h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: #2d3748; }
+  .badge { padding: 4px 8px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
+  
+  /* Editor */
+  .edit-box { background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #3498db; margin-top: 10px; }
+  .edit-box input, .edit-box select { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box; }
 </style>
+
 
 <div style="display:flex; gap:40px;">
   <div style="flex:1;">
