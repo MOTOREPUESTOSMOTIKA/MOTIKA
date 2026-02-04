@@ -14,7 +14,6 @@ body {
 }
 
 /* ================= HEADER ================= */
-
 .header {
     background: #222;
     color: #fff;
@@ -22,29 +21,11 @@ body {
     text-align: center;
 }
 
-.header-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
 .logo img {
     width: 120px;
     max-width: 100%;
     display: block;
     margin: 0 auto;
-}
-
-.header-texto h2 {
-    font-size: 16px;
-    font-weight: 400;
-    text-transform: none;
-    margin-bottom: -8px;
-    color: #fff;
 }
 
 .header-texto h1 {
@@ -59,14 +40,7 @@ body {
     filter: drop-shadow(2px 2px 0px #000);
 }
 
-.header-texto p {
-    font-size: 13px;
-    color: #ccc;
-    margin-top: 5px;
-}
-
-/* ================= FRANJA ================= */
-
+/* ================= FRANJA INFO ================= */
 .franja-info {
     background: #fff;
     padding: 10px;
@@ -78,8 +52,7 @@ body {
     font-size: 14px;
 }
 
-/* ================= BUSCADOR ================= */
-
+/* ================= BUSCADOR FLOTANTE ================= */
 .buscador-container {
     position: fixed;
     bottom: 15px;
@@ -88,14 +61,13 @@ body {
 }
 
 .buscador-container input {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #aaa;
-    width: 160px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #222;
+    width: 180px;
     font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
-
-/* ================= BOTÓN CARRITO FLOTANTE ================= */
 
 .btn-carrito {
     position: fixed;
@@ -113,63 +85,77 @@ body {
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-/* ================= PRODUCTOS ================= */
-
+/* ================= GRID DE PRODUCTOS ================= */
 main {
     max-width: 1100px;
     margin: auto;
-    padding: 20px;
+    padding: 15px;
 }
 
 .grid-productos {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    gap: 15px;
 }
 
 .producto {
     background: #fff;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
+    border: 1px solid #eee;
+    height: 100%;
 }
 
-.producto img {
+.contenedor-img {
     width: 100%;
-    height: 140px;
-    object-fit: cover;
+    height: 180px;
+    overflow: hidden;
+    background-color: #eee;
+}
+
+.contenedor-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* LLENA TODO EL ESPACIO SIN HUECOS */
+    display: block;
 }
 
 .producto-info {
-    padding: 10px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    flex-grow: 1;
 }
 
 .producto-info h3 {
     font-size: 14px;
-    line-height: 1.2;
+    margin-bottom: 5px;
+    height: 34px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .precio {
     font-weight: 900;
-    font-size: 14px;
+    font-size: 16px;
+    color: #222;
+    margin-bottom: 5px;
 }
 
-.estado {
-    font-size: 12px;
-}
-
-.disponible { color: green; }
-.no-disponible { color: orange; }
+.estado { font-size: 11px; margin-bottom: 10px; text-transform: uppercase; }
+.disponible { color: #27ae60; }
+.no-disponible { color: #f39c12; }
+.encargo { color: #3498db; }
 
 .producto-info button {
     margin-top: auto;
-    padding: 8px;
-    border-radius: 6px;
+    padding: 10px;
+    border-radius: 8px;
     border: none;
     font-size: 13px;
     cursor: pointer;
@@ -177,16 +163,15 @@ main {
 }
 
 .btn-agregar { background: #27ae60; color: #fff; }
-.btn-consultar { background: #ff9800; color: #fff; }
+.btn-consultar { background: #f39c12; color: #fff; }
 button.agregado { background: #aaa; color: #333; }
 
-/* ================= PANEL DEL CARRITO ================= */
-
+/* ================= CARRITO ================= */
 .carrito {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 320px; /* Un poco más ancho para las 3 columnas */
+    width: 320px;
     height: 100%;
     background: #fff;
     padding: 16px;
@@ -197,183 +182,34 @@ button.agregado { background: #aaa; color: #333; }
     flex-direction: column;
 }
 
-.carrito.abierto {
-    right: 0;
-}
+.carrito.abierto { right: 0; }
 
-.carrito-vacio-msg {
-    text-align: center;
-    padding-top: 50px;
-    color: #888;
-}
-
-/* DISEÑO DE FILA: [X] [NOMBRE] [PRECIO] */
 .item-carrito-lista {
     display: grid;
-    grid-template-columns: 50px 1fr auto; 
+    grid-template-columns: 45px 1fr auto; 
     align-items: center;
     gap: 10px;
-    padding: 12px 0;
+    padding: 10px 0;
     border-bottom: 1px solid #eee;
 }
 
 .btn-borrar {
-    background-color: #ffeded;
+    background: #ffeded;
     color: #ff2d55;
     border: none;
-    border-radius: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    width: 45px;
-    height: 45px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.btn-borrar:active {
-    background-color: #ff2d55;
-    color: white;
-}
-
-.nombre-p {
-    font-size: 13px;
-    font-weight: 700;
-    padding-left: 5px; /* Lo separa de la X */
-    text-align: left;
-}
-
-.precio-p {
-    font-size: 13px;
-    font-weight: 900;
-    color: #333;
-    text-align: right;
-}
-
-.btn-vaciar {
-    width: 100%;
-    background-color: transparent;
-    color: #999;
-    border: 1px solid #ddd;
-    padding: 10px;
     border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 15px;
-    font-size: 13px;
+    width: 35px;
+    height: 35px;
     font-weight: bold;
-}
-
-.total-carrito {
-    margin-top: auto;
-    padding: 15px 0;
-    border-top: 2px solid #222;
-    display: flex;
-    justify-content: space-between;
-    font-size: 18px;
-    font-weight: 900;
-}
-
-#precioTotal { color: #ff2d55; }
-
-#btnComprar {
-    display: block;
-    margin-top: 10px;
-    background: #25d366;
-    color: #fff;
-    padding: 12px;
-    border-radius: 6px;
-    text-align: center;
-    text-decoration: none;
-    font-weight: 900;
 }
 
 /* ================= RESPONSIVE ================= */
-
 @media (max-width: 768px) {
     .grid-productos { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (max-width: 480px) {
-    .grid-productos { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .header-texto h1 { font-size: 28px; }
-    .producto img { height: 100px; }
-    .producto-info h3, .precio { font-size: 12px; }
+    .grid-productos { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .contenedor-img { height: 140px; }
+    .header-texto h1 { font-size: 26px; }
 }
-/* Color verde para lo que hay en tienda */
-.disponible {
-    color: #27ae60;
-    font-weight: 900;
-}
-
-/* Color naranja para consultar */
-.no-disponible {
-    color: #f39c12;
-    font-weight: 900;
-}
-
-/* NUEVO: Color azul para los encargos */
-.encargo {
-    color: #3498db;
-    font-weight: 900;
-}
-
-/* Opcional: Si quieres que el botón de consultar sea naranja también */
-.btn-consultar {
-    background: #f39c12;
-    color: #fff;
-}
-/* Asegura que el contenedor de la imagen no deje huecos */
-.contenedor-img {
-    width: 100%;
-    height: 180px; /* Altura fija para que todos los cuadros sean iguales */
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f9f9f9;
-}
-
-/* Evita que la imagen se recorte feo */
-.contenedor-img img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* Cambiamos cover por contain para que se vea toda la pieza */
-    padding: 10px;
-}
-
-/* Ajuste para que las tarjetas de producto no se amontonen */
-.producto {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%; /* Para que todas midan lo mismo en la cuadrícula */
-}
-/* Esto quita cualquier espacio extra en las tarjetas */
-.producto {
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #eee;
-    height: 100%;
-}
-
-.contenedor-img {
-    margin: 0;
-    padding: 0;
-    line-height: 0; /* Evita huecos fantasma debajo de la imagen */
-}
-
-.contenedor-img img {
-    transition: transform 0.3s ease;
-}
-
-/* Efecto opcional: un pequeño zoom al tocar la foto */
-.producto:hover .contenedor-img img {
-    transform: scale(1.05);
-}
-
- 
