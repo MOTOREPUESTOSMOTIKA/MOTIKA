@@ -2,12 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  // API KEY DE IMGBB
+  // API KEY DE IMGBB CONFIGURADA
   const IMGBB_API_KEY = "c9c201374e8b952b54f76ac5acd6c23b";
 
   const nombre = document.getElementById("nombre");
   const precio = document.getElementById("precio");
-  const archivoImagen = document.getElementById("archivoImagen"); // El nuevo input de archivo
+  const archivoImagen = document.getElementById("archivoImagen");
+  const imgPreview = document.getElementById("img-preview");
   const estadoProducto = document.getElementById("estado"); 
   const categoriaProducto = document.getElementById("categoriaProducto");
   const btnAgregar = document.getElementById("agregar");
@@ -21,7 +22,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginError = document.getElementById("loginError");
   const btnLogout = document.getElementById("btnLogout");
 
-  // ================= FUNCIÓN PARA SUBIR A IMGBB =================
+  // ================= VISTA PREVIA DE IMAGEN =================
+  archivoImagen.addEventListener("change", function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        imgPreview.src = e.target.result;
+        imgPreview.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // ================= FUNCIÓN SUBIR A IMGBB =================
   async function subirFoto(file) {
     const formData = new FormData();
     formData.append("image", file);
@@ -77,37 +91,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btnAgregarCategoria.addEventListener("click", async () => {
     const nombreCat = nombreCategoria.value.trim();
-    if (!nombreCat) return mostrarToast("Escribe un nombre de categoría", true);
+    if (!nombreCat) return mostrarToast("Escribe un nombre", true);
     await db.collection("categorias").add({ nombre: nombreCat });
     nombreCategoria.value = "";
-    mostrarToast("Categoría agregada correctamente");
+    mostrarToast("Categoría agregada");
     cargarCategoriasSelect();
   });
 
-  // ================= PRODUCTOS (CON SUBIDA DE FOTO) =================
+  // ================= AGREGAR PRODUCTO =================
   btnAgregar.addEventListener("click", async () => {
     if (!nombre.value || !precio.value) {
-        return mostrarToast("Nombre y Precio son obligatorios", true);
+        return mostrarToast("Nombre y Precio obligatorios", true);
     }
 
-    let urlFinal = "https://via.placeholder.com/300"; // Imagen por defecto
+    let urlFinal = "https://via.placeholder.com/300?text=Sin+Foto";
 
-    // Si hay un archivo seleccionado, lo subimos primero
+    // Si hay foto seleccionada, la subimos
     if (archivoImagen.files.length > 0) {
-        btnAgregar.innerText = "Subiendo imagen...";
+        const originalText = btnAgregar.innerText;
+        btnAgregar.innerText = "Subiendo foto...";
         btnAgregar.disabled = true;
         
         const urlSubida = await subirFoto(archivoImagen.files[0]);
         if (urlSubida) {
             urlFinal = urlSubida;
         } else {
-            btnAgregar.innerText = "Agregar Producto";
+            btnAgregar.innerText = originalText;
             btnAgregar.disabled = false;
-            return mostrarToast("Error al subir la imagen", true);
+            return mostrarToast("Error al subir imagen", true);
         }
     }
-
-    const estadoSeleccionado = estadoProducto.value;
 
     try {
       await db.collection("productos").add({
@@ -115,23 +128,22 @@ document.addEventListener("DOMContentLoaded", () => {
         precio: precio.value,
         imagen: urlFinal,
         categoria: categoriaProducto.value,
-        estado: estadoSeleccionado,
-        disponible: estadoSeleccionado === "disponible" 
+        estado: estadoProducto.value,
+        disponible: estadoProducto.value === "disponible" 
       });
 
-      mostrarToast("Producto agregado correctamente");
+      mostrarToast("¡Producto agregado!");
 
-      // Limpiar campos
+      // Limpiar todo
       nombre.value = "";
       precio.value = "";
-      archivoImagen.value = ""; // Limpia el selector de archivos
-      estadoProducto.value = "disponible";
-      btnAgregar.innerText = "Agregar Producto";
+      archivoImagen.value = "";
+      imgPreview.style.display = "none";
+      btnAgregar.innerText = "Agregar producto";
       btnAgregar.disabled = false;
 
     } catch (e) {
-      mostrarToast("Error al guardar en base de datos", true);
-      btnAgregar.innerText = "Agregar Producto";
+      mostrarToast("Error al guardar", true);
       btnAgregar.disabled = false;
     }
   });
