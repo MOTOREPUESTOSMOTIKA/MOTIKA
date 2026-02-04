@@ -157,3 +157,107 @@ async function eliminarCategoria(id) {
     cargarCategorias();
   }
 }
+// Variable global para guardar categorías y usarlas en los editores
+let categoriasGlobales = [];
+
+async function cargarCategorias() {
+  const snapshot = await db.collection("categorias").get();
+  listaCategorias.innerHTML = "";
+  categoriasGlobales = []; // Limpiamos
+
+  snapshot.forEach(doc => {
+    const cat = doc.data();
+    categoriasGlobales.push(cat.nombre); // Guardamos para el editor
+    
+    const div = document.createElement("div");
+    div.className = "product-item";
+    div.style.display = "flex";
+    div.style.justifyContent = "space-between";
+    div.innerHTML = `
+      <span><strong>${cat.nombre}</strong></span>
+      <button onclick="eliminarCategoria('${doc.id}')" style="background:#e74c3c; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Eliminar</button>
+    `;
+    listaCategorias.appendChild(div);
+  });
+}
+
+async function cargarProductos() {
+  listaProductos.innerHTML = "<p>Cargando...</p>";
+  const snapshot = await db.collection("productos").get();
+  listaProductos.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const p = doc.data();
+    const div = document.createElement("div");
+    div.className = "product-item";
+
+    // Crear las opciones de categoría para el SELECT de edición
+    let opcionesCat = categoriasGlobales.map(c => 
+      `<option value="${c}" ${p.categoria === c ? 'selected' : ''}>${c}</option>`
+    ).join("");
+
+    div.innerHTML = `
+      <div id="view-${doc.id}" style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="product-info">
+          <h4>${p.nombre}</h4>
+          <small>Precio: ${p.precio} | <b>${p.categoria || 'Sin Cat.'}</b></small><br>
+          <span class="badge" style="color:${p.estado === 'disponible' ? '#27ae60' : (p.estado === 'encargar' ? '#3498db' : '#f39c12')}">
+            ● ${p.estado || 'disponible'}
+          </span>
+        </div>
+        <div style="display:flex; gap:5px;">
+          <button onclick="mostrarFormularioEdicion('${doc.id}')" style="background:#3498db; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Editar</button>
+          <button onclick="eliminarProducto('${doc.id}')" style="background:#e74c3c; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Eliminar</button>
+        </div>
+      </div>
+
+      <div id="edit-${doc.id}" class="edit-box" style="display:none;">
+        <label>Nombre:</label>
+        <input type="text" id="edit-nombre-${doc.id}" value="${p.nombre}">
+        
+        <label>Precio:</label>
+        <input type="text" id="edit-precio-${doc.id}" value="${p.precio}">
+
+        <label>Categoría:</label>
+        <select id="edit-categoria-${doc.id}">
+          ${opcionesCat}
+        </select>
+        
+        <label>Estado:</label>
+        <select id="edit-estado-${doc.id}">
+          <option value="disponible" ${p.estado === 'disponible' ? 'selected' : ''}>Disponible</option>
+          <option value="encargar" ${p.estado === 'encargar' ? 'selected' : ''}>Para Encargar</option>
+          <option value="consultar" ${p.estado === 'consultar' ? 'selected' : ''}>Solo Consultar</option>
+        </select>
+
+        <div style="display:flex; gap:10px;">
+          <button onclick="actualizarProducto('${doc.id}')" style="background:#2ecc71; color:white; border:none; padding:10px; flex:1; border-radius:6px; font-weight:bold; cursor:pointer;">Guardar</button>
+          <button onclick="cancelarEdicion('${doc.id}')" style="background:#95a5a6; color:white; border:none; padding:10px; flex:1; border-radius:6px; cursor:pointer;">Cancelar</button>
+        </div>
+      </div>
+    `;
+    listaProductos.appendChild(div);
+  });
+}
+
+// No olvides actualizar la función de guardar para incluir la categoría:
+async function actualizarProducto(id) {
+  const nuevoNombre = document.getElementById(`edit-nombre-${id}`).value;
+  const nuevoPrecio = document.getElementById(`edit-precio-${id}`).value;
+  const nuevaCategoria = document.getElementById(`edit-categoria-${id}`).value;
+  const nuevoEstado = document.getElementById(`edit-estado-${id}`).value;
+
+  try {
+    await db.collection("productos").doc(id).update({
+      nombre: nuevoNombre,
+      precio: nuevoPrecio,
+      categoria: nuevaCategoria,
+      estado: nuevoEstado
+    });
+    alert("¡Producto actualizado!");
+    cargarProductos();
+  } catch (e) {
+    alert("Error al actualizar");
+  }
+}
+
