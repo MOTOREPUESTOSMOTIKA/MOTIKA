@@ -1,95 +1,276 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap');
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
 
 body {
-    font-family: 'Poppins', sans-serif;
-    background: #f2f2f2;
-    color: #222;
-    font-weight: 700; 
+    font-family: 'Montserrat', sans-serif; /* Letra moderna y limpia */
+    background: #f8f9fa;
+    color: #333;
 }
 
-/* FRAnJA DE CONTACTO (Alineada a la izquierda) */
+/* --- HEADER Y TÍTULOS --- */
+header {
+    background: #222;
+    padding: 20px;
+    text-align: center;
+}
+
+.logo img {
+    width: 140px;
+    margin-bottom: 10px;
+}
+
+h1, h2 {
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.header-texto h1 {
+    font-size: 28px;
+    font-weight: 900;
+    color: #fff;
+    margin: 10px 0;
+}
+
+/* --- FRANJA DE INFORMACIÓN (MODERNA) --- */
 .franja-info {
     background: #fff;
-    padding: 10px 15px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    border-bottom: 1px solid #ddd;
+    align-items: center; /* Centrado para que se vea ordenado */
+    text-align: center;
+    gap: 5px;
+    border-bottom: 2px solid #eee;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
 }
 
-/* PRODUCTOS Y NOMBRES UNIFORMES */
+.franja-info span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- BUSCADOR Y FILTROS --- */
+.buscador-container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.buscador-container input, 
+.buscador-container select {
+    padding: 12px;
+    border-radius: 25px; /* Bordes redondeados modernos */
+    border: 1px solid #ddd;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+.buscador-container input { width: 60%; }
+
+/* --- BOTÓN CARRITO FLOTANTE (SUPERIOR DERECHA) --- */
+.btn-carrito {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #25d366;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    color: white;
+    font-size: 26px;
+    cursor: pointer;
+    z-index: 3000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+}
+
+.btn-carrito:hover { transform: scale(1.1); }
+
+/* --- GRID DE PRODUCTOS --- */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
 .grid-productos {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    padding: 15px;
+    gap: 20px;
 }
 
 .producto {
     background: #fff;
-    border-radius: 12px;
+    border-radius: 15px;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     height: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+    border: 1px solid #eee;
 }
 
-.contenedor-img { width: 100%; height: 140px; overflow: hidden; }
-.contenedor-img img { width: 100%; height: 100%; object-fit: cover; }
+.producto:hover { transform: translateY(-5px); }
 
-.producto-info { padding: 10px; display: flex; flex-direction: column; flex-grow: 1; }
-
-/* Tamaño de nombre uniforme */
-.producto-info h3 {
-    font-size: 13px;
-    height: 32px; /* Altura fija para 2 líneas */
+.contenedor-img {
+    width: 100%;
+    height: 160px;
     overflow: hidden;
-    margin-bottom: 5px;
+    background: #f0f0f0;
 }
 
+.contenedor-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.producto-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.producto-info h3 {
+    font-size: 14px;
+    font-weight: 700;
+    height: 36px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    color: #222;
+}
+
+.precio {
+    font-size: 18px;
+    font-weight: 900;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.estado {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.disponible { color: #27ae60; }
+.encargo { color: #3498db; }
+.no-disponible { color: #f39c12; }
+
+/* --- BOTONES DE ACCIÓN --- */
 .producto-info button {
     margin-top: auto;
-    padding: 10px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 10px;
     border: none;
-    font-weight: bold;
-    color: #fff;
+    font-weight: 800;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    font-size: 11px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-.btn-agregar { background: #27ae60; }
-.btn-encargar { background: #3498db; }
-button.agregado { background: #aaa !important; color: #444; cursor: default; }
+.btn-agregar { background: #27ae60; color: #fff; }
+.btn-encargar { background: #3498db; color: #fff; }
+.btn-consultar { background: #ff9800; color: #fff; }
+button.agregado { background: #e0e0e0 !important; color: #888; cursor: default; }
 
-/* CARRITO DISEÑO ORIGINAL */
+/* --- PANEL DEL CARRITO --- */
 .carrito {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 320px;
+    width: 350px;
     height: 100%;
     background: #fff;
-    z-index: 2000;
-    transition: 0.4s ease;
+    z-index: 4000;
+    transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 25px;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.15);
 }
+
 .carrito.abierto { right: 0; }
 
-.btn-borrar {
-    color: red;
-    font-weight: bold;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-size: 18px;
+.carrito h2 { margin-bottom: 20px; font-weight: 900; }
+
+.item-carrito-lista {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
 }
 
-#precioTotal { color: #ff2d55; font-weight: 900; }
+.btn-borrar {
+    color: #ff3b30;
+    font-weight: bold;
+    border: none;
+    background: #fff5f5;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.total-container {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 3px solid #222;
+}
+
+#precioTotal {
+    color: #ff3b30;
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.btn-comprar {
+    display: block;
+    background: #222;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    text-decoration: none;
+    border-radius: 10px;
+    margin-top: 15px;
+    font-weight: 700;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .grid-productos { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .buscador-container input { width: 100%; }
+}
 
 @media (max-width: 480px) {
     .grid-productos { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .contenedor-img { height: 100px; }
+    .contenedor-img { height: 110px; }
+    .producto-info h3 { font-size: 11px; height: 28px; }
+    .precio { font-size: 14px; }
+    .header-texto h1 { font-size: 22px; }
+    .carrito { width: 100%; }
 }
