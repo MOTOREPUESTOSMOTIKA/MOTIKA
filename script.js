@@ -8,17 +8,26 @@ document.addEventListener("DOMContentLoaded", () => {
     let productos = [];
     let carrito = JSON.parse(localStorage.getItem("carrito_motika")) || [];
 
-    // Abrir y cerrar carrito
+    // 1. CERRAR AL TOCAR AFUERA O EN EL BOTÓN
     btnAbrirCarrito.onclick = (e) => {
         e.stopPropagation();
         carritoPanel.classList.toggle("abierto");
     };
+
+    document.addEventListener("click", (e) => {
+        if (!carritoPanel.contains(e.target) && e.target !== btnAbrirCarrito) {
+            carritoPanel.classList.remove("abierto");
+        }
+    });
 
     function mostrarProductos(lista) {
         contenedor.innerHTML = "";
         lista.forEach(p => {
             const div = document.createElement("div");
             div.className = "producto";
+            
+            // Verificar si ya está en el carrito
+            const yaAgregado = carrito.some(item => item.nombre === p.nombre);
             
             let btnHTML = "";
             let estadoTexto = "";
@@ -27,15 +36,19 @@ document.addEventListener("DOMContentLoaded", () => {
             if (p.estado === "disponible") {
                 estadoTexto = "Disponible en tienda";
                 estadoClase = "disponible";
-                btnHTML = `<button class="btn-agregar">Agregar al carrito</button>`;
+                btnHTML = `<button class="btn-agregar ${yaAgregado ? 'agregado' : ''}" ${yaAgregado ? 'disabled' : ''}>
+                            ${yaAgregado ? 'Agregado ✓' : 'Agregar al carrito'}
+                           </button>`;
             } else if (p.estado === "encargar") {
                 estadoTexto = "Diponible Solo encargo";
                 estadoClase = "encargo";
-                btnHTML = `<button class="btn-encargar">Encargar Repuesto</button>`;
+                btnHTML = `<button class="btn-encargar ${yaAgregado ? 'agregado' : ''}" ${yaAgregado ? 'disabled' : ''}>
+                            ${yaAgregado ? 'Agregado ✓' : 'Encargar Repuesto'}
+                           </button>`;
             } else {
                 estadoTexto = "Consultar disponibilidad";
                 estadoClase = "no-disponible";
-                btnHTML = `<button class="btn-consultar">WhatsApp</button>`;
+                btnHTML = `<button class="btn-consultar" style="background:#ff9800">WhatsApp</button>`;
             }
 
             div.innerHTML = `
@@ -48,16 +61,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `;
             
-            // CORRECCIÓN: Evento de clic para agregar
             const btn = div.querySelector("button");
             btn.onclick = () => {
-                if (p.estado === "disponible" || p.estado === "encargar") {
+                if (!yaAgregado && p.estado !== "consultar") {
                     carrito.push(p);
                     localStorage.setItem("carrito_motika", JSON.stringify(carrito));
                     mostrarCarrito();
-                    // Opcional: abrir carrito al agregar
-                    carritoPanel.classList.add("abierto");
-                } else {
+                    mostrarProductos(lista); // Para actualizar el botón a "Agregado"
+                } else if (p.estado === "consultar") {
                     window.open(`https://wa.me/573118612727?text=Hola, consulto por: ${p.nombre}`);
                 }
             };
@@ -68,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
         if (carrito.length === 0) {
-            listaCarrito.innerHTML = `<div style="text-align:center; padding:20px;"><p style="font-size:50px;">☹️</p><p>Vacío</p></div>`;
+            listaCarrito.innerHTML = `<div style="text-align:center; padding:50px;"><p style="font-size:60px;">☹️</p><p>Vacío</p></div>`;
             precioTotalDoc.innerText = "$0";
             return;
         }
@@ -78,8 +89,16 @@ document.addEventListener("DOMContentLoaded", () => {
             const item = document.createElement("div");
             item.style.display = "flex";
             item.style.justifyContent = "space-between";
-            item.style.padding = "5px 0";
-            item.innerHTML = `<span>${p.nombre}</span> <strong>${p.precio}</strong>`;
+            item.style.alignItems = "center";
+            item.style.marginBottom = "15px";
+            
+            item.innerHTML = `
+                <div style="flex:1">
+                    <p style="font-size:14px;">${p.nombre}</p>
+                    <p style="font-weight:900;">${p.precio}</p>
+                </div>
+                <button class="btn-borrar" onclick="eliminarDelCarrito(${index})">X</button>
+            `;
             listaCarrito.appendChild(item);
             
             let valor = String(p.precio).replace(/[^0-9]/g, "");
@@ -88,7 +107,18 @@ document.addEventListener("DOMContentLoaded", () => {
         precioTotalDoc.innerText = `$${total.toLocaleString('es-CO')}`;
     }
 
-    // Carga de datos
+    // FUNCIÓN GLOBAL PARA ELIMINAR
+    window.eliminarDelCarrito = (index) => {
+        carrito.splice(index, 1);
+        localStorage.setItem("carrito_motika", JSON.stringify(carrito));
+        mostrarCarrito();
+        db.collection("productos").get().then(snapshot => {
+            const nuevosProductos = [];
+            snapshot.forEach(doc => nuevosProductos.push(doc.data()));
+            mostrarProductos(nuevosProductos);
+        });
+    };
+
     db.collection("productos").get().then(snapshot => {
         productos = [];
         snapshot.forEach(doc => productos.push(doc.data()));
@@ -96,3 +126,4 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarCarrito();
     });
 });
+
