@@ -1,33 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
     const contenedor = document.getElementById("productos");
+    const buscador = document.getElementById("buscador");
+    const filtroCategoria = document.getElementById("filtroCategoria");
     const btnAbrirCarrito = document.getElementById("btnAbrirCarrito");
     const carritoPanel = document.getElementById("carrito");
     const listaCarrito = document.getElementById("listaCarrito");
+    const btnComprar = document.getElementById("btnComprar");
     const precioTotalDoc = document.getElementById("precioTotal");
 
     let productos = [];
     let carrito = JSON.parse(localStorage.getItem("carrito_motika")) || [];
 
-    // 1. CERRAR AL TOCAR AFUERA O EN EL BOTÓN
-    btnAbrirCarrito.onclick = (e) => {
-        e.stopPropagation();
-        carritoPanel.classList.toggle("abierto");
-    };
+    // --- Control del Panel ---
+    btnAbrirCarrito.onclick = () => carritoPanel.classList.toggle("abierto");
 
-    document.addEventListener("click", (e) => {
-        if (!carritoPanel.contains(e.target) && e.target !== btnAbrirCarrito) {
-            carritoPanel.classList.remove("abierto");
-        }
-    });
-
+    // --- Renderizado de Productos ---
     function mostrarProductos(lista) {
         contenedor.innerHTML = "";
         lista.forEach(p => {
             const div = document.createElement("div");
             div.className = "producto";
             
-            // Verificar si ya está en el carrito
-            const yaAgregado = carrito.some(item => item.nombre === p.nombre);
+            const estaEnCarrito = carrito.some(item => item.nombre === p.nombre);
             
             let btnHTML = "";
             let estadoTexto = "";
@@ -36,23 +30,27 @@ document.addEventListener("DOMContentLoaded", () => {
             if (p.estado === "disponible") {
                 estadoTexto = "Disponible en tienda";
                 estadoClase = "disponible";
-                btnHTML = `<button class="btn-agregar ${yaAgregado ? 'agregado' : ''}" ${yaAgregado ? 'disabled' : ''}>
-                            ${yaAgregado ? 'Agregado ✓' : 'Agregar al carrito'}
+                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>
+                            ${estaEnCarrito ? 'Agregado ✓' : 'Agregar al carrito'}
                            </button>`;
             } else if (p.estado === "encargar") {
-                estadoTexto = "Diponible Solo encargo";
+                estadoTexto = "Bajo pedido (Encargo)";
                 estadoClase = "encargo";
-                btnHTML = `<button class="btn-encargar ${yaAgregado ? 'agregado' : ''}" ${yaAgregado ? 'disabled' : ''}>
-                            ${yaAgregado ? 'Agregado ✓' : 'Encargar Repuesto'}
+                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color: #3498db;">
+                            ${estaEnCarrito ? 'Agregado ✓' : 'Encargar Repuesto'}
                            </button>`;
             } else {
                 estadoTexto = "Consultar disponibilidad";
                 estadoClase = "no-disponible";
-                btnHTML = `<button class="btn-consultar" style="background:#ff9800">WhatsApp</button>`;
+                btnHTML = `<button class="btn-consultar" style="background-color: #ff9800;">WhatsApp</button>`;
             }
 
+            const urlImagen = p.imagen && p.imagen !== "" ? p.imagen : 'https://via.placeholder.com/300x300?text=Motika+Repuestos';
+
             div.innerHTML = `
-                <div class="contenedor-img"><img src="${p.imagen || ''}"></div>
+                <div class="contenedor-img">
+                    <img src="${urlImagen}" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/300x300?text=Error+al+cargar'">
+                </div>
                 <div class="producto-info">
                     <h3>${p.nombre}</h3>
                     <div class="precio">${p.precio}</div>
@@ -60,70 +58,117 @@ document.addEventListener("DOMContentLoaded", () => {
                     ${btnHTML}
                 </div>
             `;
-            
-            const btn = div.querySelector("button");
-            btn.onclick = () => {
-                if (!yaAgregado && p.estado !== "consultar") {
+
+            const boton = div.querySelector("button");
+            boton.onclick = () => {
+                if (p.estado === "disponible" || p.estado === "encargar") {
                     carrito.push(p);
                     localStorage.setItem("carrito_motika", JSON.stringify(carrito));
                     mostrarCarrito();
-                    mostrarProductos(lista); // Para actualizar el botón a "Agregado"
-                } else if (p.estado === "consultar") {
-                    window.open(`https://wa.me/573118612727?text=Hola, consulto por: ${p.nombre}`);
+                    mostrarProductos(lista); 
+                } else {
+                    const msg = `Hola Motika, quisiera saber la disponibilidad del: ${p.nombre}`;
+                    window.open(`https://wa.me/573118612727?text=${encodeURIComponent(msg)}`);
                 }
             };
             contenedor.appendChild(div);
         });
     }
 
+    // --- Lógica del Carrito ---
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
         if (carrito.length === 0) {
-            listaCarrito.innerHTML = `<div style="text-align:center; padding:50px;"><p style="font-size:60px;">☹️</p><p>Vacío</p></div>`;
-            precioTotalDoc.innerText = "$0";
+            listaCarrito.innerHTML = `<div class="carrito-vacio-msg"><p style="font-size: 50px;">☹️</p><p>Tu carrito está vacío</p></div>`;
+            if(precioTotalDoc) precioTotalDoc.innerText = "$0";
+            btnComprar.style.display = "none";
             return;
         }
-        
+
+        btnComprar.style.display = "block";
         let total = 0;
+        let listaTienda = "";
+        let listaEncargo = "";
+
         carrito.forEach((p, index) => {
-            const item = document.createElement("div");
-            item.style.display = "flex";
-            item.style.justifyContent = "space-between";
-            item.style.alignItems = "center";
-            item.style.marginBottom = "15px";
-            
-            item.innerHTML = `
-                <div style="flex:1">
-                    <p style="font-size:14px;">${p.nombre}</p>
-                    <p style="font-weight:900;">${p.precio}</p>
-                </div>
-                <button class="btn-borrar" onclick="eliminarDelCarrito(${index})">X</button>
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "item-carrito-lista";
+            itemDiv.innerHTML = `
+                <button class="btn-borrar" data-index="${index}">✕</button>
+                <span class="nombre-p">${p.nombre}</span>
+                <span class="precio-p">${p.precio}</span>
             `;
-            listaCarrito.appendChild(item);
-            
-            let valor = String(p.precio).replace(/[^0-9]/g, "");
-            total += parseInt(valor) || 0;
+            listaCarrito.appendChild(itemDiv);
+
+            if (p.estado === 'encargar') listaEncargo += `- ${p.nombre} (${p.precio})%0A`;
+            else listaTienda += `- ${p.nombre} (${p.precio})%0A`;
+
+            let valorLimpio = String(p.precio).replace(/[^0-9]/g, "");
+            total += parseInt(valorLimpio) || 0;
         });
-        precioTotalDoc.innerText = `$${total.toLocaleString('es-CO')}`;
+
+        document.querySelectorAll(".btn-borrar").forEach(btn => {
+            btn.onclick = (e) => {
+                const idx = e.currentTarget.getAttribute("data-index");
+                carrito.splice(idx, 1);
+                localStorage.setItem("carrito_motika", JSON.stringify(carrito));
+                mostrarCarrito();
+                mostrarProductos(productos); 
+            };
+        });
+
+        let mensajeFinal = "Hola Motika! 👋 Pedido:%0A%0A";
+        if (listaTienda !== "") mensajeFinal += "*TIENDA:*%0A" + listaTienda + "%0A";
+        if (listaEncargo !== "") mensajeFinal += "*ENCARGO:*%0A" + listaEncargo + "%0A";
+        mensajeFinal += "*Total: $" + total.toLocaleString('es-CO') + "*";
+
+        if(precioTotalDoc) precioTotalDoc.innerText = `$${total.toLocaleString('es-CO')}`;
+        btnComprar.href = `https://wa.me/573118612727?text=${mensajeFinal}`;
     }
 
-    // FUNCIÓN GLOBAL PARA ELIMINAR
-    window.eliminarDelCarrito = (index) => {
-        carrito.splice(index, 1);
-        localStorage.setItem("carrito_motika", JSON.stringify(carrito));
+    function vaciarTodo() {
+        carrito = [];
+        localStorage.removeItem("carrito_motika");
         mostrarCarrito();
-        db.collection("productos").get().then(snapshot => {
-            const nuevosProductos = [];
-            snapshot.forEach(doc => nuevosProductos.push(doc.data()));
-            mostrarProductos(nuevosProductos);
-        });
-    };
+        mostrarProductos(productos);
+    }
 
-    db.collection("productos").get().then(snapshot => {
+    // --- Firebase con ORDEN ALFABÉTICO ---
+    db.collection("productos").onSnapshot(snapshot => {
         productos = [];
-        snapshot.forEach(doc => productos.push(doc.data()));
+        const categoriasSet = new Set();
+        snapshot.forEach(doc => {
+            const p = doc.data();
+            if (p.nombre && p.precio) {
+                productos.push(p);
+                if(p.categoria) categoriasSet.add(p.categoria);
+            }
+        });
+
+        // 🔥 ORDENAR DE LA A a la Z
+        productos.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        
+        filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
+        
+        // Ordenar categorías también
+        const categoriasOrdenadas = Array.from(categoriasSet).sort();
+        categoriasOrdenadas.forEach(cat => {
+            const opt = document.createElement("option");
+            opt.value = opt.textContent = cat;
+            filtroCategoria.appendChild(opt);
+        });
+
         mostrarProductos(productos);
         mostrarCarrito();
     });
-});
 
+    buscador.onkeyup = () => {
+        const t = buscador.value.toLowerCase();
+        mostrarProductos(productos.filter(p => p.nombre.toLowerCase().includes(t)));
+    };
+
+    filtroCategoria.onchange = () => {
+        const cat = filtroCategoria.value;
+        mostrarProductos(cat === "todas" ? productos : productos.filter(p => p.categoria === cat));
+    };
+});
