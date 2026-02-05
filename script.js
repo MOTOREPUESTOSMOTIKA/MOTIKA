@@ -11,10 +11,28 @@ document.addEventListener("DOMContentLoaded", () => {
     let productos = [];
     let carrito = JSON.parse(localStorage.getItem("carrito_motika")) || [];
 
-    // --- Control del Panel ---
-    btnAbrirCarrito.onclick = () => carritoPanel.classList.toggle("abierto");
+    // --- Control del Panel (AJUSTADO PARA CERRAR FUERA) ---
+    btnAbrirCarrito.onclick = (e) => {
+        e.stopPropagation(); // Evita que el clic se propague al document
+        carritoPanel.classList.toggle("abierto");
+    };
 
-    // --- Renderizado de Productos ---
+    // Nueva función: Cerrar al tocar fuera del cuadro blanco
+    document.addEventListener("click", (event) => {
+        const clicFueraDelPanel = !carritoPanel.contains(event.target);
+        const clicFueraDelBoton = event.target !== btnAbrirCarrito;
+
+        if (carritoPanel.classList.contains("abierto") && clicFueraDelPanel && clicFueraDelBoton) {
+            carritoPanel.classList.remove("abierto");
+        }
+    });
+
+    // Evita que clics dentro del carrito lo cierren accidentalmente
+    carritoPanel.onclick = (e) => {
+        e.stopPropagation();
+    };
+
+    // --- Renderizado de Productos (Original intacto) ---
     function mostrarProductos(lista) {
         contenedor.innerHTML = "";
         lista.forEach(p => {
@@ -75,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Lógica del Carrito ---
+    // --- Lógica del Carrito (Original intacto con borrado) ---
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
         if (carrito.length === 0) {
@@ -133,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarProductos(productos);
     }
 
-    // --- Firebase con ORDEN ALFABÉTICO ---
+    // --- Firebase con ORDEN ALFABÉTICO (Original intacto) ---
     db.collection("productos").onSnapshot(snapshot => {
         productos = [];
         const categoriasSet = new Set();
@@ -145,12 +163,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // 🔥 ORDENAR DE LA A a la Z
         productos.sort((a, b) => a.nombre.localeCompare(b.nombre));
         
         filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
         
-        // Ordenar categorías también
         const categoriasOrdenadas = Array.from(categoriasSet).sort();
         categoriasOrdenadas.forEach(cat => {
             const opt = document.createElement("option");
