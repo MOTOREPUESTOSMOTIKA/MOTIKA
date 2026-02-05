@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let productos = [];
     let carrito = JSON.parse(localStorage.getItem("carrito_motika")) || [];
 
+    // --- Control del Panel ---
     btnAbrirCarrito.onclick = (e) => {
         e.stopPropagation();
         carritoPanel.classList.add("abierto");
@@ -51,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 estadoTexto = "Consultar";
                 estadoClase = "no-disponible";
-                btnHTML = `<button class="btn-consultar">Consultar</button>`;
+                btnHTML = `<button class="btn-consultar">Pedir</button>`;
             }
 
             const urlImagen = p.imagen && p.imagen !== "" ? p.imagen : 'https://via.placeholder.com/300x300?text=Motika+Repuestos';
@@ -75,8 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         mostrarProductos(lista);
                     }
                 } else {
-                    const msg = `Hola Motika 👋, me gustaría consultar la disponibilidad de este repuesto: *${p.nombre}*. Quedo atento, gracias!`;
-                    window.open(`https://wa.me/573118612727?text=${encodeURIComponent(msg)}`);
+                    const msgConsultar = `Hola Motika! 👋 Quiero consultar disponibilidad de: *${p.nombre}*`;
+                    window.open(`https://wa.me/573118612727?text=${encodeURIComponent(msgConsultar)}`);
                 }
             };
             contenedor.appendChild(div);
@@ -94,7 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         btnComprar.style.display = "block";
         let total = 0;
-        let listaPedido = "";
+        let listaTienda = "";
+        let listaEncargo = "";
 
         carrito.forEach((p, index) => {
             const itemDiv = document.createElement("div");
@@ -105,27 +107,45 @@ document.addEventListener("DOMContentLoaded", () => {
                 <button class="btn-borrar" data-index="${index}">✕</button>`;
             listaCarrito.appendChild(itemDiv);
 
-            listaPedido += `✅ *${p.nombre}* (${p.precio})\n`;
+            // Separar listas para el mensaje
+            if (p.estado === 'encargar') {
+                listaEncargo += `- ${p.nombre} (${p.precio})\n`;
+            } else {
+                listaTienda += `- ${p.nombre} (${p.precio})\n`;
+            }
+
             let valorLimpio = String(p.precio).replace(/[^0-9]/g, "");
             total += parseInt(valorLimpio) || 0;
         });
 
         document.querySelectorAll(".btn-borrar").forEach(btn => {
             btn.onclick = (e) => {
-                carrito.splice(e.currentTarget.getAttribute("data-index"), 1);
+                const idx = e.currentTarget.getAttribute("data-index");
+                carrito.splice(idx, 1);
                 localStorage.setItem("carrito_motika", JSON.stringify(carrito));
                 mostrarCarrito();
                 mostrarProductos(productos);
             };
         });
 
-        // NUEVO MENSAJE PROFESIONAL
-        let mensajeWhatsApp = `¡Hola *Motika*! 👋\n\nHe seleccionado los siguientes productos desde su catálogo digital y me gustaría concretar el pedido:\n\n${listaPedido}\n💰 *Total estimado: $${total.toLocaleString('es-CO')}*\n\n¿Me podrían confirmar disponibilidad y los pasos para el pago? ¡Gracias!`;
+        // --- CONSTRUCCIÓN DEL MENSAJE DE WHATSAPP ---
+        let mensajeWhatsApp = `Hola Motika! 👋 Quiero realizar el siguiente pedido:\n\n`;
+        
+        if (listaTienda !== "") {
+            mensajeWhatsApp += `*PRODUCTOS EN TIENDA:*\n${listaTienda}\n`;
+        }
+        
+        if (listaEncargo !== "") {
+            mensajeWhatsApp += `*PRODUCTOS PARA ENCARGAR:*\n${listaEncargo}\n`;
+        }
+
+        mensajeWhatsApp += `*Total a pagar: $${total.toLocaleString('es-CO')}*`;
 
         if(precioTotalDoc) precioTotalDoc.innerText = `$${total.toLocaleString('es-CO')}`;
         btnComprar.href = `https://wa.me/573118612727?text=${encodeURIComponent(mensajeWhatsApp)}`;
     }
 
+    // --- Firebase ---
     db.collection("productos").onSnapshot(snapshot => {
         productos = [];
         const categoriasSet = new Set();
