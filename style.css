@@ -389,13 +389,22 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
         flex-direction: column;
     }
 
-    /* Nombre del producto */
+    @media (max-width: 480px) {
+
     .producto-info h3 {
         font-size: 12px;
-        min-height: 34px; /* MISMA altura para todos */
-        line-height: 1.2;
+        font-weight: 600; /* menos pesado */
+        line-height: 1.25;
+        max-height: 30px; /* máximo 2 líneas */
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
         margin-bottom: 6px;
     }
+
+}
 
     /* Precio */
     .precio {
@@ -415,4 +424,7 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     .producto-info button {
         margin-top: auto;
     }
+}
+.producto-info h3 {
+    letter-spacing: -0.2px;
 }
