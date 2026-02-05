@@ -173,7 +173,7 @@ main {
 
 .contenedor-img {
     width: 100%;
-    height: 110px; /* Aquí achatas el espacio como en tu imagen */
+    height: 50px; /* Aquí achatas el espacio como en tu imagen */
     background: #fff;
     display: flex;
     align-items: center;
