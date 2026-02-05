@@ -381,7 +381,7 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     .titulo-principal { font-size: 32px; }
     .carrito { width: 100%; }
 }
-/* ================= AJUSTE SOLO MÓVIL - TARJETAS PRODUCTO ================= */
+/* ================= AJUSTE SOLO MÓVIL - NOMBRE PRODUCTO ================= */
 @media (max-width: 480px) {
 
     .producto-info {
@@ -389,42 +389,33 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
         flex-direction: column;
     }
 
-    @media (max-width: 480px) {
-
     .producto-info h3 {
         font-size: 12px;
-        font-weight: 600; /* menos pesado */
+        font-weight: 600;
         line-height: 1.25;
-        max-height: 30px; /* máximo 2 líneas */
+        height: 30px;              /* altura fija */
         overflow: hidden;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 2;     /* máximo 2 líneas */
         -webkit-box-orient: vertical;
         text-overflow: ellipsis;
         margin-bottom: 6px;
+        letter-spacing: -0.2px;
     }
 
-}
-
-    /* Precio */
     .precio {
         font-size: 14px;
-        min-height: 20px; /* Evita saltos */
+        min-height: 20px;
         margin-bottom: 4px;
     }
 
-    /* Estado: SIEMPRE encima del botón */
     .estado {
         font-size: 10px;
         min-height: 16px;
         margin-bottom: 8px;
     }
 
-    /* Botón siempre abajo */
     .producto-info button {
         margin-top: auto;
     }
-}
-.producto-info h3 {
-    letter-spacing: -0.2px;
 }
