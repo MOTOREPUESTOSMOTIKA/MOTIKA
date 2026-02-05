@@ -286,3 +286,48 @@ button.agregado { background: #ccc !important; color: #666; cursor: default; }
     .titulo-principal { font-size: 32px; }
     .carrito { width: 100%; }
 }
+/* ... (Todo tu CSS anterior igual) ... */
+
+/* ================= AJUSTES NUEVOS DEL CARRITO ================= */
+.btn-cerrar-panel {
+    position: absolute;
+    top: 15px;
+    left: 15px; /* Lado opuesto al diseño para que sea fácil de ver */
+    background: #f0f0f0;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    transition: 0.3s;
+}
+
+.btn-cerrar-panel:hover {
+    background: #e0e0e0;
+    transform: rotate(90deg);
+}
+
+/* Mensaje de carrito vacío centrado */
+.carrito-vacio-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Para que use el espacio disponible */
+    text-align: center;
+    color: #888;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.carrito-vacio-msg p:first-child {
+    font-size: 60px !important; /* Tamaño de la carita triste */
+    margin: 0;
+}
+
