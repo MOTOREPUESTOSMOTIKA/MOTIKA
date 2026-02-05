@@ -381,3 +381,38 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     .titulo-principal { font-size: 32px; }
     .carrito { width: 100%; }
 }
+/* ================= AJUSTE SOLO MÓVIL - TARJETAS PRODUCTO ================= */
+@media (max-width: 480px) {
+
+    .producto-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Nombre del producto */
+    .producto-info h3 {
+        font-size: 12px;
+        min-height: 34px; /* MISMA altura para todos */
+        line-height: 1.2;
+        margin-bottom: 6px;
+    }
+
+    /* Precio */
+    .precio {
+        font-size: 14px;
+        min-height: 20px; /* Evita saltos */
+        margin-bottom: 4px;
+    }
+
+    /* Estado: SIEMPRE encima del botón */
+    .estado {
+        font-size: 10px;
+        min-height: 16px;
+        margin-bottom: 8px;
+    }
+
+    /* Botón siempre abajo */
+    .producto-info button {
+        margin-top: auto;
+    }
+}
