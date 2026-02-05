@@ -54,22 +54,49 @@ body {
 }
 
 /* ================= FRANJA INFO ================= */
+/* ================= FRANJA INFO MODERNA ================= */
 .franja-info {
-    background: #fff;
-    padding: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    border-bottom: 1px solid #ddd;
-    flex-wrap: wrap;
+    background: #ffffff;
+    padding: 20px 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Crea las 3 columnas */
+    gap: 10px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
 }
 
 .item-info {
-    font-size: 13px;
-    font-weight: 700;
-    color: #444;
-    text-transform: uppercase;
+    display: flex;
+    flex-direction: column; /* Icono arriba, texto abajo */
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.item-info i {
+    font-size: 20px; /* Tamaño del icono */
+    color: #888;    /* Color gris sutil */
+}
+
+.item-info span {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    text-transform: none; /* Quita las mayúsculas para que sea más sutil */
+    line-height: 1.2;
+}
+
+/* Ajuste para celulares muy pequeños */
+@media (max-width: 480px) {
+    .franja-info {
+        padding: 15px 5px;
+    }
+    .item-info i {
+        font-size: 18px;
+    }
+    .item-info span {
+        font-size: 9px;
+    }
 }
 
 /* ================= BUSCADOR Y CATEGORÍAS ================= */
