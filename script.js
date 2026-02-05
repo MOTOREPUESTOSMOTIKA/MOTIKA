@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const buscador = document.getElementById("buscador");
     const filtroCategoria = document.getElementById("filtroCategoria");
     const btnAbrirCarrito = document.getElementById("btnAbrirCarrito");
+    const btnCerrarCarrito = document.getElementById("btnCerrarCarrito"); // NUEVO
     const carritoPanel = document.getElementById("carrito");
     const listaCarrito = document.getElementById("listaCarrito");
     const btnComprar = document.getElementById("btnComprar");
@@ -11,13 +12,17 @@ document.addEventListener("DOMContentLoaded", () => {
     let productos = [];
     let carrito = JSON.parse(localStorage.getItem("carrito_motika")) || [];
 
-    // --- Control del Panel (AJUSTADO PARA CERRAR FUERA) ---
+    // --- Control del Panel ---
     btnAbrirCarrito.onclick = (e) => {
-        e.stopPropagation(); // Evita que el clic se propague al document
-        carritoPanel.classList.toggle("abierto");
+        e.stopPropagation();
+        carritoPanel.classList.add("abierto");
     };
 
-    // Nueva función: Cerrar al tocar fuera del cuadro blanco
+    // NUEVO: Cerrar con la X
+    btnCerrarCarrito.onclick = () => {
+        carritoPanel.classList.remove("abierto");
+    };
+
     document.addEventListener("click", (event) => {
         const clicFueraDelPanel = !carritoPanel.contains(event.target);
         const clicFueraDelBoton = event.target !== btnAbrirCarrito;
@@ -27,12 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Evita que clics dentro del carrito lo cierren accidentalmente
     carritoPanel.onclick = (e) => {
         e.stopPropagation();
     };
 
-    // --- Renderizado de Productos (Original intacto) ---
+    // --- Renderizado de Productos (Sin cambios) ---
     function mostrarProductos(lista) {
         contenedor.innerHTML = "";
         lista.forEach(p => {
@@ -46,21 +50,21 @@ document.addEventListener("DOMContentLoaded", () => {
             let estadoClase = "";
 
             if (p.estado === "disponible") {
-                estadoTexto = "Disponible en tienda";
+                estadoTexto = "En tienda"; // Texto corto para que no rompa el diseño
                 estadoClase = "disponible";
                 btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>
-                            ${estaEnCarrito ? 'Agregado ✓' : 'Agregar al carrito'}
+                            ${estaEnCarrito ? 'Agregado ✓' : 'Agregar'}
                            </button>`;
             } else if (p.estado === "encargar") {
-                estadoTexto = "Bajo pedido (Encargo)";
+                estadoTexto = "Por encargo";
                 estadoClase = "encargo";
-                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color: #3498db;">
-                            ${estaEnCarrito ? 'Agregado ✓' : 'Encargar Repuesto'}
+                btnHTML = `<button class="btn-encargar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>
+                            ${estaEnCarrito ? 'Agregado ✓' : 'Encargar'}
                            </button>`;
             } else {
-                estadoTexto = "Consultar disponibilidad";
+                estadoTexto = "Consultar";
                 estadoClase = "no-disponible";
-                btnHTML = `<button class="btn-consultar" style="background-color: #ff9800;">WhatsApp</button>`;
+                btnHTML = `<button class="btn-consultar">Pedir</button>`;
             }
 
             const urlImagen = p.imagen && p.imagen !== "" ? p.imagen : 'https://via.placeholder.com/300x300?text=Motika+Repuestos';
@@ -72,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="producto-info">
                     <h3>${p.nombre}</h3>
                     <div class="precio">${p.precio}</div>
-                    <div class="estado ${estadoClase}">${estadoTexto}</div>
+                    <div class="estado ${estadoClase}">• ${estadoTexto}</div>
                     ${btnHTML}
                 </div>
             `;
@@ -93,11 +97,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Lógica del Carrito (Original intacto con borrado) ---
+    // --- Lógica del Carrito (CON CARITA CENTRADA) ---
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
         if (carrito.length === 0) {
-            listaCarrito.innerHTML = `<div class="carrito-vacio-msg"><p style="font-size: 50px;">☹️</p><p>Tu carrito está vacío</p></div>`;
+            // Estructura para centrar carita y texto
+            listaCarrito.innerHTML = `
+                <div class="carrito-vacio-msg">
+                    <p>☹️</p>
+                    <p>Tu carrito está vacío</p>
+                </div>`;
             if(precioTotalDoc) precioTotalDoc.innerText = "$0";
             btnComprar.style.display = "none";
             return;
@@ -112,9 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const itemDiv = document.createElement("div");
             itemDiv.className = "item-carrito-lista";
             itemDiv.innerHTML = `
-                <button class="btn-borrar" data-index="${index}">✕</button>
                 <span class="nombre-p">${p.nombre}</span>
                 <span class="precio-p">${p.precio}</span>
+                <button class="btn-borrar" data-index="${index}">✕</button>
             `;
             listaCarrito.appendChild(itemDiv);
 
@@ -144,14 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnComprar.href = `https://wa.me/573118612727?text=${mensajeFinal}`;
     }
 
-    function vaciarTodo() {
-        carrito = [];
-        localStorage.removeItem("carrito_motika");
-        mostrarCarrito();
-        mostrarProductos(productos);
-    }
-
-    // --- Firebase con ORDEN ALFABÉTICO (Original intacto) ---
+    // --- Resto del código Firebase (Sin cambios) ---
     db.collection("productos").onSnapshot(snapshot => {
         productos = [];
         const categoriasSet = new Set();
@@ -164,9 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         productos.sort((a, b) => a.nombre.localeCompare(b.nombre));
-        
         filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
-        
         const categoriasOrdenadas = Array.from(categoriasSet).sort();
         categoriasOrdenadas.forEach(cat => {
             const opt = document.createElement("option");
