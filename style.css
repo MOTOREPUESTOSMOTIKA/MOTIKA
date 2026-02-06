@@ -120,29 +120,6 @@ body {
 
 .buscador-container input { width: 100%; max-width: 400px; }
 
-/* ================= BOTÓN CARRITO FLOTANTE ================= */
-.btn-carrito {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #25d366;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: none;
-    color: white;
-    font-size: 26px;
-    cursor: pointer;
-    z-index: 3000;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-}
-
-.btn-carrito:hover { transform: scale(1.1); }
-
 /* ================= GRID DE PRODUCTOS ================= */
 main {
     max-width: 1200px;
