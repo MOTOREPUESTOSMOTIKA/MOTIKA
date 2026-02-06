@@ -421,3 +421,18 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
         margin-top: 0;
     }
 }
+.btn-whatsapp-fijo {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #25d366; /* Verde WhatsApp */
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    z-index: 1000;
+}
