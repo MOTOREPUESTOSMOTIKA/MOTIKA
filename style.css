@@ -274,6 +274,24 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     padding: 12px 0;
     border-bottom: 1px solid #f0f0f0;
     font-size: 13px;
+    
+    /* AGREGA ESTO PARA CENTRAR LA CARITA */
+.carrito-vacio-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* Centra horizontal (izquierda-derecha) */
+    justify-content: center; /* Centra vertical (arriba-abajo) */
+    height: 100%;           /* Usa todo el alto del carrito */
+    text-align: center;
+    color: #bbb;
+    flex-grow: 1;
+}
+
+/* Para que la carita se vea bien grande */
+.carrito-vacio-msg p {
+    margin: 5px 0;
+}
+
 }
 
 .btn-borrar {
