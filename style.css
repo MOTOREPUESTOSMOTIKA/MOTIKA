@@ -58,7 +58,7 @@ body {
     background: #ffffff;
     padding: 20px 10px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Crea las 3 columnas */
+    grid-template-columns: repeat(3, 1fr); 
     gap: 10px;
     border-bottom: 1px solid #eee;
     text-align: center;
@@ -66,26 +66,25 @@ body {
 
 .item-info {
     display: flex;
-    flex-direction: column; /* Icono arriba, texto abajo */
+    flex-direction: column; 
     align-items: center;
     justify-content: center;
     gap: 8px;
 }
 
 .item-info i {
-    font-size: 20px; /* Tamaño del icono */
-    color: #888;    /* Color gris sutil */
+    font-size: 20px; 
+    color: #888;    
 }
 
 .item-info span {
     font-size: 11px;
     font-weight: 600;
     color: #666;
-    text-transform: none; /* Quita las mayúsculas para que sea más sutil */
+    text-transform: none; 
     line-height: 1.2;
 }
 
-/* Ajuste para celulares muy pequeños */
 @media (max-width: 480px) {
     .franja-info {
         padding: 15px 5px;
@@ -134,12 +133,12 @@ main {
 }
 
 .producto {
-    background: #ffffff; /* Tarjeta blanca sobre fondo gris */
+    background: #ffffff; 
     border-radius: 12px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Sombra más suave */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
     border: 1px solid #eef0f2;
     transition: transform 0.2s;
 }
@@ -150,21 +149,20 @@ main {
 
 .contenedor-img {
     width: 100%;
-    height: 50px; /* Aquí achatas el espacio como en tu imagen */
+    height: 50px; 
     background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px; /* Menos espacio interno */
+    padding: 5px; 
     overflow: hidden;
 }
 
 .contenedor-img img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; /* Esto garantiza que el producto se vea SIEMPRE completo */
+    object-fit: contain; 
 }
-
 
 .producto-info {
     padding: 12px;
@@ -264,7 +262,6 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     justify-content: center;
 }
 
-/* LISTA ITEMS CARRITO */
 #listaCarrito {
     flex-grow: 1;
     overflow-y: auto;
@@ -285,7 +282,7 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     border: none;
     background: transparent;
     cursor: pointer;
-    font-size: 22px; /* X más grande como pediste */
+    font-size: 22px; 
     margin-right: 12px;
     line-height: 1;
 }
@@ -293,7 +290,6 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
 .nombre-p { flex-grow: 1; font-weight: 600; }
 .precio-p { font-weight: 800; color: #444; }
 
-/* BOTÓN VACIAR TODO */
 .btn-vaciar-todo {
     width: 100%;
     background: #fff2f1;
@@ -308,7 +304,6 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     margin-bottom: 10px;
 }
 
-/* TOTAL Y BOTÓN COMPRAR */
 .total-carrito {
     padding: 15px 0;
     border-top: 2px solid #222;
@@ -334,18 +329,7 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     font-size: 14px;
 }
 
-/* MENSAJE VACÍO */
-.carrito-vacio-msg {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 60%;
-    color: #bbb;
-    text-align: center;
-}
-
-/* ================= RESPONSIVE ================= */
+/* ================= RESPONSIVE PRODUCTOS ================= */
 @media (max-width: 768px) {
     .grid-productos { grid-template-columns: repeat(3, 1fr); gap: 10px; }
 }
@@ -357,15 +341,6 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     .contenedor-img { height: 110px; }
     .titulo-principal { font-size: 32px; }
     .carrito { width: 100%; }
-}
-/* ================= BLOQUE INFERIOR FIJO (ESTADO + BOTÓN) ================= */
-@media (max-width: 480px) {
-
-    .producto-info {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
 
     .producto-info h3 {
         font-size: 12px;
@@ -379,45 +354,15 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
         margin-bottom: 6px;
         letter-spacing: -0.2px;
     }
-
-    .precio {
-        font-size: 14px;
-        font-weight: 900;
-        margin-bottom: 6px;
-    }
-
-    /* 🔑 CLAVE: el estado empuja hacia abajo */
-    .estado {
-        margin-top: auto;
-        font-size: 10px;
-        font-weight: 800;
-        margin-bottom: 6px;
-    }
-
-    .producto-info button {
-        margin-top: 0;
-    }
 }
+
+/* ================= BOTONES FLOTANTES (CORREGIDO) ================= */
+
+/* 1. Botón de WhatsApp (Fondo) */
 .btn-whatsapp-fijo {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #25d366; /* Verde WhatsApp */
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    z-index: 1000;
-}
-/* Botón de WhatsApp (El de abajo) */
-.btn-whatsapp-fijo {
-    position: fixed;
-    bottom: 20px;       /* Distancia desde el borde inferior */
-    right: 20px;        /* Distancia desde el borde derecho */
+    bottom: 20px;       
+    right: 20px;        
     width: 60px;
     height: 60px;
     background-color: #25d366;
@@ -430,16 +375,17 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     z-index: 1000;
     text-decoration: none;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: 0.3s;
 }
 
-/* Botón del Carrito (El que va sobre el de WhatsApp) */
+/* 2. Botón del Carrito (Encima de WhatsApp) */
 .btn-carrito {
     position: fixed;
-    bottom: 90px;       /* Más alto para que no tape al de WhatsApp (20 + 70 de separación) */
+    bottom: 90px;       /* Separación para que flote arriba del verde */
     right: 20px;
     width: 60px;
     height: 60px;
-    background-color: #333; /* O el color que prefieras para el carrito */
+    background-color: #333; 
     color: white;
     border: none;
     border-radius: 50%;
@@ -447,10 +393,16 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     cursor: pointer;
     z-index: 1000;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
 }
 
-/* Ajuste para que el icono de WhatsApp se vea bien */
+.btn-carrito:hover, .btn-whatsapp-fijo:hover {
+    transform: scale(1.1);
+}
+
 .btn-whatsapp-fijo i {
     line-height: 0;
 }
-
