@@ -154,8 +154,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         let mensajeWhatsApp = `Hola Motika! 👋 Quiero realizar el siguiente pedido:\n\n`;
-        if (listaTienda) mensajeWhatsApp += `*PRODUCTOS EN TIENDA:*\n${listaTienda}\n`;
-        if (listaEncargo) mensajeWhatsApp += `*PRODUCTOS EN REPOSICIÓN / ENCARGO:*\n${listaEncargo}\n`;
+        if (listaTienda) {
+    mensajeWhatsApp += `*🟢 PRODUCTOS EN TIENDA:*\n${listaTienda}\n`;
+}
+
+if (listaEncargo) {
+    mensajeWhatsApp += `*🔵 PRODUCTOS PARA ENCARGAR:*\n${listaEncargo}\n`;
+}
+
+if (listaApartar) {
+    mensajeWhatsApp += `*🟠 PRODUCTOS PARA APARTAR:*\n${listaApartar}\n`;
+}
         mensajeWhatsApp += `*Total a pagar: $${total.toLocaleString("es-CO")}*`;
 
         if (precioTotalDoc) precioTotalDoc.innerText = `$${total.toLocaleString("es-CO")}`;
