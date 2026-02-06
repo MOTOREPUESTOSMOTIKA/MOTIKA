@@ -262,10 +262,28 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     justify-content: center;
 }
 
+/* LISTA ITEMS Y CENTRADO DE MENSAJE VACÍO */
 #listaCarrito {
     flex-grow: 1;
     overflow-y: auto;
     margin-bottom: 15px;
+    display: flex;         
+    flex-direction: column;
+}
+
+.carrito-vacio-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    justify-content: center;
+    height: 100%;          
+    text-align: center;
+    color: #bbb;
+    flex-grow: 1;
+}
+
+.carrito-vacio-msg p {
+    margin: 5px 0;
 }
 
 .item-carrito-lista {
@@ -274,24 +292,6 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     padding: 12px 0;
     border-bottom: 1px solid #f0f0f0;
     font-size: 13px;
-    
-    /* AGREGA ESTO PARA CENTRAR LA CARITA */
-.carrito-vacio-msg {
-    display: flex;
-    flex-direction: column;
-    align-items: center;    /* Centra horizontal (izquierda-derecha) */
-    justify-content: center; /* Centra vertical (arriba-abajo) */
-    height: 100%;           /* Usa todo el alto del carrito */
-    text-align: center;
-    color: #bbb;
-    flex-grow: 1;
-}
-
-/* Para que la carita se vea bien grande */
-.carrito-vacio-msg p {
-    margin: 5px 0;
-}
-
 }
 
 .btn-borrar {
@@ -374,9 +374,8 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     }
 }
 
-/* ================= BOTONES FLOTANTES (CORREGIDO) ================= */
+/* ================= BOTONES FLOTANTES (FINALES) ================= */
 
-/* 1. Botón de WhatsApp (Fondo) */
 .btn-whatsapp-fijo {
     position: fixed;
     bottom: 20px;       
@@ -396,10 +395,9 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     transition: 0.3s;
 }
 
-/* 2. Botón del Carrito (Encima de WhatsApp) */
 .btn-carrito {
     position: fixed;
-    bottom: 90px;       /* Separación para que flote arriba del verde */
+    bottom: 90px;       
     right: 20px;
     width: 60px;
     height: 60px;
