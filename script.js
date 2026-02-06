@@ -23,89 +23,100 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     document.addEventListener("click", (event) => {
-        if (carritoPanel.classList.contains("abierto") && !carritoPanel.contains(event.target) && event.target !== btnAbrirCarrito) {
+        if (
+            carritoPanel.classList.contains("abierto") &&
+            !carritoPanel.contains(event.target) &&
+            event.target !== btnAbrirCarrito
+        ) {
             carritoPanel.classList.remove("abierto");
         }
     });
 
     carritoPanel.onclick = (e) => e.stopPropagation();
 
-    // --- Renderizado de Productos (Textos Originales Restaurados) ---
+    // --- Renderizado de Productos ---
     function mostrarProductos(lista) {
         contenedor.innerHTML = "";
+
         lista.forEach(p => {
             const div = document.createElement("div");
             div.className = "producto";
             const estaEnCarrito = carrito.some(item => item.nombre === p.nombre);
-            
+
             let btnHTML = "";
             let estadoTexto = "";
             let estadoClase = "";
 
             if (p.estado === "disponible") {
-                estadoTexto = "Disponible en tienda"; // Texto Original
+                estadoTexto = "Disponible en tienda";
                 estadoClase = "disponible";
-                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>
-                            ${estaEnCarrito ? 'Agregado ✓' : 'Agregar al carrito'}
-                           </button>`;
-            } else if (p.estado === "encargar") {
-                estadoTexto = "Bajo pedido (Encargo)"; // Texto Original
+                btnHTML = `
+                    <button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''}>
+                        ${estaEnCarrito ? 'Agregado ✓' : 'Agregar al carrito'}
+                    </button>`;
+            } 
+            else if (p.estado === "encargar") {
+                estadoTexto = "Bajo pedido (Encargo)";
                 estadoClase = "encargo";
-                btnHTML = `<button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color: #3498db;">
-                            ${estaEnCarrito ? 'Agregado ✓' : 'Encargar Repuesto'}
-                           </button>`;
-            } else {
-                estadoTexto = "Consultar disponibilidad"; // Texto Original
+                btnHTML = `
+                    <button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color:#3498db;">
+                        ${estaEnCarrito ? 'Agregado ✓' : 'Encargar repuesto'}
+                    </button>`;
+            } 
+            else {
+                // 🔴 CAMBIO SOLICITADO
+                estadoTexto = "En reposición";
                 estadoClase = "no-disponible";
-                btnHTML = `<button class="btn-consultar" style="background-color: #ff9800;">WhatsApp</button>`;
+                btnHTML = `
+                    <button class="btn-agregar ${estaEnCarrito ? 'agregado' : ''}" ${estaEnCarrito ? 'disabled' : ''} style="background-color:#ff9800;">
+                        ${estaEnCarrito ? 'Agregado ✓' : 'Apartar'}
+                    </button>`;
             }
 
-            const urlImagen = p.imagen && p.imagen !== "" ? p.imagen : 'https://via.placeholder.com/300x300?text=Motika+Repuestos';
+            const urlImagen = p.imagen && p.imagen !== ""
+                ? p.imagen
+                : "https://via.placeholder.com/300x300?text=Motika+Repuestos";
 
             div.innerHTML = `
-                <div class="contenedor-img"><img src="${urlImagen}" loading="lazy" referrerpolicy="no-referrer"></div>
+                <div class="contenedor-img">
+                    <img src="${urlImagen}" loading="lazy" referrerpolicy="no-referrer">
+                </div>
                 <div class="producto-info">
                     <h3>${p.nombre}</h3>
                     <div class="precio">${p.precio}</div>
                     <div class="estado ${estadoClase}">${estadoTexto}</div>
                     ${btnHTML}
-                </div>`;
+                </div>
+            `;
 
             const boton = div.querySelector("button");
             boton.onclick = () => {
-                if (p.estado === "disponible" || p.estado === "encargar") {
-                    if(!estaEnCarrito) {
-                        carrito.push(p);
-                        localStorage.setItem("carrito_motika", JSON.stringify(carrito));
-                        mostrarCarrito();
-                        mostrarProductos(lista);
-                    }
-                } else {
-                    const msgConsultar = `Hola Motika! 👋 Quiero consultar disponibilidad de: *${p.nombre}*`;
-                    window.open(`https://wa.me/573118612727?text=${encodeURIComponent(msgConsultar)}`);
+                if (!estaEnCarrito) {
+                    carrito.push(p);
+                    localStorage.setItem("carrito_motika", JSON.stringify(carrito));
+                    mostrarCarrito();
+                    mostrarProductos(lista);
                 }
             };
+
             contenedor.appendChild(div);
         });
     }
 
-    // --- Lógica del Carrito (X al principio y Vaciar Carrito) ---
+    // --- Carrito ---
     function mostrarCarrito() {
         listaCarrito.innerHTML = "";
-        
+
         if (carrito.length === 0) {
-            listaCarrito.innerHTML = `<div class="carrito-vacio-msg"><p style="font-size: 50px;">☹️</p><p>Tu carrito está vacío</p></div>`;
-            if(precioTotalDoc) precioTotalDoc.innerText = "$0";
+            listaCarrito.innerHTML = `
+                <div class="carrito-vacio-msg">
+                    <p style="font-size:50px;">☹️</p>
+                    <p>Tu carrito está vacío</p>
+                </div>`;
+            if (precioTotalDoc) precioTotalDoc.innerText = "$0";
             btnComprar.style.display = "none";
             return;
         }
-
-        // Botón opcional para Vaciar Todo manualmente
-        const btnVaciarTodo = document.createElement("button");
-        btnVaciarTodo.innerText = "Vaciar Carrito";
-        btnVaciarTodo.className = "btn-vaciar-todo"; // Agrega estilo en tu CSS si deseas
-        btnVaciarTodo.onclick = () => vaciarCarritoCompleto();
-        listaCarrito.appendChild(btnVaciarTodo);
 
         btnComprar.style.display = "block";
         let total = 0;
@@ -115,26 +126,26 @@ document.addEventListener("DOMContentLoaded", () => {
         carrito.forEach((p, index) => {
             const itemDiv = document.createElement("div");
             itemDiv.className = "item-carrito-lista";
-            // X al principio y más grande (font-size: 20px)
             itemDiv.innerHTML = `
-                <button class="btn-borrar" data-index="${index}" style="font-size: 22px; margin-right: 10px;">✕</button>
+                <button class="btn-borrar" data-index="${index}" style="font-size:22px;">✕</button>
                 <span class="nombre-p">${p.nombre}</span>
-                <span class="precio-p">${p.precio}</span>`;
+                <span class="precio-p">${p.precio}</span>
+            `;
             listaCarrito.appendChild(itemDiv);
 
-            if (p.estado === 'encargar') {
+            if (p.estado === "encargar" || p.estado === "no-disponible") {
                 listaEncargo += `- ${p.nombre} (${p.precio})\n`;
             } else {
                 listaTienda += `- ${p.nombre} (${p.precio})\n`;
             }
 
-            let valorLimpio = String(p.precio).replace(/[^0-9]/g, "");
-            total += parseInt(valorLimpio) || 0;
+            let valor = String(p.precio).replace(/[^0-9]/g, "");
+            total += parseInt(valor) || 0;
         });
 
         document.querySelectorAll(".btn-borrar").forEach(btn => {
             btn.onclick = (e) => {
-                const idx = e.currentTarget.getAttribute("data-index");
+                const idx = e.currentTarget.dataset.index;
                 carrito.splice(idx, 1);
                 localStorage.setItem("carrito_motika", JSON.stringify(carrito));
                 mostrarCarrito();
@@ -142,18 +153,16 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         });
 
-        // --- Mensaje de WhatsApp Solicitado ---
         let mensajeWhatsApp = `Hola Motika! 👋 Quiero realizar el siguiente pedido:\n\n`;
-        if (listaTienda !== "") mensajeWhatsApp += `*PRODUCTOS EN TIENDA:*\n${listaTienda}\n`;
-        if (listaEncargo !== "") mensajeWhatsApp += `*PRODUCTOS PARA ENCARGAR:*\n${listaEncargo}\n`;
-        mensajeWhatsApp += `*Total a pagar: $${total.toLocaleString('es-CO')}*`;
+        if (listaTienda) mensajeWhatsApp += `*PRODUCTOS EN TIENDA:*\n${listaTienda}\n`;
+        if (listaEncargo) mensajeWhatsApp += `*PRODUCTOS EN REPOSICIÓN / ENCARGO:*\n${listaEncargo}\n`;
+        mensajeWhatsApp += `*Total a pagar: $${total.toLocaleString("es-CO")}*`;
 
-        if(precioTotalDoc) precioTotalDoc.innerText = `$${total.toLocaleString('es-CO')}`;
+        if (precioTotalDoc) precioTotalDoc.innerText = `$${total.toLocaleString("es-CO")}`;
         btnComprar.href = `https://wa.me/573118612727?text=${encodeURIComponent(mensajeWhatsApp)}`;
 
-        // Vaciar carrito al hacer clic en Comprar
         btnComprar.onclick = () => {
-            setTimeout(() => { vaciarCarritoCompleto(); }, 1000);
+            setTimeout(() => vaciarCarritoCompleto(), 1000);
         };
     }
 
@@ -168,24 +177,41 @@ document.addEventListener("DOMContentLoaded", () => {
     db.collection("productos").onSnapshot(snapshot => {
         productos = [];
         const categoriasSet = new Set();
+
         snapshot.forEach(doc => {
             const p = doc.data();
             if (p.nombre && p.precio) {
                 productos.push(p);
-                if(p.categoria) categoriasSet.add(p.categoria);
+                if (p.categoria) categoriasSet.add(p.categoria);
             }
         });
+
         productos.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
         filtroCategoria.innerHTML = `<option value="todas">Todas las Categorías</option>`;
-        Array.from(categoriasSet).sort().forEach(cat => {
+        [...categoriasSet].sort().forEach(cat => {
             const opt = document.createElement("option");
             opt.value = opt.textContent = cat;
             filtroCategoria.appendChild(opt);
         });
+
         mostrarProductos(productos);
         mostrarCarrito();
     });
 
-    buscador.onkeyup = () => mostrarProductos(productos.filter(p => p.nombre.toLowerCase().includes(buscador.value.toLowerCase())));
-    filtroCategoria.onchange = () => mostrarProductos(filtroCategoria.value === "todas" ? productos : productos.filter(p => p.categoria === filtroCategoria.value));
+    buscador.onkeyup = () => {
+        mostrarProductos(
+            productos.filter(p =>
+                p.nombre.toLowerCase().includes(buscador.value.toLowerCase())
+            )
+        );
+    };
+
+    filtroCategoria.onchange = () => {
+        mostrarProductos(
+            filtroCategoria.value === "todas"
+                ? productos
+                : productos.filter(p => p.categoria === filtroCategoria.value)
+        );
+    };
 });
