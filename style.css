@@ -436,3 +436,44 @@ button.agregado { background: #ddd !important; color: #888 !important; cursor: d
     font-size: 30px;
     z-index: 1000;
 }
+/* Botón de WhatsApp (El de abajo) */
+.btn-whatsapp-fijo {
+    position: fixed;
+    bottom: 20px;       /* Distancia desde el borde inferior */
+    right: 20px;        /* Distancia desde el borde derecho */
+    width: 60px;
+    height: 60px;
+    background-color: #25d366;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    z-index: 1000;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Botón del Carrito (El que va sobre el de WhatsApp) */
+.btn-carrito {
+    position: fixed;
+    bottom: 90px;       /* Más alto para que no tape al de WhatsApp (20 + 70 de separación) */
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #333; /* O el color que prefieras para el carrito */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 25px;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Ajuste para que el icono de WhatsApp se vea bien */
+.btn-whatsapp-fijo i {
+    line-height: 0;
+}
+
